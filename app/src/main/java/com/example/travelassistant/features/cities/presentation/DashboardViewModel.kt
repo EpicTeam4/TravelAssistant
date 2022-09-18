@@ -1,4 +1,4 @@
-package com.example.travelassistant.ui.dashboard
+package com.example.travelassistant.features.cities.presentation
 
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
