@@ -32,7 +32,7 @@ data class Port(
     @ColumnInfo(name = Schema.SLUG) val slug: String?
 ) {
     object Schema {
-        const val TABLE_NAME = "airports"
+        const val TABLE_NAME = "airportsrailway"
         const val ID = "id"
         const val NAME = "name"
         const val ADDRESS = "address"

@@ -9,7 +9,11 @@
         android:id="@+id/navigation_home"
         android:name="com.example.travelassistant.features.travelinfo.presentation.ui.CitiesListFragment"
         android:label="@string/title_home"
-        tools:layout="@layout/fragment_cities_list" />
+        tools:layout="@layout/fragment_cities_list" >
+        <action
+            android:id="@+id/action_navigation_home_to_toDestinationFragment"
+            app:destination="@id/toDestinationFragment" />
+    </fragment>
 
     <fragment
         android:id="@+id/navigation_notifications"
@@ -19,7 +23,36 @@
 
     <fragment
         android:id="@+id/navigation_dashboard"
-        android:name="com.example.travelassistant.features.cities.presentation.DashboardFragment"
+        android:name="com.example.travelassistant.features.cities.presentation.CitiesFragment"
         android:label="@string/title_dashboard"
         tools:layout="@layout/fragment_dashboard" />
+    <fragment
+        android:id="@+id/toDestinationFragment"
+        android:name="com.example.travelassistant.features.travelinfo.presentation.ui.destination.ToDestinationFragment"
+        android:label="fragment_to_destination"
+        tools:layout="@layout/fragment_to_destination" >
+        <action
+            android:id="@+id/action_toDestinationFragment_to_fromDestinationFragment"
+            app:destination="@id/fromDestinationFragment" />
+    </fragment>
+    <fragment
+        android:id="@+id/fromDestinationFragment"
+        android:name="com.example.travelassistant.features.travelinfo.presentation.ui.destination.FromDestinationFragment"
+        android:label="FromDestinationFragment" >
+        <action
+            android:id="@+id/action_fromDestinationFragment_to_hotelFragment"
+            app:destination="@id/hotelFragment" />
+    </fragment>
+    <fragment
+        android:id="@+id/hotelFragment"
+        android:name="com.example.travelassistant.features.travelinfo.presentation.ui.HotelFragment"
+        android:label="HotelFragment" >
+        <action
+            android:id="@+id/action_hotelFragment_to_personalItemsFragment"
+            app:destination="@id/personalItemsFragment" />
+    </fragment>
+    <fragment
+        android:id="@+id/personalItemsFragment"
+        android:name="com.example.travelassistant.features.travelinfo.presentation.ui.PersonalItemsFragment"
+        android:label="PersonalItemsFragment" />
 </navigation>

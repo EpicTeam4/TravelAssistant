@@ -4,15 +4,18 @@ import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import androidx.fragment.app.viewModels
+import androidx.core.os.bundleOf
+import androidx.fragment.app.Fragment
+import androidx.fragment.app.activityViewModels
+import androidx.navigation.findNavController
 import androidx.recyclerview.widget.GridLayoutManager
 import androidx.recyclerview.widget.RecyclerView
-import com.example.travelassistant.BaseFragment
 import com.example.travelassistant.R
 import com.example.travelassistant.core.Constants.COUNT_OF_CITY_CARD_COLUMNS
 import com.example.travelassistant.databinding.FragmentCitiesListBinding
 import com.example.travelassistant.core.domain.entity.City
 import com.example.travelassistant.features.travelinfo.presentation.adapters.CityAdapter
+import dagger.hilt.android.AndroidEntryPoint
 
 /**
  * Фрагмент со списком городов
@@ -20,9 +23,10 @@ import com.example.travelassistant.features.travelinfo.presentation.adapters.Cit
  * @author Marianne Sabanchieva
  */
 
-class CitiesListFragment : BaseFragment() {
+@AndroidEntryPoint
+class CitiesListFragment : Fragment() {
 
-    private val infoViewModel: InfoViewModel by viewModels { factory }
+    private val infoViewModel: InfoViewModel by activityViewModels()
     private var _binding: FragmentCitiesListBinding? = null
     private lateinit var recyclerView: RecyclerView
     private lateinit var citiesAdapter: CityAdapter
@@ -67,6 +71,8 @@ class CitiesListFragment : BaseFragment() {
     }
 
     private fun onCityClick(id: Long) {
-        //TODO: будет реализован переход к фрагменту
+        val bundle = bundleOf("id" to id)
+        requireActivity().findNavController(R.id.navHostFragment)
+            .navigate(R.id.action_navigation_home_to_toDestinationFragment)
     }
 }

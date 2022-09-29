@@ -13,4 +13,10 @@
     <dimen name="city_name_text_size">20sp</dimen>
     <dimen name="cardview_layout_margin">8dp</dimen>
 
+    /* fragment_from_destination, fragment_to_destination */
+    <dimen name="button_layout_margin_top">50dp</dimen>
+    <dimen name="layout_margin_top">8dp</dimen>
+
+    <dimen name="text_size">14sp</dimen>
+
 </resources>

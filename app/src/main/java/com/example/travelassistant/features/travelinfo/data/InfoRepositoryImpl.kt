@@ -4,7 +4,6 @@ import com.example.travelassistant.core.domain.LocalDataSource
 import com.example.travelassistant.core.domain.entity.Port
 import com.example.travelassistant.core.domain.entity.City
 import com.example.travelassistant.features.travelinfo.domain.repository.InfoRepository
-import javax.inject.Inject
 
 /**
  * Реализация методов репозитория
@@ -12,7 +11,7 @@ import javax.inject.Inject
  * @author Marianne Sabanchieva
  */
 
-class InfoRepositoryImpl @Inject constructor(
+class InfoRepositoryImpl(
     private val dataSource: LocalDataSource
 ) : InfoRepository {
     override suspend fun getCities(): List<City> = dataSource.getCities()
