@@ -7,7 +7,7 @@
 
     <fragment
         android:id="@+id/navigation_home"
-        android:name="com.example.travelassistant.ui.home.HomeFragment"
+        android:name="com.example.travelassistant.features.travelinfo.presentation.ui.CitiesListFragment"
         android:label="@string/title_home"
         tools:layout="@layout/fragment_home" />
 
@@ -18,8 +18,8 @@
         tools:layout="@layout/fragment_cities" />
 
     <fragment
-        android:id="@+id/navigation_notifications"
-        android:name="com.example.travelassistant.ui.notifications.NotificationsFragment"
-        android:label="@string/title_notifications"
-        tools:layout="@layout/fragment_notifications" />
+        android:id="@+id/navigation_dashboard"
+        android:name="com.example.travelassistant.features.cities.presentation.DashboardFragment"
+        android:label="@string/title_dashboard"
+        tools:layout="@layout/fragment_dashboard" />
 </navigation>

@@ -1,13 +1,18 @@
 <resources>
     <!-- Default screen margins, per the Android Design guidelines. -->
+    <dimen name="cardview_height">200dp</dimen>
     <dimen name="activity_horizontal_margin">16dp</dimen>
     <dimen name="activity_vertical_margin">16dp</dimen>
 
+    <dimen name="default_margin">16dp</dimen>
+    <dimen name="cardview_elevation">8dp</dimen>
+
+    /* fragment_cities_list */
     <dimen name="list_layout_margin">8dp</dimen>
 
+    /* fragment_city */
     <dimen name="city_name_text_size">20sp</dimen>
     <dimen name="cardview_layout_margin">8dp</dimen>
 
-    <dimen name="cardview_elevation">8dp</dimen>
 
 </resources>
