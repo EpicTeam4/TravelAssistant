@@ -1,12 +1,12 @@
 package com.example.travelassistant.features.cities.domain
 
-import com.example.travelassistant.features.cities.data.CitiesRepository
 import com.example.travelassistant.features.cities.domain.model.CityDomain
+import com.example.travelassistant.features.cities.domain.repository.CitiesRepository
 
 class CitiesUseCase(private val citiesRepository : CitiesRepository) {
 
     suspend fun getCities(): List<CityDomain> {
-        return citiesRepository.getCities().map { CityDomain(it.id, it.name, findUrl(it.id)) }
+        return citiesRepository.getCities().map { CityDomain(it.id, it.name, findUrl(it.id)) } // todo wrong CityDomain map to CityDomain
     }
 
     private fun findUrl(cityId: String): String {

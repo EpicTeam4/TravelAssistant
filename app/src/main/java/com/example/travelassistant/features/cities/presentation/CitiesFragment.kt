@@ -7,6 +7,7 @@ import android.view.ViewGroup
 import androidx.fragment.app.Fragment
 import androidx.recyclerview.widget.GridLayoutManager
 import androidx.recyclerview.widget.RecyclerView
+import com.example.travelassistant.core.Constants.COUNT_OF_CITIES_SCREEN_COLUMNS
 import com.example.travelassistant.databinding.FragmentCitiesBinding
 import org.koin.androidx.viewmodel.ext.android.viewModel
 
@@ -30,7 +31,7 @@ class CitiesFragment : Fragment() {
         _binding = FragmentCitiesBinding.inflate(inflater, container, false)
 
         recyclerView = binding.citiesRecyclerView
-        recyclerView.layoutManager = GridLayoutManager(activity, 2)
+        recyclerView.layoutManager = GridLayoutManager(activity, COUNT_OF_CITIES_SCREEN_COLUMNS)
         recyclerView.adapter = citiesAdapter
 
         return binding.root

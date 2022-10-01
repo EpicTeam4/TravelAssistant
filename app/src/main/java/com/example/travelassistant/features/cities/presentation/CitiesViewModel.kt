@@ -19,7 +19,7 @@ class CitiesViewModel(private val citiesUseCase: CitiesUseCase) : ViewModel() {
         viewModelScope.launch {
             val result = citiesUseCase.getCities()
             withContext(Dispatchers.Main) {
-                _cities.postValue(result.map { City(it.id, it.name, it.imageUrl) })
+                _cities.postValue(result.map { City(it.id, it.name, it.imageUrl.orEmpty()) })
             }
         }
     }
