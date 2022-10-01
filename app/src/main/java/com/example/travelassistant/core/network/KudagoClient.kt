@@ -36,7 +36,7 @@ class KudagoClient {
         }
     }
 
-    suspend fun getLocations(): List<Location> { // todo может захардкодить? список постоянный. com.example.travelassistant.core.network.dto.Location
+    suspend fun getLocations(): List<Location> {
         return retrofit.getLocations();
     }
 
@@ -48,10 +48,14 @@ class KudagoClient {
         return retrofit.getPlacesWithFields(location, fields);
     }
 
+    suspend fun getPlacesWithFieldsOrderByFavoritesCountDesc(location: String, fields: String): PlacesResponse {
+        return retrofit.getPlacesWithLocationFieldsOrderBy(location, fields, "-favorites_count");
+    }
+
 }
 
 
-fun main(): Unit =
+fun main(): Unit = // todo move to junit test
     runBlocking {
         println(KudagoClient().getLocations())
         println(KudagoClient().getPlaces("spb"))

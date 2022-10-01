@@ -19,7 +19,17 @@
         android:id="@+id/navigation_cities"
         android:name="com.example.travelassistant.features.cities.presentation.CitiesFragment"
         android:label="@string/title_cities"
-        tools:layout="@layout/fragment_cities" />
+        tools:layout="@layout/fragment_cities">
+        <action
+            android:id="@+id/action_navigation_cities_to_cities_places"
+            app:destination="@id/navigation_cities_places" /> <!-- todo назад в тулбаре сверху не работает -->
+    </fragment>
+
+    <fragment
+        android:id="@+id/navigation_cities_places"
+        android:name="com.example.travelassistant.features.cities.presentation.PlacesFragment"
+        android:label="@string/title_places"
+        tools:layout="@layout/fragment_places" />
 
     <fragment
         android:id="@+id/navigation_favourites"

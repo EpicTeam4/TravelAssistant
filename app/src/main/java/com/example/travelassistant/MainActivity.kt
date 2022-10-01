@@ -10,7 +10,9 @@ import androidx.navigation.ui.setupWithNavController
 import com.example.travelassistant.databinding.ActivityMainBinding
 import dagger.hilt.android.AndroidEntryPoint
 import com.example.travelassistant.features.cities.di.citiesModule
+import org.koin.android.ext.koin.androidContext
 import org.koin.core.context.startKoin
+import org.koin.core.context.stopKoin
 
 @AndroidEntryPoint
 class MainActivity : AppCompatActivity() {
@@ -21,6 +23,7 @@ class MainActivity : AppCompatActivity() {
         super.onCreate(savedInstanceState)
 
         startKoin {
+            androidContext(this@MainActivity)
             modules(citiesModule)
         }
 
@@ -40,4 +43,10 @@ class MainActivity : AppCompatActivity() {
         setupActionBarWithNavController(navController, appBarConfiguration)
         navView.setupWithNavController(navController)
     }
+
+    override fun onDestroy() {
+        super.onDestroy()
+        stopKoin()
+    }
+
 }

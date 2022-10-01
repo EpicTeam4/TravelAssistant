@@ -4,10 +4,13 @@ import android.view.LayoutInflater
 import android.view.ViewGroup
 import androidx.recyclerview.widget.RecyclerView
 import com.example.travelassistant.databinding.FragmentCitiesRecyclerViewItemBinding
-import com.example.travelassistant.features.cities.presentation.model.City
+import com.example.travelassistant.features.cities.domain.model.CityDomain
 import com.squareup.picasso.Picasso
 
-class CitiesRecyclerViewAdapter(val cities: MutableList<City>) :
+class CitiesRecyclerViewAdapter(
+    val cities: MutableList<CityDomain>,
+    private val onItemClicked: (id: String) -> Unit
+) :
     RecyclerView.Adapter<CitiesRecyclerViewAdapter.ViewHolder>() {
 
     class ViewHolder(val binding: FragmentCitiesRecyclerViewItemBinding) :
@@ -28,17 +31,16 @@ class CitiesRecyclerViewAdapter(val cities: MutableList<City>) :
                 Picasso.get()
                     .load(imageUrl)
                     .into(cityImage);
-//                root.setOnClickListener {
-//                    onItemClicked(id)
-//                }
+                root.setOnClickListener {
+                    onItemClicked(id)
+                }
             }
         }
     }
 
     override fun getItemCount() = cities.size
 
-
-    fun setCities(citiesList: List<City>) {
+    fun setCities(citiesList: List<CityDomain>) {
         if (citiesList.isNotEmpty()) {
             cities.clear()
             cities.addAll(citiesList)

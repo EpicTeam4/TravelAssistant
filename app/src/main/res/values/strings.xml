@@ -2,6 +2,7 @@
     <string name="app_name">TravelAssistant</string>
     <string name="title_home">Поездка</string>
     <string name="title_cities">Города</string>
+    <string name="title_places">Достопримечательности</string>
     <string name="title_favourites">Избранное</string>
     <string name="title_dashboard">Избранное</string>
     <string name="title_notifications">Города</string>
