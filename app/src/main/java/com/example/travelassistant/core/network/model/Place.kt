@@ -1,26 +1,27 @@
 package com.example.travelassistant.core.network.model
 
-data class Place(val id: Int,
-                 val title: String?,
-                 val short_title: String?,
-                 val slug: String?,
-                 val address: String?,
-                 val location: String?,
-                 val timetable: String?,
-                 val phone: String?,
-                 val is_stub: Boolean?,
-                 val images: List<Image?>?,
-                 val description: String?,
-                 val body_text: String?,
-                 val site_url: String?,
-                 val foreign_url: String?,
-                 val coords: Coords?,
-                 val subway: String?,
-                 val favorites_count: Int?,
-                 val comments_count: Int?,
-                 val is_closed: Boolean?,
-                 val categories: List<String?>?,
-                 val tags: List<String?>?
+data class Place(
+    val id: Int,
+    val title: String?,
+    val short_title: String?,
+    val slug: String?,
+    val address: String?,
+    val location: String?,
+    val timetable: String?,
+    val phone: String?,
+    val is_stub: Boolean?,
+    val images: List<Image?>?,
+    val description: String?,
+    val body_text: String?,
+    val site_url: String?,
+    val foreign_url: String?,
+    val coords: Coords?,
+    val subway: String?,
+    val favorites_count: Int?,
+    val comments_count: Int?,
+    val is_closed: Boolean?,
+    val categories: List<String?>?,
+    val tags: List<String?>?
 )
 
 data class Image(val image: String?, val source: Source?)
