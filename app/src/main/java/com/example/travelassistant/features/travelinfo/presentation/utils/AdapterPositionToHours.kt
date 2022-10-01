@@ -10,12 +10,12 @@ package com.example.travelassistant.features.travelinfo.presentation.utils
  */
 
 sealed class AdapterPositionToHours(val pos: Int, val hours: Long) {
-    object Three : AdapterPositionToHours(1, convertHoursToMilliseconds(3))
-    object Five : AdapterPositionToHours(2, convertHoursToMilliseconds(5))
-    object Twelve : AdapterPositionToHours(3, convertHoursToMilliseconds(12))
-    object Day : AdapterPositionToHours(4, convertHoursToMilliseconds(24))
-    object ThreeDays : AdapterPositionToHours(5, convertHoursToMilliseconds(72))
-    object Unknown : AdapterPositionToHours(0, 0)
+    object Three : AdapterPositionToHours(pos = 1, hours = DateTimeFormatter().convertHoursToMilliseconds(3))
+    object Five : AdapterPositionToHours(pos = 2, hours = DateTimeFormatter().convertHoursToMilliseconds(5))
+    object Twelve : AdapterPositionToHours(pos = 3, hours = DateTimeFormatter().convertHoursToMilliseconds(12))
+    object Day : AdapterPositionToHours(pos = 4, hours = DateTimeFormatter().convertHoursToMilliseconds(24))
+    object ThreeDays : AdapterPositionToHours(pos = 5, hours = DateTimeFormatter().convertHoursToMilliseconds(72))
+    object Unknown : AdapterPositionToHours(pos = 0, 0)
 }
 
 fun Int.toHours(): Long =
