@@ -1,6 +1,7 @@
 package com.example.travelassistant
 
 import android.os.Bundle
+import androidx.activity.viewModels
 import com.google.android.material.bottomnavigation.BottomNavigationView
 import androidx.appcompat.app.AppCompatActivity
 import androidx.navigation.findNavController
@@ -8,23 +9,23 @@ import androidx.navigation.ui.AppBarConfiguration
 import androidx.navigation.ui.setupActionBarWithNavController
 import androidx.navigation.ui.setupWithNavController
 import com.example.travelassistant.databinding.ActivityMainBinding
+import com.example.travelassistant.features.travelinfo.presentation.ui.InfoViewModel
+import dagger.hilt.android.AndroidEntryPoint
 import com.example.travelassistant.features.cities.di.citiesModule
 import org.koin.core.context.startKoin
 
+@AndroidEntryPoint
 class MainActivity : AppCompatActivity() {
 
     private lateinit var binding: ActivityMainBinding
+    val viewModel: InfoViewModel by viewModels()
 
     override fun onCreate(savedInstanceState: Bundle?) {
-
         super.onCreate(savedInstanceState)
 
         startKoin {
             modules(citiesModule)
         }
-
-      (application as TravelAssistantApplication).dagger
-            .inject(this)
 
         binding = ActivityMainBinding.inflate(layoutInflater)
         setContentView(binding.root)
