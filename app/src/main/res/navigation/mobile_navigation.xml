@@ -3,7 +3,7 @@
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:id="@+id/mobile_navigation"
-    app:startDestination="@+id/navigation_home">
+    app:startDestination="@+id/navigation_cities">
 
     <fragment
         android:id="@+id/navigation_home"
@@ -16,10 +16,10 @@
     </fragment>
 
     <fragment
-        android:id="@+id/navigation_notifications"
-        android:name="com.example.travelassistant.features.favourites.presentation.NotificationsFragment"
-        android:label="@string/title_notifications"
-        tools:layout="@layout/fragment_notifications" />
+        android:id="@+id/navigation_cities"
+        android:name="com.example.travelassistant.features.cities.presentation.CitiesFragment"
+        android:label="@string/title_dashboard"
+        tools:layout="@layout/fragment_cities" />
 
     <fragment
         android:id="@+id/navigation_dashboard"

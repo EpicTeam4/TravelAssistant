@@ -11,6 +11,8 @@ import androidx.navigation.ui.setupWithNavController
 import com.example.travelassistant.databinding.ActivityMainBinding
 import com.example.travelassistant.features.travelinfo.presentation.ui.InfoViewModel
 import dagger.hilt.android.AndroidEntryPoint
+import com.example.travelassistant.features.cities.di.citiesModule
+import org.koin.core.context.startKoin
 
 @AndroidEntryPoint
 class MainActivity : AppCompatActivity() {
@@ -20,6 +22,10 @@ class MainActivity : AppCompatActivity() {
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
+
+        startKoin {
+            modules(citiesModule)
+        }
 
         binding = ActivityMainBinding.inflate(layoutInflater)
         setContentView(binding.root)
@@ -31,7 +37,7 @@ class MainActivity : AppCompatActivity() {
         // menu should be considered as top level destinations.
         val appBarConfiguration = AppBarConfiguration(
             setOf(
-                R.id.navigation_home, R.id.navigation_dashboard, R.id.navigation_notifications
+                R.id.navigation_home, R.id.navigation_cities, R.id.navigation_notifications
             )
         )
         setupActionBarWithNavController(navController, appBarConfiguration)
