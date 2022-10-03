@@ -3,7 +3,7 @@
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:id="@+id/mobile_navigation"
-    app:startDestination="@+id/navigation_cities">
+    app:startDestination="@id/navigation_home">
 
     <fragment
         android:id="@+id/navigation_home"
@@ -18,14 +18,14 @@
     <fragment
         android:id="@+id/navigation_cities"
         android:name="com.example.travelassistant.features.cities.presentation.CitiesFragment"
-        android:label="@string/title_dashboard"
+        android:label="@string/title_cities"
         tools:layout="@layout/fragment_cities" />
 
     <fragment
-        android:id="@+id/navigation_dashboard"
-        android:name="com.example.travelassistant.features.cities.presentation.CitiesFragment"
-        android:label="@string/title_dashboard"
-        tools:layout="@layout/fragment_dashboard" />
+        android:id="@+id/navigation_favourites"
+        android:name="com.example.travelassistant.features.favourites.FavouritesFragment"
+        android:label="@string/title_favourites"
+        tools:layout="@layout/fragment_favourites" />
     <fragment
         android:id="@+id/toDestinationFragment"
         android:name="com.example.travelassistant.features.travelinfo.presentation.ui.destination.ToDestinationFragment"
@@ -34,6 +34,9 @@
         <action
             android:id="@+id/action_toDestinationFragment_to_fromDestinationFragment"
             app:destination="@id/fromDestinationFragment" />
+        <argument
+            android:name="cityId"
+            app:argType="long" />
     </fragment>
     <fragment
         android:id="@+id/fromDestinationFragment"
@@ -42,17 +45,23 @@
         <action
             android:id="@+id/action_fromDestinationFragment_to_hotelFragment"
             app:destination="@id/hotelFragment" />
+        <argument
+            android:name="cityId"
+            app:argType="long" />
     </fragment>
     <fragment
         android:id="@+id/hotelFragment"
-        android:name="com.example.travelassistant.features.travelinfo.presentation.ui.HotelFragment"
+        android:name="com.example.travelassistant.features.travelinfo.presentation.ui.destination.HotelFragment"
         android:label="HotelFragment" >
         <action
             android:id="@+id/action_hotelFragment_to_personalItemsFragment"
             app:destination="@id/personalItemsFragment" />
+        <argument
+            android:name="cityId"
+            app:argType="long" />
     </fragment>
     <fragment
         android:id="@+id/personalItemsFragment"
-        android:name="com.example.travelassistant.features.travelinfo.presentation.ui.PersonalItemsFragment"
+        android:name="com.example.travelassistant.features.travelinfo.presentation.ui.destination.PersonalItemsFragment"
         android:label="PersonalItemsFragment" />
 </navigation>

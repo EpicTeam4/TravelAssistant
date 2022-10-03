@@ -9,7 +9,7 @@ import androidx.navigation.ui.AppBarConfiguration
 import androidx.navigation.ui.setupActionBarWithNavController
 import androidx.navigation.ui.setupWithNavController
 import com.example.travelassistant.databinding.ActivityMainBinding
-import com.example.travelassistant.features.travelinfo.presentation.ui.InfoViewModel
+import com.example.travelassistant.features.travelinfo.presentation.ui.TravelInfoViewModel
 import dagger.hilt.android.AndroidEntryPoint
 import com.example.travelassistant.features.cities.di.citiesModule
 import org.koin.core.context.startKoin
@@ -18,7 +18,7 @@ import org.koin.core.context.startKoin
 class MainActivity : AppCompatActivity() {
 
     private lateinit var binding: ActivityMainBinding
-    val viewModel: InfoViewModel by viewModels()
+    val viewModel: TravelInfoViewModel by viewModels()
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -37,7 +37,7 @@ class MainActivity : AppCompatActivity() {
         // menu should be considered as top level destinations.
         val appBarConfiguration = AppBarConfiguration(
             setOf(
-                R.id.navigation_home, R.id.navigation_cities, R.id.navigation_notifications
+                R.id.navigation_home, R.id.navigation_cities, R.id.navigation_favourites
             )
         )
         setupActionBarWithNavController(navController, appBarConfiguration)

@@ -4,17 +4,15 @@ import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import androidx.core.os.bundleOf
-import androidx.fragment.app.Fragment
+import androidx.core.view.isVisible
 import androidx.fragment.app.activityViewModels
-import androidx.navigation.findNavController
 import androidx.recyclerview.widget.GridLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.example.travelassistant.R
 import com.example.travelassistant.core.Constants.COUNT_OF_CITY_CARD_COLUMNS
 import com.example.travelassistant.databinding.FragmentCitiesListBinding
-import com.example.travelassistant.core.domain.entity.City
 import com.example.travelassistant.features.travelinfo.presentation.adapters.CityAdapter
+import com.example.travelassistant.features.travelinfo.presentation.ui.destination.BaseFragment
 import dagger.hilt.android.AndroidEntryPoint
 
 /**
@@ -24,9 +22,9 @@ import dagger.hilt.android.AndroidEntryPoint
  */
 
 @AndroidEntryPoint
-class CitiesListFragment : Fragment() {
+class CitiesListFragment : BaseFragment() {
 
-    private val infoViewModel: InfoViewModel by activityViewModels()
+    private val infoViewModel: TravelInfoViewModel by activityViewModels()
     private var _binding: FragmentCitiesListBinding? = null
     private lateinit var recyclerView: RecyclerView
     private lateinit var citiesAdapter: CityAdapter
@@ -38,9 +36,7 @@ class CitiesListFragment : Fragment() {
     ): View {
         val view = inflater.inflate(R.layout.fragment_cities_list, container, false)
 
-        citiesAdapter = CityAdapter(mutableListOf()) { id ->
-            onCityClick(id)
-        }
+        citiesAdapter = CityAdapter(mutableListOf()) { id -> onCityClick(id) }
         recyclerView = (view.findViewById(R.id.cities) as RecyclerView).apply {
             layoutManager = GridLayoutManager(requireContext(), COUNT_OF_CITY_CARD_COLUMNS)
             adapter = citiesAdapter
@@ -53,8 +49,9 @@ class CitiesListFragment : Fragment() {
 
         _binding = FragmentCitiesListBinding.bind(view)
 
-        initObservers()
-        infoViewModel.init()
+        infoViewModel.dataState.observe(viewLifecycleOwner, ::handleState)
+        observe(infoViewModel.commands, ::handleCommand)
+        infoViewModel.loadData()
     }
 
     override fun onDestroyView() {
@@ -62,17 +59,35 @@ class CitiesListFragment : Fragment() {
         _binding = null
     }
 
-    private fun initObservers() {
-        infoViewModel.allCities.observe(viewLifecycleOwner, ::setCities)
+    private fun handleState(state: TravelInfoViewState) {
+        refresh(state)
+        when (state) {
+            is TravelInfoViewState.Content -> state.handle()
+            is TravelInfoViewState.Error -> state.handle()
+        }
     }
 
-    private fun setCities(cities: List<City>) {
+    private fun TravelInfoViewState.Content.handle() {
         citiesAdapter.setCities(cities)
     }
 
+    private fun TravelInfoViewState.Error.handle() {
+        _binding?.errorPanel?.apply {
+            errorIcon.setImageResource(errorModel.icon)
+            errorTitle.setText(errorModel.title)
+        }
+    }
+
+    private fun refresh(state: TravelInfoViewState) {
+        _binding?.apply {
+            cities.isVisible = state is TravelInfoViewState.Content
+            errorPanel.root.isVisible = state is TravelInfoViewState.Error
+        }
+    }
+
     private fun onCityClick(id: Long) {
-        val bundle = bundleOf("id" to id)
-        requireActivity().findNavController(R.id.navHostFragment)
-            .navigate(R.id.action_navigation_home_to_toDestinationFragment)
+        infoViewModel.openToDestination(
+            CitiesListFragmentDirections.actionNavigationHomeToToDestinationFragment(id)
+        )
     }
 }

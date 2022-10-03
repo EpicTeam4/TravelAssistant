@@ -2,6 +2,7 @@ package com.example.travelassistant.features.travelinfo.domain.repository
 
 import com.example.travelassistant.core.domain.entity.Port
 import com.example.travelassistant.core.domain.entity.City
+import com.example.travelassistant.core.domain.entity.Hotel
 
 /**
  * Репозиторий для списка предустановленных городов, аэропортов и их детализации
@@ -15,4 +16,6 @@ interface InfoRepository {
 
     suspend fun getPorts(): List<Port>
     suspend fun getPortById(id: Long): Port?
+
+    suspend fun getHotels(location: String): List<Hotel>
 }
