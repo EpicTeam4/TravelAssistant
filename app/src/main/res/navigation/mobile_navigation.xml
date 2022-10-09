@@ -18,14 +18,15 @@
     <fragment
         android:id="@+id/navigation_cities"
         android:name="com.example.travelassistant.features.cities.presentation.CitiesFragment"
-        android:label="@string/title_dashboard"
+        android:label="@string/title_cities"
         tools:layout="@layout/fragment_cities" />
 
     <fragment
-        android:id="@+id/navigation_dashboard"
-        android:name="com.example.travelassistant.features.cities.presentation.CitiesFragment"
-        android:label="@string/title_dashboard"
-        tools:layout="@layout/fragment_dashboard" />
+        android:id="@+id/navigation_favourites"
+        android:name="com.example.travelassistant.ui.favourites.FavouritesFragment"
+        android:label="@string/title_favourites"
+        tools:layout="@layout/fragment_favourites" />
+
     <fragment
         android:id="@+id/toDestinationFragment"
         android:name="com.example.travelassistant.features.travelinfo.presentation.ui.destination.ToDestinationFragment"
