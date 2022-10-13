@@ -7,8 +7,9 @@ import com.example.travelassistant.core.Constants.SECONDS_IN_MINUTE
 import java.text.SimpleDateFormat
 import java.util.Calendar
 import java.util.GregorianCalendar
+import javax.inject.Inject
 
-class DateTimeFormatter {
+class DateTimeFormatter @Inject constructor() {
 
     /**
      * Convert long date to string - конвертирует дату из Long в строку

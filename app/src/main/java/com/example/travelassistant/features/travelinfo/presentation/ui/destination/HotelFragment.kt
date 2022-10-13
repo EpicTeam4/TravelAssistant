@@ -5,24 +5,23 @@ import android.view.LayoutInflater
 import android.view.MenuItem
 import android.view.View
 import android.view.ViewGroup
+import android.widget.AdapterView
 import android.widget.ArrayAdapter
 import androidx.core.view.isVisible
 import androidx.fragment.app.activityViewModels
 import com.example.travelassistant.R
-import com.example.travelassistant.core.orDefault
-import com.example.travelassistant.databinding.FragmentToDestinationBinding
+import com.example.travelassistant.databinding.FragmentHotelBinding
 import com.example.travelassistant.features.travelinfo.presentation.ui.TravelInfoViewModel
 import com.example.travelassistant.features.travelinfo.presentation.ui.TravelInfoViewState
 import com.example.travelassistant.features.travelinfo.presentation.ui.observe
-import com.example.travelassistant.features.travelinfo.presentation.utils.toHours
 import dagger.hilt.android.AndroidEntryPoint
 
 @AndroidEntryPoint
-class ToDestinationFragment : BaseFragment() {
+class HotelFragment : BaseFragment() {
 
-    private val infoViewModel: TravelInfoViewModel by activityViewModels()
-    private var _binding: FragmentToDestinationBinding? = null
-    private lateinit var portsList: ArrayAdapter<String>
+    private var _binding: FragmentHotelBinding? = null
+    private val infoViewModel by activityViewModels<TravelInfoViewModel>()
+    private lateinit var hotelsList: ArrayAdapter<String>
 
     override fun onCreateView(
         inflater: LayoutInflater,
@@ -31,50 +30,49 @@ class ToDestinationFragment : BaseFragment() {
     ): View? {
         setHasOptionsMenu(true)
         activity?.actionBar?.setDisplayHomeAsUpEnabled(true)
-        return inflater.inflate(R.layout.fragment_to_destination, container, false)
+        return inflater.inflate(R.layout.fragment_hotel, container, false)
     }
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
 
-        _binding = FragmentToDestinationBinding.bind(view)
+        _binding = FragmentHotelBinding.bind(view)
 
+        val selectedCityId = HotelFragmentArgs.fromBundle(requireArguments()).cityId
+
+        infoViewModel.loadHotels(selectedCityId)
         initObservers()
         observe(infoViewModel.commands, ::handleCommand)
-        infoViewModel.loadData()
 
-        val selectedCityId = ToDestinationFragmentArgs.fromBundle(requireArguments()).cityId
+        _binding?.spinner?.onItemSelectedListener = object : AdapterView.OnItemSelectedListener {
+            override fun onItemSelected(
+                parent: AdapterView<*>?,
+                itemSelected: View, selectedItemPosition: Int, selectedId: Long
+            ) {
+                infoViewModel.selectedHotelPos = selectedItemPosition
+                infoViewModel.dataState.observe(viewLifecycleOwner, ::handleState)
+            }
+
+            override fun onNothingSelected(parent: AdapterView<*>?) {}
+        }
 
         _binding?.apply {
             button.setOnClickListener {
-                getSelectedPortId()
-                getSelectedTime()
-
-                infoViewModel.openFromDestination(
-                    ToDestinationFragmentDirections.actionToDestinationFragmentToFromDestinationFragment(
-                        selectedCityId
-                    )
+                infoViewModel.openItemsFragment(
+                    HotelFragmentDirections.actionHotelFragmentToPersonalItemsFragment()
                 )
             }
 
-            dateOfJourney.setOnClickListener {
-                pickDate()
-                dateOfJourney.setText(infoViewModel.formatter.convertLongDateToString(
-                    infoViewModel.tempDate)
-                )
-                infoViewModel.infoAboutTravel = infoViewModel.infoAboutTravel.copyInfoAboutTravel(
-                    timeInMillis = infoViewModel.tempDate
-                )
+            swipeRefreshLayout.setOnRefreshListener {
+                infoViewModel.loadHotels(selectedCityId)
+                swipeRefreshLayout.isRefreshing = false
             }
         }
     }
 
     override fun onResume() {
         super.onResume()
-        _binding?.apply {
-            spinner.setSelection(infoViewModel.infoAboutTravel.portId)
-            spinnerTime.selectedItemPosition.let { spinnerTime.setSelection(it) }
-        }
+        _binding?.spinner?.setSelection(infoViewModel.selectedHotelPos)
     }
 
     override fun onDestroyView() {
@@ -83,13 +81,12 @@ class ToDestinationFragment : BaseFragment() {
     }
 
     private fun initObservers() {
-        portsList =
+        hotelsList =
             (ArrayAdapter<String>(requireContext(), android.R.layout.simple_spinner_item)).apply {
                 setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item)
             }
-
+        _binding?.spinner?.adapter = hotelsList
         infoViewModel.dataState.observe(viewLifecycleOwner, ::handleState)
-        _binding?.spinner?.adapter = portsList
     }
 
     private fun handleState(state: TravelInfoViewState) {
@@ -101,7 +98,21 @@ class ToDestinationFragment : BaseFragment() {
     }
 
     private fun TravelInfoViewState.Content.handle() {
-        if (portsList.isEmpty) ports.forEach { portsList.add(it.name) }
+        if (hotelsList.isEmpty)
+            hotels.forEach { hotel ->
+                hotelsList.add(hotel.title.replaceFirstChar { it.uppercaseChar() })
+            }
+
+        _binding?.apply {
+            if (hotels.isNotEmpty()) {
+                val id = hotels[infoViewModel.selectedHotelPos].id
+                infoViewModel.infoAboutTravel =
+                    infoViewModel.infoAboutTravel.copyInfoAboutTravel(hotelId = id)
+                hotelAddress.text = hotels[infoViewModel.selectedHotelPos].address
+                hotelPhone.text = hotels[infoViewModel.selectedHotelPos].phone
+                hotelWebsite.text = hotels[infoViewModel.selectedHotelPos].subway
+            }
+        }
     }
 
     private fun TravelInfoViewState.Error.handle() {
@@ -116,20 +127,6 @@ class ToDestinationFragment : BaseFragment() {
             contentPanel.isVisible = state is TravelInfoViewState.Content
             errorPanel.root.isVisible = state is TravelInfoViewState.Error
         }
-    }
-
-    private fun getSelectedPortId(): Int {
-        infoViewModel.infoAboutTravel = infoViewModel.infoAboutTravel.copyInfoAboutTravel(
-                portId = _binding?.spinner?.selectedItemPosition.orDefault()
-            )
-        return infoViewModel.infoAboutTravel.portId
-    }
-
-    private fun getSelectedTime(): Long {
-        infoViewModel.infoAboutTravel = infoViewModel.infoAboutTravel.copyInfoAboutTravel(
-            hours = _binding?.spinnerTime?.selectedItemPosition.orDefault().toHours()
-        )
-        return infoViewModel.infoAboutTravel.hours
     }
 
     override fun onOptionsItemSelected(menuItem: MenuItem): Boolean {
