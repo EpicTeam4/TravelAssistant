@@ -3,6 +3,8 @@
     <string name="title_home">Поездка</string>
     <string name="title_cities">Города</string>
     <string name="title_favourites">Избранное</string>
+    <string name="title_dashboard">Избранное</string>
+    <string name="title_notifications">Города</string>
     <string name="travel_date">Дата поездки</string>
     <string name="flight_number">Номер рейса</string>
     <string name="van_seat_number">Номер вагона и места</string>
