@@ -8,9 +8,11 @@ import com.example.travelassistant.core.database.DatabaseConst.DATABASE_NAME
 import com.example.travelassistant.core.database.TravelDatabase
 import com.example.travelassistant.core.database.dao.PortDao
 import com.example.travelassistant.core.database.dao.CityDao
+import com.example.travelassistant.core.database.dao.PersonalItemDao
 import com.example.travelassistant.core.domain.LocalDataSource
 import com.example.travelassistant.core.domain.entity.City
 import com.example.travelassistant.core.domain.entity.Hotel
+import com.example.travelassistant.core.domain.entity.PersonalItem
 import com.example.travelassistant.core.domain.entity.Port
 import com.example.travelassistant.core.network.ApiMapperHotel
 import com.example.travelassistant.core.network.KudagoClient
@@ -48,6 +50,9 @@ class AppModule {
     fun providePortDao(appDatabase: TravelDatabase): PortDao = appDatabase.port()
 
     @Provides
+    fun provideItemDao(appDatabase: TravelDatabase): PersonalItemDao = appDatabase.item()
+
+    @Provides
     fun provideKudagoClientApi(): KudagoClientApi =
         Retrofit.Builder()
             .addConverterFactory(GsonConverterFactory.create())
@@ -70,6 +75,10 @@ class AppModule {
     @Provides
     suspend fun providesHotelUseCase(useCase: GetInfoUseCase, location: String): State<List<Hotel>> =
         useCase.getHotels(location)
+
+    @Provides
+    suspend fun providesItemUseCase(useCase: GetInfoUseCase): State<List<PersonalItem>> =
+        useCase.getAllItems()
 
     @Provides
     fun bindsInfoRepository(dataSource: LocalDataSource, hotelMapper: ApiMapperHotel): InfoRepository =

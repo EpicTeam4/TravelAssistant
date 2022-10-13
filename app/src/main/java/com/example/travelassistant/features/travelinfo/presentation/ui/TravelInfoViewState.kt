@@ -2,6 +2,7 @@ package com.example.travelassistant.features.travelinfo.presentation.ui
 
 import com.example.travelassistant.core.domain.entity.City
 import com.example.travelassistant.core.domain.entity.Hotel
+import com.example.travelassistant.core.domain.entity.PersonalItem
 import com.example.travelassistant.core.domain.entity.Port
 import com.example.travelassistant.features.travelinfo.data.model.ErrorModel
 
@@ -16,6 +17,7 @@ sealed class TravelInfoViewState {
     data class Content(
         val cities: List<City> = listOf(),
         val ports: List<Port> = listOf(),
-        val hotels: List<Hotel> = listOf()
+        val hotels: List<Hotel> = listOf(),
+        val items: List<PersonalItem> = listOf()
     ) : TravelInfoViewState()
 }
