@@ -8,10 +8,8 @@ import android.view.ViewGroup
 import android.widget.AdapterView
 import android.widget.ArrayAdapter
 import androidx.core.view.isVisible
-import androidx.fragment.app.activityViewModels
 import com.example.travelassistant.R
 import com.example.travelassistant.databinding.FragmentHotelBinding
-import com.example.travelassistant.features.travelinfo.presentation.ui.TravelInfoViewModel
 import com.example.travelassistant.features.travelinfo.presentation.ui.TravelInfoViewState
 import com.example.travelassistant.features.travelinfo.presentation.ui.observe
 import dagger.hilt.android.AndroidEntryPoint
@@ -20,7 +18,6 @@ import dagger.hilt.android.AndroidEntryPoint
 class HotelFragment : BaseFragment() {
 
     private var _binding: FragmentHotelBinding? = null
-    private val infoViewModel by activityViewModels<TravelInfoViewModel>()
     private lateinit var hotelsList: ArrayAdapter<String>
 
     override fun onCreateView(
@@ -40,7 +37,7 @@ class HotelFragment : BaseFragment() {
 
         val selectedCityId = HotelFragmentArgs.fromBundle(requireArguments()).cityId
 
-        infoViewModel.loadHotels(selectedCityId)
+        infoViewModel.loadData(selectedCityId)
         initObservers()
         observe(infoViewModel.commands, ::handleCommand)
 
@@ -64,7 +61,7 @@ class HotelFragment : BaseFragment() {
             }
 
             swipeRefreshLayout.setOnRefreshListener {
-                infoViewModel.loadHotels(selectedCityId)
+                infoViewModel.loadData(selectedCityId)
                 swipeRefreshLayout.isRefreshing = false
             }
         }

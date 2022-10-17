@@ -7,8 +7,8 @@ import androidx.lifecycle.viewModelScope
 import androidx.navigation.NavDirections
 import com.example.travelassistant.core.domain.entity.City
 import com.example.travelassistant.core.domain.entity.Hotel
+import com.example.travelassistant.core.domain.entity.PersonalItem
 import com.example.travelassistant.core.domain.entity.Port
-import com.example.travelassistant.features.travelinfo.domain.State
 import com.example.travelassistant.features.travelinfo.domain.data
 import com.example.travelassistant.features.travelinfo.domain.usecase.GetInfoUseCase
 import com.example.travelassistant.features.travelinfo.presentation.model.DateTime
@@ -47,7 +47,7 @@ class TravelInfoViewModel @Inject constructor(
     private val dataContent = MutableLiveData<TravelInfoViewState>()
     val dataState: LiveData<TravelInfoViewState> get() = dataContent
 
-    fun loadData() {
+    fun loadData(id: Long) {
         viewModelScope.launch {
             val (cities, ports) = coroutineScope {
                 val citiesResult = async { useCase.getCities() }
@@ -56,26 +56,20 @@ class TravelInfoViewModel @Inject constructor(
                 citiesResult.await().data to portsResult.await().data
             }
 
-            if (cities != null && ports != null) {
-                handleData(cities = cities, ports = ports, hotels = listOf())
+            val citySlug = useCase.getCityById(id)
+            val (hotels, items) = coroutineScope {
+                val hotelsResult = async { citySlug?.slug?.let { useCase.getHotels(it) } }
+                val itemsResult = async { useCase.getAllItems() }
+
+                hotelsResult.await()?.data to itemsResult.await().data
+            }
+
+            if (cities != null && ports != null && hotels != null && items != null) {
+                handleData(cities = cities, ports = ports, hotels = hotels, items = items)
+            } else if (cities != null && ports != null && hotels.isNullOrEmpty() && items != null) {
+                handleData(cities = cities, ports = ports, hotels = listOf(), items = items)
             } else {
                 handleError(true)
-            }
-        }
-    }
-
-    fun loadHotels(id: Long) {
-        viewModelScope.launch {
-            val citySlug = useCase.getCityById(id)
-            if (citySlug?.slug != null) {
-                when (val result = useCase.getHotels(citySlug.slug)) {
-                    is State.Success -> handleData(
-                        cities = listOf(),
-                        ports = listOf(),
-                        hotels = result.data
-                    )
-                    is State.Error -> handleError(result.isNetworkError)
-                }
             }
         }
     }
@@ -89,14 +83,13 @@ class TravelInfoViewModel @Inject constructor(
     private suspend fun handleData(
         cities: List<City>,
         ports: List<Port>,
-        hotels: List<Hotel>
+        hotels: List<Hotel>,
+        items: List<PersonalItem>
     ) {
         withContext(Main) {
             dataContent.value =
                 TravelInfoViewState.Content(
-                    cities = cities,
-                    ports = ports,
-                    hotels = hotels
+                    cities = cities, ports = ports, hotels = hotels, items = items
                 )
         }
     }

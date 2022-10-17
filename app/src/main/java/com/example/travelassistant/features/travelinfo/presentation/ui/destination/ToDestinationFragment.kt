@@ -7,11 +7,10 @@ import android.view.View
 import android.view.ViewGroup
 import android.widget.ArrayAdapter
 import androidx.core.view.isVisible
-import androidx.fragment.app.activityViewModels
 import com.example.travelassistant.R
+import com.example.travelassistant.core.Constants.DEFAULT_VALUE
 import com.example.travelassistant.core.orDefault
 import com.example.travelassistant.databinding.FragmentToDestinationBinding
-import com.example.travelassistant.features.travelinfo.presentation.ui.TravelInfoViewModel
 import com.example.travelassistant.features.travelinfo.presentation.ui.TravelInfoViewState
 import com.example.travelassistant.features.travelinfo.presentation.ui.observe
 import com.example.travelassistant.features.travelinfo.presentation.utils.toHours
@@ -20,7 +19,6 @@ import dagger.hilt.android.AndroidEntryPoint
 @AndroidEntryPoint
 class ToDestinationFragment : BaseFragment() {
 
-    private val infoViewModel: TravelInfoViewModel by activityViewModels()
     private var _binding: FragmentToDestinationBinding? = null
     private lateinit var portsList: ArrayAdapter<String>
 
@@ -41,7 +39,7 @@ class ToDestinationFragment : BaseFragment() {
 
         initObservers()
         observe(infoViewModel.commands, ::handleCommand)
-        infoViewModel.loadData()
+        infoViewModel.loadData(DEFAULT_VALUE)
 
         val selectedCityId = ToDestinationFragmentArgs.fromBundle(requireArguments()).cityId
 
