@@ -17,6 +17,7 @@
     <string name="subway">Станция метро</string>
     <string name="network_error">Не удалось загрузить данные</string>
     <string name="unknown_error">Непредвиденная ошибка</string>
+    <string name="add_item">Добавить элемент багажа</string>
     <string-array name="time">
         <item>не напоминать</item>
         <item>за 3 часа</item>

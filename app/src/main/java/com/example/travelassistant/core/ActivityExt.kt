@@ -1,7 +1,6 @@
 package com.example.travelassistant.core
 
 import android.app.Activity
-import androidx.navigation.NavDirections
 import androidx.navigation.findNavController
 import com.example.travelassistant.R
 
@@ -11,5 +10,5 @@ import com.example.travelassistant.R
  * @author Marianne Sabanchieva
  */
 
-fun Activity.toNavigate(pathId: NavDirections) =
+fun Activity.toNavigate(pathId: Int) =
     this.findNavController(R.id.navHostFragment).navigate(pathId)

@@ -3,7 +3,7 @@ package com.example.travelassistant.features.travelinfo.presentation.ui.destinat
 import android.app.DatePickerDialog
 import android.app.TimePickerDialog
 import androidx.fragment.app.Fragment
-import androidx.fragment.app.viewModels
+import androidx.fragment.app.activityViewModels
 import com.example.travelassistant.core.toNavigate
 import com.example.travelassistant.features.travelinfo.presentation.ui.TravelInfoViewModel
 import com.example.travelassistant.features.travelinfo.presentation.ui.commands.GoToFragment
@@ -20,7 +20,7 @@ import java.util.Calendar
 @AndroidEntryPoint
 open class BaseFragment : Fragment() {
 
-    protected val infoViewModel: TravelInfoViewModel by viewModels()
+    private val infoViewModel: TravelInfoViewModel by activityViewModels()
 
     protected fun handleCommand(viewCommand: ViewCommand) {
         if (viewCommand is GoToFragment) goToFragment(viewCommand)

@@ -5,11 +5,11 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import androidx.core.view.isVisible
+import androidx.fragment.app.activityViewModels
 import androidx.recyclerview.widget.GridLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.example.travelassistant.R
 import com.example.travelassistant.core.Constants.COUNT_OF_CITY_CARD_COLUMNS
-import com.example.travelassistant.core.Constants.DEFAULT_VALUE
 import com.example.travelassistant.databinding.FragmentCitiesListBinding
 import com.example.travelassistant.features.travelinfo.presentation.adapters.CityAdapter
 import com.example.travelassistant.features.travelinfo.presentation.ui.destination.BaseFragment
@@ -27,6 +27,7 @@ class CitiesListFragment : BaseFragment() {
     private var _binding: FragmentCitiesListBinding? = null
     private lateinit var recyclerView: RecyclerView
     private lateinit var citiesAdapter: CityAdapter
+    private val infoViewModel: TravelInfoViewModel by activityViewModels()
 
     override fun onCreateView(
         inflater: LayoutInflater,
@@ -50,7 +51,7 @@ class CitiesListFragment : BaseFragment() {
 
         infoViewModel.dataState.observe(viewLifecycleOwner, ::handleState)
         observe(infoViewModel.commands, ::handleCommand)
-        infoViewModel.loadData(DEFAULT_VALUE)
+        infoViewModel.loadCities()
     }
 
     override fun onDestroyView() {
@@ -85,8 +86,7 @@ class CitiesListFragment : BaseFragment() {
     }
 
     private fun onCityClick(id: Long) {
-        infoViewModel.openToDestination(
-            CitiesListFragmentDirections.actionNavigationHomeToToDestinationFragment(id)
-        )
+        infoViewModel.infoAboutTravel = infoViewModel.infoAboutTravel.copyInfoAboutTravel(city_id = id)
+        infoViewModel.openToDestination()
     }
 }

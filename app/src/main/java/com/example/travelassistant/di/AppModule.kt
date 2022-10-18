@@ -4,16 +4,20 @@ import android.app.Application
 import android.content.Context
 import androidx.room.Room
 import com.example.travelassistant.core.Constants.BASE_URL
+import com.example.travelassistant.core.database.DatabaseConst.DATABASE_INFO_NAME
 import com.example.travelassistant.core.database.DatabaseConst.DATABASE_NAME
 import com.example.travelassistant.core.database.TravelDatabase
+import com.example.travelassistant.core.database.TravelInfoDatabase
 import com.example.travelassistant.core.database.dao.PortDao
 import com.example.travelassistant.core.database.dao.CityDao
 import com.example.travelassistant.core.database.dao.PersonalItemDao
+import com.example.travelassistant.core.database.dao.TravelInfoDao
 import com.example.travelassistant.core.domain.LocalDataSource
 import com.example.travelassistant.core.domain.entity.City
 import com.example.travelassistant.core.domain.entity.Hotel
 import com.example.travelassistant.core.domain.entity.PersonalItem
 import com.example.travelassistant.core.domain.entity.Port
+import com.example.travelassistant.core.domain.entity.InfoAboutTravel
 import com.example.travelassistant.core.network.ApiMapperHotel
 import com.example.travelassistant.core.network.KudagoClient
 import com.example.travelassistant.core.network.KudagoClientApi
@@ -53,6 +57,9 @@ class AppModule {
     fun provideItemDao(appDatabase: TravelDatabase): PersonalItemDao = appDatabase.item()
 
     @Provides
+    fun provideDetails(appDatabase: TravelInfoDatabase): TravelInfoDao = appDatabase.details()
+
+    @Provides
     fun provideKudagoClientApi(): KudagoClientApi =
         Retrofit.Builder()
             .addConverterFactory(GsonConverterFactory.create())
@@ -81,6 +88,10 @@ class AppModule {
         useCase.getAllItems()
 
     @Provides
+    suspend fun providesDetailsUseCase(useCase: GetInfoUseCase, info: InfoAboutTravel) =
+        useCase.addDetails(info)
+
+    @Provides
     fun bindsInfoRepository(dataSource: LocalDataSource, hotelMapper: ApiMapperHotel): InfoRepository =
         InfoRepositoryImpl(dataSource, hotelMapper)
 
@@ -90,4 +101,9 @@ class AppModule {
         Room.databaseBuilder(context, TravelDatabase::class.java, DATABASE_NAME)
             .createFromAsset("$DATABASE_NAME.db")
             .build()
+
+    @Provides
+    @Singleton
+    fun provideInfoDatabase(context: Context): TravelInfoDatabase =
+        Room.databaseBuilder(context, TravelInfoDatabase::class.java, DATABASE_INFO_NAME).build()
 }

@@ -4,6 +4,7 @@ import com.example.travelassistant.core.domain.entity.Port
 import com.example.travelassistant.core.domain.entity.City
 import com.example.travelassistant.core.domain.entity.Hotel
 import com.example.travelassistant.core.domain.entity.PersonalItem
+import com.example.travelassistant.core.domain.entity.InfoAboutTravel
 
 /**
  * Репозиторий для списка предустановленных городов, аэропортов и их детализации
@@ -20,4 +21,8 @@ interface InfoRepository {
 
     suspend fun getHotels(location: String): List<Hotel>
     suspend fun getAllItems(): List<PersonalItem>
+    suspend fun addItem(item: PersonalItem)
+
+    suspend fun getDetails(date: Long): InfoAboutTravel?
+    suspend fun addDetails(info: InfoAboutTravel)
 }
