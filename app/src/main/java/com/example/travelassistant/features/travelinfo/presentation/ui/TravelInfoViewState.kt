@@ -1,5 +1,6 @@
 package com.example.travelassistant.features.travelinfo.presentation.ui
 
+import com.example.travelassistant.core.Constants.EMPTY_STRING
 import com.example.travelassistant.core.domain.entity.City
 import com.example.travelassistant.core.domain.entity.Hotel
 import com.example.travelassistant.core.domain.entity.PersonalItem
@@ -18,6 +19,7 @@ sealed class TravelInfoViewState {
         val cities: List<City> = listOf(),
         val ports: List<Port> = listOf(),
         val hotels: List<Hotel> = listOf(),
-        val items: List<PersonalItem> = listOf()
+        val items: List<PersonalItem> = listOf(),
+        val datetime: String = EMPTY_STRING
     ) : TravelInfoViewState()
 }

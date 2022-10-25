@@ -30,8 +30,8 @@
     <fragment
         android:id="@+id/toDestinationFragment"
         android:name="com.example.travelassistant.features.travelinfo.presentation.ui.destination.ToDestinationFragment"
-        android:label="fragment_to_destination"
-        tools:layout="@layout/fragment_to_destination" >
+        android:label="Туда"
+        tools:layout="@layout/fragment_to_destination">
         <action
             android:id="@+id/action_toDestinationFragment_to_fromDestinationFragment"
             app:destination="@id/fromDestinationFragment" />
@@ -42,7 +42,7 @@
     <fragment
         android:id="@+id/fromDestinationFragment"
         android:name="com.example.travelassistant.features.travelinfo.presentation.ui.destination.FromDestinationFragment"
-        android:label="FromDestinationFragment" >
+        android:label="Обратно">
         <action
             android:id="@+id/action_fromDestinationFragment_to_hotelFragment"
             app:destination="@id/hotelFragment" />
@@ -53,7 +53,7 @@
     <fragment
         android:id="@+id/hotelFragment"
         android:name="com.example.travelassistant.features.travelinfo.presentation.ui.destination.HotelFragment"
-        android:label="HotelFragment" >
+        android:label="Отель">
         <action
             android:id="@+id/action_hotelFragment_to_personalItemsFragment"
             app:destination="@id/personalItemsFragment" />
@@ -64,5 +64,10 @@
     <fragment
         android:id="@+id/personalItemsFragment"
         android:name="com.example.travelassistant.features.travelinfo.presentation.ui.destination.PersonalItemsFragment"
-        android:label="PersonalItemsFragment" />
+        android:label="Багаж">
+        <action
+            android:id="@+id/action_personalItemsFragment_to_navigation_home"
+            app:destination="@id/navigation_home"
+            app:popUpTo="@id/navigation_home" />
+    </fragment>
 </navigation>

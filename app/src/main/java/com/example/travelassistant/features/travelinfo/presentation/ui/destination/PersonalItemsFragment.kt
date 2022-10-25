@@ -6,13 +6,16 @@ import android.view.MenuItem
 import android.view.View
 import android.view.ViewGroup
 import androidx.core.view.isVisible
+import androidx.fragment.app.activityViewModels
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.example.travelassistant.R
-import com.example.travelassistant.core.Constants.DEFAULT_VALUE
+import com.example.travelassistant.core.domain.entity.InfoAboutTravel
 import com.example.travelassistant.databinding.FragmentPersonalItemsBinding
 import com.example.travelassistant.features.travelinfo.presentation.adapters.ItemAdapter
+import com.example.travelassistant.features.travelinfo.presentation.ui.TravelInfoViewModel
 import com.example.travelassistant.features.travelinfo.presentation.ui.TravelInfoViewState
+import com.example.travelassistant.features.travelinfo.presentation.ui.observe
 import dagger.hilt.android.AndroidEntryPoint
 
 @AndroidEntryPoint
@@ -21,13 +24,14 @@ class PersonalItemsFragment : BaseFragment() {
     private var _binding: FragmentPersonalItemsBinding? = null
     private lateinit var recyclerView: RecyclerView
     private lateinit var itemsAdapter: ItemAdapter
+    private val infoViewModel: TravelInfoViewModel by activityViewModels()
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?
     ): View? {
         val view = inflater.inflate(R.layout.fragment_personal_items, container, false)
-        infoViewModel.loadData(DEFAULT_VALUE)
+        infoViewModel.loadItems()
         setHasOptionsMenu(true)
         activity?.actionBar?.setDisplayHomeAsUpEnabled(true)
         return view
@@ -44,6 +48,23 @@ class PersonalItemsFragment : BaseFragment() {
             adapter = itemsAdapter
         }
 
+        _binding?.button?.setOnClickListener {
+            with(infoViewModel) {
+                addDetails(infoViewModel.infoAboutTravel)
+                infoAboutTravel = InfoAboutTravel()
+                openHomeFragment()
+            }
+            //TODO: добавить установку напоминалок
+        }
+
+        _binding?.addItem?.setOnClickListener {
+            with(infoViewModel) {
+                luggageItem = luggageItem.copyItem(item = _binding?.newItem?.text.toString())
+                addItem(luggageItem)
+            }
+        }
+
+        observe(infoViewModel.commands, ::handleCommand)
         infoViewModel.dataState.observe(viewLifecycleOwner, ::handleState)
     }
 

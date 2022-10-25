@@ -1,8 +1,10 @@
 package com.example.travelassistant
 
 import android.os.Bundle
+import androidx.activity.viewModels
 import com.google.android.material.bottomnavigation.BottomNavigationView
 import androidx.appcompat.app.AppCompatActivity
+import androidx.fragment.app.viewModels
 import androidx.navigation.findNavController
 import androidx.navigation.ui.AppBarConfiguration
 import androidx.navigation.ui.setupActionBarWithNavController
@@ -10,12 +12,14 @@ import androidx.navigation.ui.setupWithNavController
 import com.example.travelassistant.databinding.ActivityMainBinding
 import dagger.hilt.android.AndroidEntryPoint
 import com.example.travelassistant.features.cities.di.citiesModule
+import com.example.travelassistant.features.travelinfo.presentation.ui.TravelInfoViewModel
 import org.koin.core.context.startKoin
 
 @AndroidEntryPoint
 class MainActivity : AppCompatActivity() {
 
     private lateinit var binding: ActivityMainBinding
+    private val infoViewModel: TravelInfoViewModel by viewModels()
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)

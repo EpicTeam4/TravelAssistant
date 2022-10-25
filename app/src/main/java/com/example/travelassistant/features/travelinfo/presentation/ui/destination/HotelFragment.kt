@@ -8,8 +8,10 @@ import android.view.ViewGroup
 import android.widget.AdapterView
 import android.widget.ArrayAdapter
 import androidx.core.view.isVisible
+import androidx.fragment.app.activityViewModels
 import com.example.travelassistant.R
 import com.example.travelassistant.databinding.FragmentHotelBinding
+import com.example.travelassistant.features.travelinfo.presentation.ui.TravelInfoViewModel
 import com.example.travelassistant.features.travelinfo.presentation.ui.TravelInfoViewState
 import com.example.travelassistant.features.travelinfo.presentation.ui.observe
 import dagger.hilt.android.AndroidEntryPoint
@@ -19,6 +21,7 @@ class HotelFragment : BaseFragment() {
 
     private var _binding: FragmentHotelBinding? = null
     private lateinit var hotelsList: ArrayAdapter<String>
+    private val infoViewModel: TravelInfoViewModel by activityViewModels()
 
     override fun onCreateView(
         inflater: LayoutInflater,
@@ -35,9 +38,7 @@ class HotelFragment : BaseFragment() {
 
         _binding = FragmentHotelBinding.bind(view)
 
-        val selectedCityId = HotelFragmentArgs.fromBundle(requireArguments()).cityId
-
-        infoViewModel.loadData(selectedCityId)
+        infoViewModel.loadHotels(infoViewModel.infoAboutTravel.city_id)
         initObservers()
         observe(infoViewModel.commands, ::handleCommand)
 
@@ -55,13 +56,12 @@ class HotelFragment : BaseFragment() {
 
         _binding?.apply {
             button.setOnClickListener {
-                infoViewModel.openItemsFragment(
-                    HotelFragmentDirections.actionHotelFragmentToPersonalItemsFragment()
-                )
+                setData()
+                infoViewModel.openItemsFragment()
             }
 
             swipeRefreshLayout.setOnRefreshListener {
-                infoViewModel.loadData(selectedCityId)
+                infoViewModel.loadHotels(infoViewModel.infoAboutTravel.city_id)
                 swipeRefreshLayout.isRefreshing = false
             }
         }
@@ -124,6 +124,15 @@ class HotelFragment : BaseFragment() {
             contentPanel.isVisible = state is TravelInfoViewState.Content
             errorPanel.root.isVisible = state is TravelInfoViewState.Error
         }
+    }
+
+    private fun setData() {
+        infoViewModel.infoAboutTravel = infoViewModel.infoAboutTravel.copyInfoAboutTravel(
+            hotelAddress = _binding?.hotelAddress?.text.toString(),
+            hotelPhone = _binding?.hotelPhone?.text.toString(),
+            hotelStation = _binding?.hotelWebsite?.text.toString(),
+            wayToHotel = _binding?.wayToHotel?.text.toString()
+        )
     }
 
     override fun onOptionsItemSelected(menuItem: MenuItem): Boolean {

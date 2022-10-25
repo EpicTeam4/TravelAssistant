@@ -7,10 +7,11 @@ import android.view.View
 import android.view.ViewGroup
 import android.widget.ArrayAdapter
 import androidx.core.view.isVisible
+import androidx.fragment.app.activityViewModels
 import com.example.travelassistant.R
-import com.example.travelassistant.core.Constants.DEFAULT_VALUE
 import com.example.travelassistant.core.orDefault
 import com.example.travelassistant.databinding.FragmentToDestinationBinding
+import com.example.travelassistant.features.travelinfo.presentation.ui.TravelInfoViewModel
 import com.example.travelassistant.features.travelinfo.presentation.ui.TravelInfoViewState
 import com.example.travelassistant.features.travelinfo.presentation.ui.observe
 import com.example.travelassistant.features.travelinfo.presentation.utils.toHours
@@ -21,6 +22,7 @@ class ToDestinationFragment : BaseFragment() {
 
     private var _binding: FragmentToDestinationBinding? = null
     private lateinit var portsList: ArrayAdapter<String>
+    private val infoViewModel: TravelInfoViewModel by activityViewModels()
 
     override fun onCreateView(
         inflater: LayoutInflater,
@@ -39,30 +41,24 @@ class ToDestinationFragment : BaseFragment() {
 
         initObservers()
         observe(infoViewModel.commands, ::handleCommand)
-        infoViewModel.loadData(DEFAULT_VALUE)
-
-        val selectedCityId = ToDestinationFragmentArgs.fromBundle(requireArguments()).cityId
+        infoViewModel.loadPorts()
 
         _binding?.apply {
             button.setOnClickListener {
                 getSelectedPortId()
                 getSelectedTime()
+                setData()
 
-                infoViewModel.openFromDestination(
-                    ToDestinationFragmentDirections.actionToDestinationFragmentToFromDestinationFragment(
-                        selectedCityId
-                    )
-                )
+                infoViewModel.openFromDestination()
             }
 
             dateOfJourney.setOnClickListener {
                 pickDate()
-                dateOfJourney.setText(infoViewModel.formatter.convertLongDateToString(
-                    infoViewModel.tempDate)
-                )
-                infoViewModel.infoAboutTravel = infoViewModel.infoAboutTravel.copyInfoAboutTravel(
-                    timeInMillis = infoViewModel.tempDate
-                )
+                infoViewModel.apply {
+                    setDateTime()
+                    infoAboutTravel =
+                        infoAboutTravel.copyInfoAboutTravel(timeInMillis = infoViewModel.tempDate)
+                }
             }
         }
     }
@@ -70,7 +66,7 @@ class ToDestinationFragment : BaseFragment() {
     override fun onResume() {
         super.onResume()
         _binding?.apply {
-            spinner.setSelection(infoViewModel.infoAboutTravel.portId)
+            spinner.setSelection(infoViewModel.infoAboutTravel.portId-1)
             spinnerTime.selectedItemPosition.let { spinnerTime.setSelection(it) }
         }
     }
@@ -81,8 +77,7 @@ class ToDestinationFragment : BaseFragment() {
     }
 
     private fun initObservers() {
-        portsList =
-            (ArrayAdapter<String>(requireContext(), android.R.layout.simple_spinner_item)).apply {
+        portsList = (ArrayAdapter<String>(requireContext(), android.R.layout.simple_spinner_item)).apply {
                 setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item)
             }
 
@@ -100,6 +95,7 @@ class ToDestinationFragment : BaseFragment() {
 
     private fun TravelInfoViewState.Content.handle() {
         if (portsList.isEmpty) ports.forEach { portsList.add(it.name) }
+        _binding?.dateOfJourney?.setText(datetime)
     }
 
     private fun TravelInfoViewState.Error.handle() {
@@ -118,8 +114,8 @@ class ToDestinationFragment : BaseFragment() {
 
     private fun getSelectedPortId(): Int {
         infoViewModel.infoAboutTravel = infoViewModel.infoAboutTravel.copyInfoAboutTravel(
-                portId = _binding?.spinner?.selectedItemPosition.orDefault()
-            )
+            portId = _binding?.spinner?.selectedItemPosition.orDefault() + 1
+        )
         return infoViewModel.infoAboutTravel.portId
     }
 
@@ -128,6 +124,14 @@ class ToDestinationFragment : BaseFragment() {
             hours = _binding?.spinnerTime?.selectedItemPosition.orDefault().toHours()
         )
         return infoViewModel.infoAboutTravel.hours
+    }
+
+    private fun setData() {
+        infoViewModel.infoAboutTravel = infoViewModel.infoAboutTravel.copyInfoAboutTravel(
+            flightNum = _binding?.flight?.text.toString(),
+            seat = _binding?.seat?.text.toString(),
+            wayDescription = _binding?.route?.text.toString()
+        )
     }
 
     override fun onOptionsItemSelected(menuItem: MenuItem): Boolean {
