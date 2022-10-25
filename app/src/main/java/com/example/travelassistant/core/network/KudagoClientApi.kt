@@ -11,7 +11,7 @@ interface KudagoClientApi {
     @GET("locations")
     suspend fun getLocations(): List<Location>
 
-    @GET("places/?location")
+    @GET("places")
     suspend fun getPlaces(
         @Query(
             value = "location",
@@ -19,10 +19,17 @@ interface KudagoClientApi {
         ) location: String
     ): PlacesResponse
 
-    @GET("places/?location")
+    @GET("places")
     suspend fun getPlacesWithFields( // todo fields сделать enum
         @Query(value = "location", encoded = true) location: String,
         @Query(value = "fields", encoded = true) fields: String
+    ): PlacesResponse
+
+    @GET("places")
+    suspend fun getPlacesWithLocationFieldsOrderBy(
+        @Query(value = "location", encoded = true) location: String,
+        @Query(value = "fields", encoded = true) fields: String,
+        @Query(value = "order_by", encoded = true) orderBy: String
     ): PlacesResponse
 
     @GET("places/?categories=inn")
