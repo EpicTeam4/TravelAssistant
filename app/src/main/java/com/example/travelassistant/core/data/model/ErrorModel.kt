@@ -1,4 +1,4 @@
-package com.example.travelassistant.features.travelinfo.data.model
+package com.example.travelassistant.core.data.model
 
 import androidx.annotation.DrawableRes
 import androidx.annotation.StringRes

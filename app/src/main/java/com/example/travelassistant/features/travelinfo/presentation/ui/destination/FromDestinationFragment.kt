@@ -13,8 +13,8 @@ import com.example.travelassistant.core.orDefault
 import com.example.travelassistant.databinding.FragmentFromDestinationBinding
 import com.example.travelassistant.features.travelinfo.presentation.ui.TravelInfoViewModel
 import com.example.travelassistant.features.travelinfo.presentation.ui.TravelInfoViewState
-import com.example.travelassistant.features.travelinfo.presentation.ui.observe
-import com.example.travelassistant.features.travelinfo.presentation.utils.toHours
+import com.example.travelassistant.core.observe
+import com.example.travelassistant.core.utils.toHours
 import dagger.hilt.android.AndroidEntryPoint
 
 @AndroidEntryPoint
@@ -41,7 +41,7 @@ class FromDestinationFragment : BaseFragment() {
 
         initObservers()
         observe(infoViewModel.commands, ::handleCommand)
-        infoViewModel.loadPorts()
+        infoViewModel.loadData()
 
         _binding?.apply {
             button.setOnClickListener {
@@ -53,7 +53,7 @@ class FromDestinationFragment : BaseFragment() {
             }
 
             dateOfJourney.setOnClickListener {
-                pickDate()
+                pickDate(TIME_DEST_ID)
                 infoViewModel.apply {
                     setDateTime()
                     infoAboutTravel =

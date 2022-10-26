@@ -18,6 +18,12 @@
     <string name="network_error">Не удалось загрузить данные</string>
     <string name="unknown_error">Непредвиденная ошибка</string>
     <string name="add_item">Добавить элемент багажа</string>
+    <string name="to_dest">Туда</string>
+    <string name="from_dest">Обратно</string>
+    <string name="hotel">Отель</string>
+    <string name="details">Детали</string>
+    <string name="notification">Напоминание о поездке</string>
+    <string name="notification_title">Скоро состоится ваша поездка, пора собираться!</string>
     <string-array name="time">
         <item>не напоминать</item>
         <item>за 3 часа</item>

@@ -1,6 +1,6 @@
-package com.example.travelassistant.features.travelinfo.domain.usecase
+package com.example.travelassistant.core.domain.usecase
 
-import com.example.travelassistant.features.travelinfo.domain.State
+import com.example.travelassistant.core.domain.State
 import java.net.ConnectException
 import java.net.ProtocolException
 import java.net.SocketException

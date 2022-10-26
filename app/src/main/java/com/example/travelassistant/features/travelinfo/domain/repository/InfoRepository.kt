@@ -17,12 +17,10 @@ interface InfoRepository {
     suspend fun getCityById(id: Long): City?
 
     suspend fun getPorts(): List<Port>
-    suspend fun getPortById(id: Long): Port?
-
     suspend fun getHotels(location: String): List<Hotel>
+
     suspend fun getAllItems(): List<PersonalItem>
     suspend fun addItem(item: PersonalItem)
 
-    suspend fun getDetails(date: Long): InfoAboutTravel?
     suspend fun addDetails(info: InfoAboutTravel)
 }

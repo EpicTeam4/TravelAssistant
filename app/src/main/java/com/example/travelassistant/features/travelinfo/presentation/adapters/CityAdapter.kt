@@ -3,10 +3,10 @@ package com.example.travelassistant.features.travelinfo.presentation.adapters
 import android.view.LayoutInflater
 import android.view.ViewGroup
 import androidx.recyclerview.widget.RecyclerView
-import coil.load
 import com.example.travelassistant.R
 import com.example.travelassistant.core.domain.entity.City
-import com.example.travelassistant.databinding.FragmentCityBinding
+import com.example.travelassistant.databinding.FragmentCitiesRecyclerViewItemBinding
+import com.squareup.picasso.Picasso
 
 /**
  * City adapter - адаптер для списка предустановленных городов
@@ -22,25 +22,24 @@ class CityAdapter(
     private val onItemClicked: (id: Long) -> Unit
 ) : RecyclerView.Adapter<CityAdapter.ViewHolder>() {
 
-    class ViewHolder(val binding: FragmentCityBinding) :
+    class ViewHolder(val binding: FragmentCitiesRecyclerViewItemBinding) :
         RecyclerView.ViewHolder(binding.root)
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int) = ViewHolder(
-        FragmentCityBinding.bind(
+        FragmentCitiesRecyclerViewItemBinding.bind(
             LayoutInflater.from(parent.context)
-                .inflate(R.layout.fragment_city, parent, false)
+                .inflate(R.layout.fragment_cities_recycler_view_item, parent, false)
         )
     )
 
     override fun onBindViewHolder(holder: ViewHolder, position: Int) {
         with(holder.binding) {
             with(cities[position]) {
-                cityName.text = name
+                cityTitle.text = name
                 if (image?.isNotEmpty() == true) {
-                    city.load(image) {
-                        crossfade(true)
-                        placeholder(R.drawable.abstract_city)
-                    }
+                    Picasso.get()
+                        .load(image)
+                        .into(cityImage)
                 }
                 root.setOnClickListener {
                     onItemClicked(id)

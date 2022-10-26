@@ -1,4 +1,4 @@
-package com.example.travelassistant.features.travelinfo.presentation.utils
+package com.example.travelassistant.core.utils
 
 import com.example.travelassistant.core.Constants.EMPTY_STRING
 import com.example.travelassistant.core.Constants.MILLISECONDS_IN_SECONDS
@@ -29,6 +29,15 @@ class DateTimeFormatter @Inject constructor() {
 
     fun convertHoursToMilliseconds(hour: Int): Long =
         (hour * SECONDS_IN_MINUTE * SECONDS_IN_MINUTE * MILLISECONDS_IN_SECONDS).toLong()
+
+    /**
+     * Convert milliseconds to hours - конвертирует миллисекунды в часы
+     *
+     * @author Marianne Sabanchieva
+     */
+
+    fun convertMillisecondsToHours(time: Long): Int =
+        (time / SECONDS_IN_MINUTE / SECONDS_IN_MINUTE / MILLISECONDS_IN_SECONDS).toInt()
 
     /**
      * Get current date - инициализирует текущую дату

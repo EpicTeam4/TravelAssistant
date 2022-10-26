@@ -8,4 +8,7 @@ object Constants {
     const val SECONDS_IN_MINUTE = 60
     const val MILLISECONDS_IN_SECONDS = 1000
     const val BASE_URL = "https://kudago.com/public-api/v1.4/"
+    const val TO_DESTINATION = "Туда"
+    const val FROM_DESTINATION = "Обратно"
+    const val ACTION_NAME = "time"
 }

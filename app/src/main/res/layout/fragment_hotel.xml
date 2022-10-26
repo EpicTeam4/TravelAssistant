@@ -1,5 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <androidx.swiperefreshlayout.widget.SwipeRefreshLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:id="@+id/swipeRefreshLayout"
     android:layout_width="match_parent"
@@ -11,66 +12,78 @@
         android:layout_width="match_parent"
         android:layout_height="match_parent">
 
-        <LinearLayout
-            android:id="@+id/contentPanel"
+        <androidx.core.widget.NestedScrollView
             android:layout_width="match_parent"
-            android:layout_height="match_parent"
-            android:layout_gravity="center"
-            android:gravity="center_vertical"
-            android:orientation="vertical">
+            android:layout_height="wrap_content"
+            android:layout_gravity="center">
 
-            <Spinner
-                android:id="@+id/spinner"
+            <LinearLayout
+                android:id="@+id/contentPanel"
                 android:layout_width="match_parent"
-                android:layout_height="wrap_content" />
+                android:layout_height="match_parent"
+                android:orientation="vertical">
 
-            <TextView
-                android:id="@+id/hotelAddress"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:layout_marginTop="@dimen/layout_margin_top"
-                android:hint="@string/hotel_address"
-                android:textColor="@color/black"
-                android:textSize="@dimen/text_size" />
+                <Spinner
+                    android:id="@+id/spinner"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    app:layout_constraintTop_toTopOf="parent" />
 
-            <TextView
-                android:id="@+id/hotelPhone"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:layout_marginTop="@dimen/layout_margin_top"
-                android:hint="@string/hotel_phone"
-                android:textColor="@color/black"
-                android:textSize="@dimen/text_size" />
+                <TextView
+                    android:id="@+id/hotelAddress"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="@dimen/layout_margin_top"
+                    android:hint="@string/hotel_address"
+                    android:textColor="@color/black"
+                    android:textSize="@dimen/text_size"
+                    app:layout_constraintTop_toBottomOf="@+id/spinner" />
 
-            <TextView
-                android:id="@+id/hotelWebsite"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:layout_marginTop="@dimen/layout_margin_top"
-                android:hint="@string/subway"
-                android:textColor="@color/black"
-                android:textSize="@dimen/text_size" />
+                <TextView
+                    android:id="@+id/hotelPhone"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="@dimen/layout_margin_top"
+                    android:hint="@string/hotel_phone"
+                    android:textColor="@color/black"
+                    android:textSize="@dimen/text_size"
+                    app:layout_constraintTop_toBottomOf="@+id/hotelAddress" />
 
-            <EditText
-                android:id="@+id/wayToHotel"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:layout_marginTop="@dimen/layout_margin_top"
-                android:ems="10"
-                android:hint="@string/route_to_hotel"
-                android:importantForAutofill="no"
-                android:inputType="textMultiLine"
-                android:lines="5"
-                android:textSize="@dimen/text_size" />
+                <TextView
+                    android:id="@+id/hotelSubway"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="@dimen/layout_margin_top"
+                    android:hint="@string/subway"
+                    android:textColor="@color/black"
+                    android:textSize="@dimen/text_size"
+                    app:layout_constraintTop_toBottomOf="@+id/hotelPhone" />
 
-            <Button
-                android:id="@+id/button"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:layout_marginTop="@dimen/button_layout_margin_top"
-                android:text="@string/next" />
+                <EditText
+                    android:id="@+id/wayToHotel"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="@dimen/layout_margin_top"
+                    android:ems="10"
+                    android:hint="@string/route_to_hotel"
+                    android:importantForAutofill="no"
+                    android:inputType="textMultiLine"
+                    android:lines="5"
+                    android:textSize="@dimen/text_size"
+                    app:layout_constraintTop_toBottomOf="@+id/hotelSubway" />
 
-        </LinearLayout>
+                <Button
+                    android:id="@+id/button"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="@dimen/button_layout_margin_top"
+                    android:text="@string/next"
+                    app:layout_constraintBottom_toBottomOf="@+id/contentPanel"
+                    app:layout_constraintTop_toBottomOf="@+id/wayToHotel" />
+
+            </LinearLayout>
+
+        </androidx.core.widget.NestedScrollView>
 
         <include
             android:id="@+id/errorPanel"
