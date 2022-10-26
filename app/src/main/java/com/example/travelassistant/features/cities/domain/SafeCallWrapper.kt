@@ -1,4 +1,4 @@
-package com.example.travelassistant.features.cities.data
+package com.example.travelassistant.features.cities.domain
 
 import retrofit2.HttpException
 

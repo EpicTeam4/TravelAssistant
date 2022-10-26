@@ -9,9 +9,12 @@ import com.squareup.picasso.Picasso
 
 class CitiesRecyclerViewAdapter(
     val cities: MutableList<CityDomain>,
-    private val onItemClicked: (id: String) -> Unit
+    private val onItemClicked: (cityId: String) -> Unit
 ) :
     RecyclerView.Adapter<CitiesRecyclerViewAdapter.ViewHolder>() {
+
+// todo class UserListAdapter(private val onClickUser: () -> Unit, private val onBlockUserClick: (id: String ) -> Unit) :
+//    ListAdapter<User, UserListAdapter.ViewHolder>(ChatDiffCallback()) {
 
     class ViewHolder(val binding: FragmentCitiesRecyclerViewItemBinding) :
         RecyclerView.ViewHolder(binding.root)

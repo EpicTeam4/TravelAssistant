@@ -11,21 +11,34 @@ import kotlinx.coroutines.withContext
 
 class PlacesRepositoryImpl(private val kudagoClient: KudagoClient) : PlacesRepository {
 
+    private val PLACE_FIELDS_FOR_PLACES_SCREEN =
+        "id,title,images,description,location"
+
     private val PLACE_ALL_FIELDS =
         "id,title,short_title,slug,address,location,timetable,phone,is_stub,images," +
                 "description,body_text,site_url,foreign_url,coords,subway,favorites_count," +
                 "comments_count,is_closed,categories,tags"
 
-    override suspend fun getPlaces(location: String): Result<List<PlaceDomain>> {
+    override suspend fun getPlaces(location: String): List<PlaceDomain> {
         return withContext(Dispatchers.IO) {
-            safeCall {
-                kudagoClient.getPlacesWithFieldsOrderByFavoritesCountDesc(
-                    location, PLACE_ALL_FIELDS
-                ).let { response ->
-                    return@let response.results?.map { place ->
+            kudagoClient.getPlacesWithFieldsOrderByFavoritesCountDesc(
+                location, PLACE_FIELDS_FOR_PLACES_SCREEN
+            ).let { response ->
+                return@let response.results
+                    ?.filter { place -> place.location != "online" }
+                    ?.map { place ->
                         mapNetworkPlaceToDomainPlace(place)
                     } ?: emptyList()
-                }
+            }
+        }
+    }
+
+    override suspend fun getPlace(placeId: String): PlaceDomain {
+        return withContext(Dispatchers.IO) {
+            kudagoClient.getPlaceWithFields(
+                placeId, PLACE_ALL_FIELDS
+            ).let { response ->
+                mapNetworkPlaceToDomainPlace(response)
             }
         }
     }
@@ -44,8 +57,8 @@ fun mapNetworkPlaceToDomainPlace(source: Place): PlaceDomain {
         phone = source.phone.orEmpty(),
         isStub = source.is_stub ?: false,
         images = source.images?.map { i -> Image(i?.image.orEmpty()) } ?: emptyList(),
-        shortDescription = source.description.orEmpty(),
-        description = source.body_text.orEmpty(),
+        shortDescription = source.description.orEmpty().replace("<[^>]*>".toRegex(), ""),
+        description = source.body_text.orEmpty().replace("<[^>]*>".toRegex(), ""),
         siteUrl = source.site_url.orEmpty(),
         foreignUrl = source.foreign_url.orEmpty(),
         coordinates = Coords(source.coords?.lat ?: 0.0f, source.coords?.lon ?: 0.0f),

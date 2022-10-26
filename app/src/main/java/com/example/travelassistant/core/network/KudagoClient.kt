@@ -2,6 +2,7 @@ package com.example.travelassistant.core.network
 
 import com.example.travelassistant.core.Constants.BASE_URL
 import com.example.travelassistant.core.network.model.Location
+import com.example.travelassistant.core.network.model.Place
 import com.example.travelassistant.core.network.model.PlacesResponse
 import okhttp3.Interceptor
 import okhttp3.OkHttpClient
@@ -34,19 +35,23 @@ class KudagoClient {
     }
 
     suspend fun getLocations(): List<Location> {
-        return retrofit.getLocations();
+        return retrofit.getLocations()
     }
 
     suspend fun getPlaces(location: String): PlacesResponse {
-        return retrofit.getPlaces(location);
+        return retrofit.getPlaces(location)
     }
 
     suspend fun getPlacesWithFields(location: String, fields: String): PlacesResponse {
-        return retrofit.getPlacesWithFields(location, fields);
+        return retrofit.getPlacesWithFields(location, fields)
     }
 
     suspend fun getPlacesWithFieldsOrderByFavoritesCountDesc(location: String, fields: String): PlacesResponse {
-        return retrofit.getPlacesWithLocationFieldsOrderBy(location, fields, "-favorites_count");
+        return retrofit.getPlacesWithLocationFieldsOrderBy(location, fields, "-favorites_count")
+    }
+
+    suspend fun getPlaceWithFields(placeId: String, fields: String): Place {
+        return retrofit.getPlaceByIdWithFields(placeId, fields)
     }
 
 }

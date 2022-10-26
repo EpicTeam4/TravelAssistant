@@ -10,6 +10,7 @@ import com.example.travelassistant.features.cities.data.CitiesRepositoryLocalDbI
 import com.example.travelassistant.features.cities.data.PlacesRepositoryImpl
 import com.example.travelassistant.features.cities.domain.CitiesUseCase
 import com.example.travelassistant.features.cities.presentation.CitiesViewModel
+import com.example.travelassistant.features.cities.presentation.PlaceDetailViewModel
 import com.example.travelassistant.features.cities.presentation.PlacesViewModel
 import org.koin.androidx.viewmodel.dsl.viewModel
 import org.koin.dsl.module
@@ -48,11 +49,11 @@ val citiesModule = module {
     }
     single {
         val database = get<TravelInfoDatabase>()
-        database.sights()
+        database.details()
     }
     single {
         val database = get<TravelInfoDatabase>()
-        database.details()
+        database.sights()
     }
     single { LocalDataSource(city = get(), airport = get(), item = get(), details = get(), sights = get()) }
     single { KudagoClient() }
@@ -67,5 +68,6 @@ val citiesModule = module {
 
     viewModel { CitiesViewModel(get()) }
     viewModel { PlacesViewModel(get()) }
+    viewModel { PlaceDetailViewModel (get()) }
 
 }

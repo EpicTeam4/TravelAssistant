@@ -9,7 +9,7 @@
         android:id="@+id/navigation_home"
         android:name="com.example.travelassistant.features.travelinfo.presentation.ui.CitiesListFragment"
         android:label="@string/title_home"
-        tools:layout="@layout/fragment_cities" >
+        tools:layout="@layout/fragment_cities_list">
         <action
             android:id="@+id/action_navigation_home_to_toDestinationFragment"
             app:destination="@id/toDestinationFragment" />
@@ -29,7 +29,27 @@
         android:id="@+id/navigation_cities_places"
         android:name="com.example.travelassistant.features.cities.presentation.PlacesFragment"
         android:label="@string/title_places"
-        tools:layout="@layout/fragment_places" />
+        tools:layout="@layout/fragment_places">
+        <action
+            android:id="@+id/action_navigation_cities_places_to_place_details"
+            app:destination="@id/navigation_cities_place_details" />
+        <argument
+            android:name="cityId"
+            app:argType="string"
+            app:nullable="false" />
+    </fragment>
+
+    <fragment
+        android:id="@+id/navigation_cities_place_details"
+        android:name="com.example.travelassistant.features.cities.presentation.PlaceDetailsFragment"
+        android:label="@string/title_places"
+        tools:layout="@layout/fragment_place_details">
+        <argument
+            android:name="placeId"
+            app:nullable="false"
+            app:argType="string" />
+
+    </fragment>
 
     <fragment
         android:id="@+id/navigation_favourites"

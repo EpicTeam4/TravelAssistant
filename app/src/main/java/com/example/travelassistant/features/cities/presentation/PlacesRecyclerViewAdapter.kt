@@ -7,7 +7,10 @@ import com.example.travelassistant.databinding.FragmentPlacesRecyclerViewItemBin
 import com.example.travelassistant.features.cities.domain.model.PlaceDomain
 import com.squareup.picasso.Picasso
 
-class PlacesRecyclerViewAdapter(private val places: MutableList<PlaceDomain>) :
+class PlacesRecyclerViewAdapter(
+    private val places: MutableList<PlaceDomain>,
+    private val onItemClicked: (placeId: String) -> Unit
+) :
     RecyclerView.Adapter<PlacesRecyclerViewAdapter.ViewHolder>() {
 
     class ViewHolder(val binding: FragmentPlacesRecyclerViewItemBinding) :
@@ -32,6 +35,9 @@ class PlacesRecyclerViewAdapter(private val places: MutableList<PlaceDomain>) :
                             .load(it.url)
                             .into(placeImage)
                     }
+                }
+                root.setOnClickListener {
+                    onItemClicked(id)
                 }
             }
         }
