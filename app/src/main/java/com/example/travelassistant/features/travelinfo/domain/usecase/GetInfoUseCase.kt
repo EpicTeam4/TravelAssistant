@@ -44,6 +44,9 @@ class GetInfoUseCase @Inject constructor(private val infoRepository: InfoReposit
     suspend fun addItem(item: PersonalItem) =
         withContext(Dispatchers.IO) { infoRepository.addItem(item) }
 
+    suspend fun deleteItem(id: Int) =
+        withContext(Dispatchers.IO) { infoRepository.deleteItem(id) }
+
     suspend fun addDetails(info: InfoAboutTravel) =
         withContext(Dispatchers.IO) { infoRepository.addDetails(info) }
 

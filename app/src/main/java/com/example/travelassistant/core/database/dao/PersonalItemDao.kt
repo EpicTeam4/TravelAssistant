@@ -19,4 +19,7 @@ interface PersonalItemDao {
 
     @Insert(onConflict = OnConflictStrategy.REPLACE)
     suspend fun insertItem(item: PersonalItem)
+
+    @Query("Delete From ${PersonalItem.Schema.TABLE_NAME} Where ${PersonalItem.Schema.ID} = :id")
+    suspend fun deleteItem(id: Int)
 }

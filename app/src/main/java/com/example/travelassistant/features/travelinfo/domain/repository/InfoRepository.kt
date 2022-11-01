@@ -22,5 +22,6 @@ interface InfoRepository {
     suspend fun getAllItems(): List<PersonalItem>
     suspend fun addItem(item: PersonalItem)
 
+    suspend fun deleteItem(id: Int)
     suspend fun addDetails(info: InfoAboutTravel)
 }
