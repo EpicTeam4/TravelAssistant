@@ -4,7 +4,6 @@
     <string name="title_cities">Города</string>
     <string name="title_places">Достопримечательности</string>
     <string name="title_favourites">Избранное</string>
-    <string name="title_dashboard">Избранное</string>
     <string name="title_notifications">Города</string>
     <string name="travel_date">Дата поездки</string>
     <string name="flight_number">Номер рейса</string>
@@ -22,6 +21,7 @@
     <string name="to_dest">Туда</string>
     <string name="from_dest">Обратно</string>
     <string name="hotel">Отель</string>
+    <string name="luggage">Багаж</string>
     <string name="details">Детали</string>
     <string name="notification">Напоминание о поездке</string>
     <string name="notification_title">Скоро состоится ваша поездка, пора собираться!</string>

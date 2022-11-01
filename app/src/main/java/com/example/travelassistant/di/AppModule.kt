@@ -13,6 +13,7 @@ import com.example.travelassistant.core.database.dao.CityDao
 import com.example.travelassistant.core.database.dao.PersonalItemDao
 import com.example.travelassistant.core.database.dao.TravelInfoDao
 import com.example.travelassistant.core.domain.LocalDataSource
+import com.example.travelassistant.core.domain.State
 import com.example.travelassistant.core.domain.entity.City
 import com.example.travelassistant.core.domain.entity.Hotel
 import com.example.travelassistant.core.domain.entity.PersonalItem
@@ -21,8 +22,9 @@ import com.example.travelassistant.core.domain.entity.InfoAboutTravel
 import com.example.travelassistant.core.network.ApiMapperHotel
 import com.example.travelassistant.core.network.KudagoClient
 import com.example.travelassistant.core.network.KudagoClientApi
+import com.example.travelassistant.features.editinfo.data.InfoEditingRepositoryImpl
+import com.example.travelassistant.features.editinfo.domain.repository.InfoEditingRepository
 import com.example.travelassistant.features.travelinfo.data.InfoRepositoryImpl
-import com.example.travelassistant.features.travelinfo.domain.State
 import com.example.travelassistant.features.travelinfo.domain.repository.InfoRepository
 import com.example.travelassistant.features.travelinfo.domain.usecase.GetInfoUseCase
 import dagger.Module
@@ -59,6 +61,12 @@ class AppModule {
     @Provides
     fun provideDetails(appDatabase: TravelInfoDatabase): TravelInfoDao = appDatabase.details()
 
+    /**
+     * Provide kudago client api
+     *
+     * @author Ilya P.
+     */
+
     @Provides
     fun provideKudagoClientApi(): KudagoClientApi =
         Retrofit.Builder()
@@ -94,6 +102,13 @@ class AppModule {
     @Provides
     fun bindsInfoRepository(dataSource: LocalDataSource, hotelMapper: ApiMapperHotel): InfoRepository =
         InfoRepositoryImpl(dataSource, hotelMapper)
+
+    @Provides
+    fun providesEditInfoRepository(
+        dataSource: LocalDataSource,
+        hotelMapper: ApiMapperHotel
+    ): InfoEditingRepository =
+        InfoEditingRepositoryImpl(dataSource, hotelMapper)
 
     @Provides
     @Singleton

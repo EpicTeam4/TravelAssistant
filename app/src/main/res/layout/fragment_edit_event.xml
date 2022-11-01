@@ -1,0 +1,237 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.core.widget.NestedScrollView xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:padding="@dimen/default_margin">
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:orientation="vertical">
+
+        <LinearLayout
+            android:id="@+id/contentPanel"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:orientation="vertical">
+
+            <TextView
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:gravity="center"
+                android:text="@string/to_dest"
+                android:textColor="@color/black"
+                android:textSize="@dimen/city_name_text_size"
+                android:textStyle="bold" />
+
+            <EditText
+                android:id="@+id/dateOfJourney"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="@dimen/layout_margin_top"
+                android:ems="10"
+                android:focusable="false"
+                android:hint="@string/travel_date"
+                android:importantForAutofill="no"
+                android:textSize="@dimen/text_size" />
+
+            <Spinner
+                android:id="@+id/spinner"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="@dimen/layout_margin_top" />
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="@dimen/layout_margin_top"
+                android:orientation="horizontal">
+
+                <EditText
+                    android:id="@+id/flight"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:ems="10"
+                    android:hint="@string/flight_number"
+                    android:importantForAutofill="no"
+                    android:inputType="text"
+                    android:textSize="@dimen/text_size" />
+
+                <EditText
+                    android:id="@+id/seat"
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="1"
+                    android:ems="10"
+                    android:hint="@string/van_seat_number"
+                    android:importantForAutofill="no"
+                    android:inputType="text"
+                    android:textSize="@dimen/text_size" />
+
+            </LinearLayout>
+
+            <EditText
+                android:id="@+id/route"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="@dimen/layout_margin_top"
+                android:ems="10"
+                android:hint="@string/route_to_station"
+                android:importantForAutofill="no"
+                android:inputType="textMultiLine"
+                android:lines="5"
+                android:textSize="@dimen/text_size" />
+
+            <Spinner
+                android:id="@+id/spinnerTime"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="@dimen/layout_margin_top"
+                android:entries="@array/time" />
+
+            <TextView
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="@dimen/layout_margin_top"
+                android:gravity="center"
+                android:text="@string/from_dest"
+                android:textColor="@color/black"
+                android:textSize="@dimen/city_name_text_size"
+                android:textStyle="bold" />
+
+            <EditText
+                android:id="@+id/dateOfJourneyDest"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="@dimen/layout_margin_top"
+                android:ems="10"
+                android:focusable="false"
+                android:hint="@string/travel_date"
+                android:importantForAutofill="no"
+                android:textSize="@dimen/text_size" />
+
+            <Spinner
+                android:id="@+id/spinnerDest"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="@dimen/layout_margin_top" />
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="@dimen/layout_margin_top"
+                android:orientation="horizontal">
+
+                <EditText
+                    android:id="@+id/flightDest"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:ems="10"
+                    android:hint="@string/flight_number"
+                    android:importantForAutofill="no"
+                    android:inputType="text"
+                    android:textSize="@dimen/text_size" />
+
+                <EditText
+                    android:id="@+id/seatDest"
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="1"
+                    android:ems="10"
+                    android:hint="@string/van_seat_number"
+                    android:importantForAutofill="no"
+                    android:inputType="text"
+                    android:textSize="@dimen/text_size" />
+
+            </LinearLayout>
+
+            <EditText
+                android:id="@+id/routeDest"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="@dimen/layout_margin_top"
+                android:ems="10"
+                android:hint="@string/route_to_station"
+                android:importantForAutofill="no"
+                android:inputType="textMultiLine"
+                android:lines="5"
+                android:textSize="@dimen/text_size" />
+
+            <Spinner
+                android:id="@+id/spinnerTimeDest"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="@dimen/layout_margin_top"
+                android:entries="@array/time" />
+
+            <TextView
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="@dimen/layout_margin_top"
+                android:gravity="center"
+                android:text="@string/hotel"
+                android:textColor="@color/black"
+                android:textSize="@dimen/city_name_text_size"
+                android:textStyle="bold" />
+
+            <Spinner
+                android:id="@+id/spinnerHotel"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="@dimen/layout_margin_top" />
+
+            <TextView
+                android:id="@+id/hotelAddress"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="@dimen/layout_margin_top"
+                android:hint="@string/hotel_address"
+                android:textColor="@color/black"
+                android:textSize="@dimen/text_size" />
+
+            <TextView
+                android:id="@+id/hotelPhone"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="@dimen/layout_margin_top"
+                android:hint="@string/hotel_phone"
+                android:textColor="@color/black"
+                android:textSize="@dimen/text_size" />
+
+            <TextView
+                android:id="@+id/hotelSubway"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="@dimen/layout_margin_top"
+                android:hint="@string/subway"
+                android:textColor="@color/black"
+                android:textSize="@dimen/text_size" />
+
+            <EditText
+                android:id="@+id/wayToHotel"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="@dimen/layout_margin_top"
+                android:ems="10"
+                android:hint="@string/route_to_hotel"
+                android:importantForAutofill="no"
+                android:inputType="textMultiLine"
+                android:lines="5"
+                android:textSize="@dimen/text_size" />
+
+            <Button
+                android:id="@+id/button"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="@dimen/layout_margin_top"
+                android:text="@string/save" />
+
+        </LinearLayout>
+
+        <include
+            android:id="@+id/errorPanel"
+            layout="@layout/fragment_error" />
+
+    </LinearLayout>
+
+</androidx.core.widget.NestedScrollView>

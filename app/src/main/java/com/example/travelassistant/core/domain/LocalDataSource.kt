@@ -20,12 +20,11 @@ class LocalDataSource @Inject constructor(
     suspend fun getCityById(id: Long): City? = city.getCityById(id)
 
     suspend fun getPorts(): List<Port> = airport.getAllPorts()
-    suspend fun getPortById(id: Long): Port? = airport.getPortById(id)
 
     suspend fun getAllItems(): List<PersonalItem> = item.getAllItems()
     suspend fun insertItem(personalItem: PersonalItem) = item.insertItem(personalItem)
 
-    suspend fun getAllDetails(): List<InfoAboutTravel> = details.getDetails()
     suspend fun getDetails(date: Long): InfoAboutTravel? = details.getInfo(date)
     suspend fun insertDetails(info: InfoAboutTravel) = details.insertInfo(info)
+    suspend fun updateDetails(info: InfoAboutTravel) = details.updateDetails(info)
 }
