@@ -1,25 +1,36 @@
 package com.example.travelassistant.features.travelinfo.presentation.ui
 
+import android.content.Context
+import android.content.Intent
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.example.travelassistant.R
+import com.example.travelassistant.TimeNotification
+import com.example.travelassistant.core.Constants.ACTION_NAME
 import com.example.travelassistant.core.Constants.EMPTY_STRING
+import com.example.travelassistant.core.Constants.FROM_DESTINATION
+import com.example.travelassistant.core.Constants.TO_DESTINATION
+import com.example.travelassistant.core.domain.State
+import com.example.travelassistant.core.domain.data
 import com.example.travelassistant.core.domain.entity.City
 import com.example.travelassistant.core.domain.entity.Hotel
 import com.example.travelassistant.core.domain.entity.InfoAboutTravel
 import com.example.travelassistant.core.domain.entity.PersonalItem
 import com.example.travelassistant.core.domain.entity.Port
-import com.example.travelassistant.features.travelinfo.domain.State
+import com.example.travelassistant.core.parseError
 import com.example.travelassistant.features.travelinfo.domain.usecase.GetInfoUseCase
 import com.example.travelassistant.features.travelinfo.presentation.model.DateTime
-import com.example.travelassistant.features.travelinfo.presentation.ui.commands.CommandsLiveData
-import com.example.travelassistant.features.travelinfo.presentation.ui.commands.GoToFragment
-import com.example.travelassistant.features.travelinfo.presentation.ui.commands.ViewCommand
-import com.example.travelassistant.features.travelinfo.presentation.utils.DateTimeFormatter
+import com.example.travelassistant.core.commands.CommandsLiveData
+import com.example.travelassistant.core.commands.GoToFragment
+import com.example.travelassistant.core.commands.SetAlarm
+import com.example.travelassistant.core.commands.ViewCommand
+import com.example.travelassistant.core.utils.DateTimeFormatter
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.Dispatchers.Main
+import kotlinx.coroutines.async
+import kotlinx.coroutines.awaitAll
 import kotlinx.coroutines.coroutineScope
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.withContext
@@ -65,25 +76,30 @@ class TravelInfoViewModel @Inject constructor(
         }
     }
 
-    fun loadCities() {
+    fun loadData() {
         viewModelScope.launch {
-            coroutineScope {
-                when (val cities = useCase.getCities()) {
-                    is State.Success -> handleCitiesData(cities = cities.data)
-                    is State.Error -> handleError(cities.isNetworkError)
-                }
+            val (cities, ports, items) = coroutineScope {
+                val citiesResult = async { useCase.getCities() }
+                val portsResult = async { useCase.getPorts() }
+                val itemsResult = async { useCase.getAllItems() }
+
+                awaitAll(citiesResult, portsResult, itemsResult)
+            }
+            if (cities != null && ports != null && items != null) {
+                handleData(
+                    cities = cities.data as List<City>,
+                    ports = ports.data as List<Port>,
+                    items = items.data as List<PersonalItem>
+                )
+            } else {
+                handleError(true)
             }
         }
     }
 
-    fun loadPorts() {
-        viewModelScope.launch {
-            coroutineScope {
-                when (val ports = useCase.getPorts()) {
-                    is State.Success -> handlePortsData(ports = ports.data)
-                    is State.Error -> handleError(ports.isNetworkError)
-                }
-            }
+    private suspend fun handleData(cities: List<City>, ports: List<Port>, items: List<PersonalItem>) {
+        withContext(Main) {
+            dataContent.value = content.copy(cities = cities, ports = ports, items = items)
         }
     }
 
@@ -91,31 +107,10 @@ class TravelInfoViewModel @Inject constructor(
         viewModelScope.launch {
             val citySlug = useCase.getCityById(id)
             coroutineScope {
-                when (val hotels = citySlug?.slug?.let { useCase.getHotels(it) }) {
+                when (val hotels = citySlug?.slug.let { useCase.getHotels(it.toString()) }) {
                     is State.Success -> handleHotelsData(hotels = hotels.data)
                     is State.Error -> handleError(hotels.isNetworkError)
-                    null -> handleError(true)
                 }
-            }
-        }
-    }
-
-    fun loadItems() {
-        viewModelScope.launch {
-            coroutineScope {
-                when (val items = useCase.getAllItems()) {
-                    is State.Success -> handleItemsData(items = items.data)
-                    is State.Error -> handleError(items.isNetworkError)
-                }
-            }
-        }
-    }
-
-    fun setDateTime() {
-        viewModelScope.launch {
-            val datetime = formatter.convertLongDateToString(tempDate)
-            if (datetime != EMPTY_STRING) {
-                handleDateTime(datetime = datetime)
             }
         }
     }
@@ -126,35 +121,73 @@ class TravelInfoViewModel @Inject constructor(
         }
     }
 
-    private suspend fun handleCitiesData(cities: List<City>) {
-        withContext(Main) {
-            dataContent.value = content.copy(cities = cities)
-        }
-    }
-
-    private suspend fun handlePortsData(ports: List<Port>) {
-        withContext(Main) {
-            dataContent.value = content.copy(ports = ports)
-        }
-    }
-
     private suspend fun handleHotelsData(hotels: List<Hotel>) {
         withContext(Main) {
             dataContent.value = content.copy(hotels = hotels)
         }
     }
 
-    private suspend fun handleItemsData(items: List<PersonalItem>) {
-        withContext(Main) {
-            dataContent.value = content.copy(items = items)
+    /* Date & Time */
+
+    fun getDateInMillis() {
+        tempDate = with(selectedDateTime) {
+            formatter.getSelectedDateTimeInMillis(year, month, day, hours, minutes)
+        }
+        infoAboutTravel = infoAboutTravel.copyInfoAboutTravel(timeInMillis = tempDate)
+
+        setDateTime()
+    }
+
+    fun getDateDestInMillis() {
+        tempDate = with(selectedDateTime) {
+            formatter.getSelectedDateTimeInMillis(year, month, day, hours, minutes)
+        }
+        infoAboutTravel = infoAboutTravel.copyInfoAboutTravel(timeInMillisDest = tempDate)
+
+        setDateTimeDest()
+    }
+
+    fun setDateTime() {
+        viewModelScope.launch {
+            val datetime = formatter.convertLongDateToString(tempDate)
+            if (datetime != EMPTY_STRING) {
+                dataContent.value = content.copy(datetime = datetime)
+            }
         }
     }
 
-    private suspend fun handleDateTime(datetime: String) {
-        withContext(Main) {
-            dataContent.value = content.copy(datetime = datetime)
+    private fun setDateTimeDest() {
+        viewModelScope.launch {
+            val datetimeDest = formatter.convertLongDateToString(tempDate)
+            if (datetimeDest != EMPTY_STRING) {
+                dataContent.value = content.copy(dateTimeDest = datetimeDest)
+            }
         }
     }
+
+    /* Alarms */
+
+    fun setAlarm(context: Context) {
+        if (infoAboutTravel.hours > 0 && infoAboutTravel.timeInMillis > 0) {
+            val time = infoAboutTravel.timeInMillis - infoAboutTravel.hours
+            val intent = Intent(context, TimeNotification::class.java)
+            intent.action = TO_DESTINATION
+            intent.putExtra("time", time)
+            commands.onNext(SetAlarm(intent, time))
+        }
+    }
+
+    fun setSecondAlarm(context: Context) {
+        if (infoAboutTravel.hoursFromDest > 0 && infoAboutTravel.timeInMillisDest > 0) {
+            val time = infoAboutTravel.timeInMillisDest - infoAboutTravel.hoursFromDest
+            val intent = Intent(context, TimeNotification::class.java)
+            intent.action = FROM_DESTINATION
+            intent.putExtra(ACTION_NAME, time)
+            commands.onNext(SetAlarm(intent, time))
+        }
+    }
+
+    /* Navigation */
 
     fun openToDestination() {
         commands.onNext(GoToFragment(R.id.action_navigation_home_to_toDestinationFragment))

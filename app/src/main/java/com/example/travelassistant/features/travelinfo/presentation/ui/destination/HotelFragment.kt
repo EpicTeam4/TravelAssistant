@@ -13,7 +13,7 @@ import com.example.travelassistant.R
 import com.example.travelassistant.databinding.FragmentHotelBinding
 import com.example.travelassistant.features.travelinfo.presentation.ui.TravelInfoViewModel
 import com.example.travelassistant.features.travelinfo.presentation.ui.TravelInfoViewState
-import com.example.travelassistant.features.travelinfo.presentation.ui.observe
+import com.example.travelassistant.core.observe
 import dagger.hilt.android.AndroidEntryPoint
 
 @AndroidEntryPoint
@@ -107,7 +107,7 @@ class HotelFragment : BaseFragment() {
                     infoViewModel.infoAboutTravel.copyInfoAboutTravel(hotelId = id)
                 hotelAddress.text = hotels[infoViewModel.selectedHotelPos].address
                 hotelPhone.text = hotels[infoViewModel.selectedHotelPos].phone
-                hotelWebsite.text = hotels[infoViewModel.selectedHotelPos].subway
+                hotelSubway.text = hotels[infoViewModel.selectedHotelPos].subway
             }
         }
     }
@@ -128,9 +128,6 @@ class HotelFragment : BaseFragment() {
 
     private fun setData() {
         infoViewModel.infoAboutTravel = infoViewModel.infoAboutTravel.copyInfoAboutTravel(
-            hotelAddress = _binding?.hotelAddress?.text.toString(),
-            hotelPhone = _binding?.hotelPhone?.text.toString(),
-            hotelStation = _binding?.hotelWebsite?.text.toString(),
             wayToHotel = _binding?.wayToHotel?.text.toString()
         )
     }

@@ -6,8 +6,8 @@ import androidx.fragment.app.Fragment
 import androidx.fragment.app.activityViewModels
 import com.example.travelassistant.core.toNavigate
 import com.example.travelassistant.features.travelinfo.presentation.ui.TravelInfoViewModel
-import com.example.travelassistant.features.travelinfo.presentation.ui.commands.GoToFragment
-import com.example.travelassistant.features.travelinfo.presentation.ui.commands.ViewCommand
+import com.example.travelassistant.core.commands.GoToFragment
+import com.example.travelassistant.core.commands.ViewCommand
 import dagger.hilt.android.AndroidEntryPoint
 import java.util.Calendar
 
@@ -22,7 +22,7 @@ open class BaseFragment : Fragment() {
 
     private val infoViewModel: TravelInfoViewModel by activityViewModels()
 
-    protected fun handleCommand(viewCommand: ViewCommand) {
+    protected open fun handleCommand(viewCommand: ViewCommand) {
         if (viewCommand is GoToFragment) goToFragment(viewCommand)
     }
 
@@ -30,9 +30,8 @@ open class BaseFragment : Fragment() {
         requireActivity().toNavigate(viewCommand.pathId)
     }
 
-
-    protected fun pickDate() {
-        val currentDate = Calendar.getInstance()
+    protected fun pickDate(id: String) {
+        val currentDate = infoViewModel.formatter.getCurrentDate()
         DatePickerDialog(
             requireContext(),
             { _, year, monthOfYear, dayOfMonth ->
@@ -47,7 +46,11 @@ open class BaseFragment : Fragment() {
                             infoViewModel.selectedDateTime.copyDateTime(
                                 hours = hourOfDay, minutes = minute
                             )
-                        dateLong()
+                        if (id == TIME_ID) {
+                            infoViewModel.getDateInMillis()
+                        } else {
+                            infoViewModel.getDateDestInMillis()
+                        }
                     },
                     currentDate[Calendar.HOUR_OF_DAY],
                     currentDate[Calendar.MINUTE], false
@@ -57,11 +60,8 @@ open class BaseFragment : Fragment() {
         ).show()
     }
 
-    private fun dateLong(): Long {
-        infoViewModel.tempDate = with(infoViewModel.selectedDateTime) {
-            infoViewModel.formatter.getSelectedDateTimeInMillis(
-                year, month, day, hours, minutes)
-        }
-        return infoViewModel.tempDate
+    companion object {
+        const val TIME_ID = "time"
+        const val TIME_DEST_ID = "timeDest"
     }
 }

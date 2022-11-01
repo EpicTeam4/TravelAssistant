@@ -1,10 +1,10 @@
-package com.example.travelassistant.features.travelinfo.presentation.ui
+package com.example.travelassistant.core
 
 import androidx.lifecycle.LifecycleOwner
 import androidx.lifecycle.Observer
 import com.example.travelassistant.R
-import com.example.travelassistant.features.travelinfo.data.model.ErrorModel
-import com.example.travelassistant.features.travelinfo.presentation.ui.commands.CommandsLiveData
+import com.example.travelassistant.core.data.model.ErrorModel
+import com.example.travelassistant.core.commands.CommandsLiveData
 
 fun Boolean.parseError(): ErrorModel =
     if (this) ErrorModel(R.string.network_error, R.drawable.network_error)

@@ -1,4 +1,4 @@
-package com.example.travelassistant.features.travelinfo.presentation.ui.commands
+package com.example.travelassistant.core.commands
 
 import androidx.lifecycle.MutableLiveData
 import java.util.Queue

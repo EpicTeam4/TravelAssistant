@@ -4,6 +4,12 @@ import androidx.room.Dao
 import androidx.room.Query
 import com.example.travelassistant.core.domain.entity.City
 
+/**
+ * City dao - операции, производимые с данными из таблицы
+ *
+ * @author Marianne Sabanchieva
+ */
+
 @Dao
 interface CityDao {
     @Query("Select * From ${City.Schema.TABLE_NAME}")

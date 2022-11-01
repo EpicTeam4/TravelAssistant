@@ -23,12 +23,10 @@ class InfoRepositoryImpl(
     override suspend fun getCityById(id: Long): City? = dataSource.getCityById(id)
 
     override suspend fun getPorts(): List<Port> = dataSource.getPorts()
-    override suspend fun getPortById(id: Long): Port? = dataSource.getPortById(id)
-
     override suspend fun getHotels(location: String): List<Hotel> = apiMapper.getHotels(location)
+
     override suspend fun getAllItems(): List<PersonalItem> = dataSource.getAllItems()
     override suspend fun addItem(item: PersonalItem) = dataSource.insertItem(item)
 
-    override suspend fun getDetails(date: Long): InfoAboutTravel? = dataSource.getDetails(date)
     override suspend fun addDetails(info: InfoAboutTravel) = dataSource.insertDetails(info)
 }

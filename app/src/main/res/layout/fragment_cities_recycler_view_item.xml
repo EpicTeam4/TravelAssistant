@@ -6,7 +6,6 @@
     app:cardCornerRadius="@dimen/cardview_elevation"
     app:cardPreventCornerOverlap="false">
 
-    <!--com.google.android.material.imageview.ShapeableImageView-->
     <ImageView
         android:id="@+id/city_image"
         android:layout_width="match_parent"
