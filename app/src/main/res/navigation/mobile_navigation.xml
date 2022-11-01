@@ -9,7 +9,7 @@
         android:id="@+id/navigation_home"
         android:name="com.example.travelassistant.features.travelinfo.presentation.ui.CitiesListFragment"
         android:label="@string/title_home"
-        tools:layout="@layout/fragment_cities_list" >
+        tools:layout="@layout/fragment_cities" >
         <action
             android:id="@+id/action_navigation_home_to_toDestinationFragment"
             app:destination="@id/toDestinationFragment" />
@@ -40,7 +40,7 @@
     <fragment
         android:id="@+id/toDestinationFragment"
         android:name="com.example.travelassistant.features.travelinfo.presentation.ui.destination.ToDestinationFragment"
-        android:label="Туда"
+        android:label="@string/to_dest"
         tools:layout="@layout/fragment_to_destination">
         <action
             android:id="@+id/action_toDestinationFragment_to_fromDestinationFragment"
@@ -52,7 +52,7 @@
     <fragment
         android:id="@+id/fromDestinationFragment"
         android:name="com.example.travelassistant.features.travelinfo.presentation.ui.destination.FromDestinationFragment"
-        android:label="Обратно">
+        android:label="@string/from_dest">
         <action
             android:id="@+id/action_fromDestinationFragment_to_hotelFragment"
             app:destination="@id/hotelFragment" />
@@ -63,7 +63,7 @@
     <fragment
         android:id="@+id/hotelFragment"
         android:name="com.example.travelassistant.features.travelinfo.presentation.ui.destination.HotelFragment"
-        android:label="Отель">
+        android:label="@string/hotel">
         <action
             android:id="@+id/action_hotelFragment_to_personalItemsFragment"
             app:destination="@id/personalItemsFragment" />
@@ -74,10 +74,14 @@
     <fragment
         android:id="@+id/personalItemsFragment"
         android:name="com.example.travelassistant.features.travelinfo.presentation.ui.destination.PersonalItemsFragment"
-        android:label="Багаж">
+        android:label="@string/luggage">
         <action
             android:id="@+id/action_personalItemsFragment_to_navigation_home"
             app:destination="@id/navigation_home"
             app:popUpTo="@id/navigation_home" />
     </fragment>
+    <fragment
+        android:id="@+id/navigation_details"
+        android:name="com.example.travelassistant.features.editinfo.presentation.ui.InfoEditingFragment"
+        android:label="@string/details" />
 </navigation>
