@@ -8,7 +8,8 @@ import com.example.travelassistant.core.domain.entity.PersonalItem
 import com.example.travelassistant.databinding.FragmentItemBinding
 
 class ItemAdapter(
-    private val items: MutableList<PersonalItem>
+    private val items: MutableList<PersonalItem>,
+    private val deleteItem: (id: Int) -> Unit
 ) : RecyclerView.Adapter<ItemAdapter.ViewHolder>() {
 
     class ViewHolder(val binding: FragmentItemBinding) :
@@ -23,6 +24,9 @@ class ItemAdapter(
 
     override fun onBindViewHolder(holder: ViewHolder, position: Int) {
         holder.binding.itemName.text = items[position].item
+        holder.binding.del.setOnClickListener {
+            deleteItem(items[position].id)
+        }
     }
 
     fun setItems(itemsList: List<PersonalItem>) {

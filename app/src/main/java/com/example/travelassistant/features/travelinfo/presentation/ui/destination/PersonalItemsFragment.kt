@@ -48,7 +48,7 @@ class PersonalItemsFragment : BaseFragment() {
 
         _binding = FragmentPersonalItemsBinding.bind(view)
 
-        itemsAdapter = ItemAdapter(mutableListOf())
+        itemsAdapter = ItemAdapter(mutableListOf()) { id -> deleteItem(id) }
         recyclerView = (view.findViewById(R.id.items) as RecyclerView).apply {
             layoutManager = LinearLayoutManager(requireContext())
             adapter = itemsAdapter
@@ -128,6 +128,10 @@ class PersonalItemsFragment : BaseFragment() {
             android.R.id.home -> requireActivity().onBackPressed()
         }
         return super.onOptionsItemSelected(menuItem)
+    }
+
+    private fun deleteItem(id: Int) {
+        infoViewModel.deleteItem(id)
     }
 
     companion object {

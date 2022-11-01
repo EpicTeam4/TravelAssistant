@@ -28,5 +28,6 @@ class InfoRepositoryImpl(
     override suspend fun getAllItems(): List<PersonalItem> = dataSource.getAllItems()
     override suspend fun addItem(item: PersonalItem) = dataSource.insertItem(item)
 
+    override suspend fun deleteItem(id: Int) = dataSource.deleteItem(id)
     override suspend fun addDetails(info: InfoAboutTravel) = dataSource.insertDetails(info)
 }

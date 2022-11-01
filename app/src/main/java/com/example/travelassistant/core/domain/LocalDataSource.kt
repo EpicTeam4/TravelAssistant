@@ -23,6 +23,7 @@ class LocalDataSource @Inject constructor(
 
     suspend fun getAllItems(): List<PersonalItem> = item.getAllItems()
     suspend fun insertItem(personalItem: PersonalItem) = item.insertItem(personalItem)
+    suspend fun deleteItem(id: Int) = item.deleteItem(id)
 
     suspend fun getDetails(date: Long): InfoAboutTravel? = details.getInfo(date)
     suspend fun insertDetails(info: InfoAboutTravel) = details.insertInfo(info)

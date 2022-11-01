@@ -76,6 +76,14 @@ class TravelInfoViewModel @Inject constructor(
         }
     }
 
+    fun deleteItem(id: Int) {
+        viewModelScope.launch {
+            withContext(Main) {
+                useCase.deleteItem(id)
+            }
+        }
+    }
+
     fun loadData() {
         viewModelScope.launch {
             val (cities, ports, items) = coroutineScope {
