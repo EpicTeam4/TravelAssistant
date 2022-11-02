@@ -33,9 +33,13 @@
 
     <fragment
         android:id="@+id/navigation_favourites"
-        android:name="com.example.travelassistant.ui.favourites.FavouritesFragment"
+        android:name="com.example.travelassistant.features.favourites.presentation.ui.list.FavouritesFragment"
         android:label="@string/title_favourites"
-        tools:layout="@layout/fragment_favourites" />
+        tools:layout="@layout/fragment_favourites" >
+        <action
+            android:id="@+id/action_navigation_favourites_to_favouritesDetailsFragment"
+            app:destination="@id/favouritesDetailsFragment" />
+    </fragment>
 
     <fragment
         android:id="@+id/toDestinationFragment"
@@ -84,4 +88,13 @@
         android:id="@+id/navigation_details"
         android:name="com.example.travelassistant.features.editinfo.presentation.ui.InfoEditingFragment"
         android:label="@string/details" />
+    <fragment
+        android:id="@+id/favouritesDetailsFragment"
+        android:name="com.example.travelassistant.features.favourites.presentation.ui.details.FavouritesDetailsFragment"
+        android:label="@string/title_favourites_details">
+        <argument
+            android:name="placeId"
+            android:defaultValue="-1"
+            app:argType="integer" />
+    </fragment>
 </navigation>
