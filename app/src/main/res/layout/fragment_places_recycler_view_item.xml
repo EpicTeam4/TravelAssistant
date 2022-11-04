@@ -37,6 +37,7 @@
             android:layout_marginLeft="@dimen/layout_margin_top"
             android:layout_marginRight="@dimen/layout_margin_top"
             android:ellipsize="end"
+            android:gravity="center"
             android:maxLines="2"
             android:textColor="@color/black"
             android:textSize="@dimen/places_cardview_title_text_size"

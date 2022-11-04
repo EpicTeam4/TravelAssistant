@@ -22,7 +22,7 @@
     <dimen name="text_size">14sp</dimen>
 
     /* fragment_places_list */
-    <dimen name="places_cardview_height">200dp</dimen>
+    <dimen name="places_cardview_height">180dp</dimen>
     <dimen name="places_cardview_title_text_size">14sp</dimen>
     <dimen name="places_cardview_text_size">10sp</dimen>
 

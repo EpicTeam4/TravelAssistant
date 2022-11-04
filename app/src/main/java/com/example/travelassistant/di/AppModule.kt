@@ -10,6 +10,7 @@ import com.example.travelassistant.core.database.TravelDatabase
 import com.example.travelassistant.core.database.TravelInfoDatabase
 import com.example.travelassistant.core.database.dao.PortDao
 import com.example.travelassistant.core.database.dao.CityDao
+import com.example.travelassistant.core.database.dao.FavouriteSightsDao
 import com.example.travelassistant.core.database.dao.PersonalItemDao
 import com.example.travelassistant.core.database.dao.TravelInfoDao
 import com.example.travelassistant.core.domain.LocalDataSource
@@ -24,6 +25,9 @@ import com.example.travelassistant.core.network.KudagoClient
 import com.example.travelassistant.core.network.KudagoClientApi
 import com.example.travelassistant.features.editinfo.data.InfoEditingRepositoryImpl
 import com.example.travelassistant.features.editinfo.domain.repository.InfoEditingRepository
+import com.example.travelassistant.features.favourites.data.SightsRepositoryImpl
+import com.example.travelassistant.features.favourites.domain.repository.SightsRepository
+import com.example.travelassistant.features.favourites.domain.usecase.SightsUseCase
 import com.example.travelassistant.features.travelinfo.data.InfoRepositoryImpl
 import com.example.travelassistant.features.travelinfo.domain.repository.InfoRepository
 import com.example.travelassistant.features.travelinfo.domain.usecase.GetInfoUseCase
@@ -61,6 +65,9 @@ class AppModule {
     @Provides
     fun provideDetails(appDatabase: TravelInfoDatabase): TravelInfoDao = appDatabase.details()
 
+    @Provides
+    fun provideSights(appDatabase: TravelInfoDatabase): FavouriteSightsDao = appDatabase.sights()
+
     /**
      * Provide kudago client api
      *
@@ -82,13 +89,17 @@ class AppModule {
             .create(KudagoClientApi::class.java)
 
     @Provides
-    suspend fun providesInfoUseCase(useCase: GetInfoUseCase): State<List<City>> = useCase.getCities()
+    suspend fun providesInfoUseCase(useCase: GetInfoUseCase): State<List<City>> =
+        useCase.getCities()
 
     @Provides
     suspend fun providesPortUseCase(useCase: GetInfoUseCase): State<List<Port>> = useCase.getPorts()
 
     @Provides
-    suspend fun providesHotelUseCase(useCase: GetInfoUseCase, location: String): State<List<Hotel>> =
+    suspend fun providesHotelUseCase(
+        useCase: GetInfoUseCase,
+        location: String
+    ): State<List<Hotel>> =
         useCase.getHotels(location)
 
     @Provides
@@ -100,7 +111,13 @@ class AppModule {
         useCase.addDetails(info)
 
     @Provides
-    fun bindsInfoRepository(dataSource: LocalDataSource, hotelMapper: ApiMapperHotel): InfoRepository =
+    suspend fun providesSightsUseCase(useCase: SightsUseCase) = useCase.getFavouriteSights()
+
+    @Provides
+    fun bindsInfoRepository(
+        dataSource: LocalDataSource,
+        hotelMapper: ApiMapperHotel
+    ): InfoRepository =
         InfoRepositoryImpl(dataSource, hotelMapper)
 
     @Provides
@@ -109,6 +126,10 @@ class AppModule {
         hotelMapper: ApiMapperHotel
     ): InfoEditingRepository =
         InfoEditingRepositoryImpl(dataSource, hotelMapper)
+
+    @Provides
+    fun providesSightsRepository(dataSource: LocalDataSource): SightsRepository =
+        SightsRepositoryImpl(dataSource)
 
     @Provides
     @Singleton
