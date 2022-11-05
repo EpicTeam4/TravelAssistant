@@ -10,7 +10,7 @@ import com.example.travelassistant.core.database.TravelDatabase
 import com.example.travelassistant.core.database.TravelInfoDatabase
 import com.example.travelassistant.core.database.dao.PortDao
 import com.example.travelassistant.core.database.dao.CityDao
-import com.example.travelassistant.core.database.dao.FavouriteSightsDao
+import com.example.travelassistant.core.database.dao.SightsDao
 import com.example.travelassistant.core.database.dao.PersonalItemDao
 import com.example.travelassistant.core.database.dao.TravelInfoDao
 import com.example.travelassistant.core.domain.LocalDataSource
@@ -66,7 +66,7 @@ class AppModule {
     fun provideDetails(appDatabase: TravelInfoDatabase): TravelInfoDao = appDatabase.details()
 
     @Provides
-    fun provideSights(appDatabase: TravelInfoDatabase): FavouriteSightsDao = appDatabase.sights()
+    fun provideSights(appDatabase: TravelInfoDatabase): SightsDao = appDatabase.sights()
 
     /**
      * Provide kudago client api

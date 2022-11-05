@@ -30,6 +30,14 @@
 
         </androidx.cardview.widget.CardView>
 
+        <ImageView
+            android:id="@+id/img_favorite"
+            android:layout_width="@dimen/img_favourite_size"
+            android:layout_height="@dimen/img_favourite_size"
+            android:src="@drawable/star_empty"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintTop_toTopOf="parent" />
+
         <TextView
             android:id="@+id/place_title"
             android:layout_width="0dp"

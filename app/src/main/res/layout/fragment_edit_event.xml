@@ -21,7 +21,7 @@
                 android:gravity="center"
                 android:text="@string/to_dest"
                 android:textColor="@color/black"
-                android:textSize="@dimen/city_name_text_size"
+                android:textSize="@dimen/title_text_size"
                 android:textStyle="bold" />
 
             <EditText
@@ -96,7 +96,7 @@
                 android:gravity="center"
                 android:text="@string/from_dest"
                 android:textColor="@color/black"
-                android:textSize="@dimen/city_name_text_size"
+                android:textSize="@dimen/title_text_size"
                 android:textStyle="bold" />
 
             <EditText
@@ -171,7 +171,7 @@
                 android:gravity="center"
                 android:text="@string/hotel"
                 android:textColor="@color/black"
-                android:textSize="@dimen/city_name_text_size"
+                android:textSize="@dimen/title_text_size"
                 android:textStyle="bold" />
 
             <Spinner

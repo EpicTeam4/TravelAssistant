@@ -1,12 +1,12 @@
 package com.example.travelassistant.core.domain
 
 import com.example.travelassistant.core.database.dao.CityDao
-import com.example.travelassistant.core.database.dao.FavouriteSightsDao
+import com.example.travelassistant.core.database.dao.SightsDao
 import com.example.travelassistant.core.database.dao.PersonalItemDao
 import com.example.travelassistant.core.database.dao.PortDao
 import com.example.travelassistant.core.database.dao.TravelInfoDao
 import com.example.travelassistant.core.domain.entity.City
-import com.example.travelassistant.core.domain.entity.FavouriteSights
+import com.example.travelassistant.core.domain.entity.Sights
 import com.example.travelassistant.core.domain.entity.PersonalItem
 import com.example.travelassistant.core.domain.entity.Port
 import com.example.travelassistant.core.domain.entity.InfoAboutTravel
@@ -17,7 +17,7 @@ class LocalDataSource @Inject constructor(
     private val airport: PortDao,
     private val item: PersonalItemDao,
     private val details: TravelInfoDao,
-    private val sights: FavouriteSightsDao
+    private val sights: SightsDao
 ) {
     suspend fun getCities(): List<City> = city.getAllCities()
     suspend fun getCityById(id: Long): City? = city.getCityById(id)
@@ -32,6 +32,6 @@ class LocalDataSource @Inject constructor(
     suspend fun insertDetails(info: InfoAboutTravel) = details.insertInfo(info)
     suspend fun updateDetails(info: InfoAboutTravel) = details.updateDetails(info)
 
-    suspend fun getFavouriteSights(): List<FavouriteSights> = sights.getFavouriteSights()
-    suspend fun getSightsById(id: Int): FavouriteSights? = sights.getSightsById(id)
+    suspend fun getFavouriteSights(): List<Sights> = sights.getFavouriteSights()
+    suspend fun getSightsById(id: Int): Sights? = sights.getSightsById(id)
 }

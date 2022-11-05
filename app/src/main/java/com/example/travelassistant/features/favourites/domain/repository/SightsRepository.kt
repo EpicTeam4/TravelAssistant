@@ -1,6 +1,7 @@
 package com.example.travelassistant.features.favourites.domain.repository
 
-import com.example.travelassistant.core.domain.entity.FavouriteSights
+import com.example.travelassistant.core.domain.entity.City
+import com.example.travelassistant.core.domain.entity.Sights
 
 /**
  * Репозиторий для списка избранных достопримечательностей
@@ -9,6 +10,7 @@ import com.example.travelassistant.core.domain.entity.FavouriteSights
  */
 
 interface SightsRepository {
-    suspend fun getFavouriteSights(): List<FavouriteSights>
-    suspend fun getSightsById(id: Int): FavouriteSights?
+    suspend fun getFavouriteSights(): List<Sights>
+    suspend fun getSightsById(id: Int): Sights?
+    suspend fun getCities(): List<City>
 }

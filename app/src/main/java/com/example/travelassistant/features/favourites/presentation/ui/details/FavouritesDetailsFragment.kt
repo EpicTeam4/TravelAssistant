@@ -9,7 +9,7 @@ import androidx.fragment.app.Fragment
 import androidx.fragment.app.activityViewModels
 import androidx.navigation.fragment.navArgs
 import com.example.travelassistant.R
-import com.example.travelassistant.core.domain.entity.FavouriteSights
+import com.example.travelassistant.core.domain.entity.Sights
 import com.example.travelassistant.databinding.FragmentFavouritesDetailsBinding
 import com.squareup.picasso.Picasso
 
@@ -43,7 +43,7 @@ class FavouritesDetailsFragment : Fragment() {
         _binding = null
     }
 
-    private fun getDetails(details: FavouriteSights) {
+    private fun getDetails(details: Sights) {
         _binding?.apply {
             with(details) {
                 placeTitle.text = name
