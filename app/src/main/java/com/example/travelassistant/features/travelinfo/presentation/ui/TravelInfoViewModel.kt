@@ -17,7 +17,6 @@ import com.example.travelassistant.core.domain.data
 import com.example.travelassistant.core.domain.entity.City
 import com.example.travelassistant.core.domain.entity.Hotel
 import com.example.travelassistant.core.domain.entity.InfoAboutTravel
-import com.example.travelassistant.core.domain.entity.PersonalItem
 import com.example.travelassistant.core.domain.entity.Port
 import com.example.travelassistant.core.parseError
 import com.example.travelassistant.features.travelinfo.domain.usecase.GetInfoUseCase
@@ -30,7 +29,6 @@ import com.example.travelassistant.core.utils.DateTimeFormatter
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.Dispatchers.Main
 import kotlinx.coroutines.async
-import kotlinx.coroutines.awaitAll
 import kotlinx.coroutines.coroutineScope
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.withContext
@@ -50,7 +48,6 @@ class TravelInfoViewModel @Inject constructor(
 
     var selectedDateTime = DateTime()
     var infoAboutTravel = InfoAboutTravel()
-    var luggageItem = PersonalItem()
     var selectedHotelPos = 0
     var tempDate: Long = 0
     var content = TravelInfoViewState.Content()
@@ -68,46 +65,25 @@ class TravelInfoViewModel @Inject constructor(
         }
     }
 
-    fun addItem(item: PersonalItem) {
-        viewModelScope.launch {
-            withContext(Main) {
-                useCase.addItem(item)
-            }
-        }
-    }
-
-    fun deleteItem(id: Int) {
-        viewModelScope.launch {
-            withContext(Main) {
-                useCase.deleteItem(id)
-            }
-        }
-    }
-
     fun loadData() {
         viewModelScope.launch {
-            val (cities, ports, items) = coroutineScope {
+            val (cities, ports) = coroutineScope {
                 val citiesResult = async { useCase.getCities() }
                 val portsResult = async { useCase.getPorts() }
-                val itemsResult = async { useCase.getAllItems() }
 
-                awaitAll(citiesResult, portsResult, itemsResult)
+                citiesResult.await().data to portsResult.await().data
             }
-            if (cities != null && ports != null && items != null) {
-                handleData(
-                    cities = cities.data as List<City>,
-                    ports = ports.data as List<Port>,
-                    items = items.data as List<PersonalItem>
-                )
+            if (cities != null && ports != null) {
+                handleData(cities = cities, ports = ports,)
             } else {
                 handleError(true)
             }
         }
     }
 
-    private suspend fun handleData(cities: List<City>, ports: List<Port>, items: List<PersonalItem>) {
+    private suspend fun handleData(cities: List<City>, ports: List<Port>) {
         withContext(Main) {
-            dataContent.value = content.copy(cities = cities, ports = ports, items = items)
+            dataContent.value = content.copy(cities = cities, ports = ports)
         }
     }
 
@@ -155,7 +131,7 @@ class TravelInfoViewModel @Inject constructor(
         setDateTimeDest()
     }
 
-    fun setDateTime() {
+    private fun setDateTime() {
         viewModelScope.launch {
             val datetime = formatter.convertLongDateToString(tempDate)
             if (datetime != EMPTY_STRING) {
@@ -209,11 +185,7 @@ class TravelInfoViewModel @Inject constructor(
         commands.onNext(GoToFragment(R.id.action_fromDestinationFragment_to_hotelFragment))
     }
 
-    fun openItemsFragment() {
-        commands.onNext(GoToFragment(R.id.action_hotelFragment_to_personalItemsFragment))
-    }
-
     fun openHomeFragment() {
-        commands.onNext(GoToFragment(R.id.action_personalItemsFragment_to_navigation_home))
+        commands.onNext(GoToFragment(R.id.action_hotelFragment_to_navigation_home))
     }
 }

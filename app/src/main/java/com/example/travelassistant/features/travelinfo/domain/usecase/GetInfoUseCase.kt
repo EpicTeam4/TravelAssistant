@@ -4,7 +4,6 @@ import com.example.travelassistant.core.domain.State
 import com.example.travelassistant.core.domain.entity.Port
 import com.example.travelassistant.core.domain.entity.City
 import com.example.travelassistant.core.domain.entity.Hotel
-import com.example.travelassistant.core.domain.entity.PersonalItem
 import com.example.travelassistant.core.domain.entity.InfoAboutTravel
 import com.example.travelassistant.core.domain.usecase.safeCall
 import com.example.travelassistant.features.travelinfo.domain.repository.InfoRepository
@@ -37,15 +36,6 @@ class GetInfoUseCase @Inject constructor(private val infoRepository: InfoReposit
 
     suspend fun getHotels(location: String): State<List<Hotel>> =
         withContext(Dispatchers.IO) { safeCall { infoRepository.getHotels(location) } }
-
-    suspend fun getAllItems(): State<List<PersonalItem>> =
-        withContext(Dispatchers.IO) { safeCall { infoRepository.getAllItems() } }
-
-    suspend fun addItem(item: PersonalItem) =
-        withContext(Dispatchers.IO) { infoRepository.addItem(item) }
-
-    suspend fun deleteItem(id: Int) =
-        withContext(Dispatchers.IO) { infoRepository.deleteItem(id) }
 
     suspend fun addDetails(info: InfoAboutTravel) =
         withContext(Dispatchers.IO) { infoRepository.addDetails(info) }

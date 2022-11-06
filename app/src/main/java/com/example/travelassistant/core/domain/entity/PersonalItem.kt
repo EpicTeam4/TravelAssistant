@@ -3,6 +3,7 @@ package com.example.travelassistant.core.domain.entity
 import androidx.room.ColumnInfo
 import androidx.room.Entity
 import androidx.room.PrimaryKey
+import com.example.travelassistant.core.Constants.EMPTY_STRING
 
 /**
  * Personal item - сущность базы данных
@@ -18,7 +19,7 @@ import androidx.room.PrimaryKey
 data class PersonalItem(
     @PrimaryKey(autoGenerate = true)
     @ColumnInfo(name = Schema.ID) val id: Int = 0,
-    @ColumnInfo(name = Schema.ITEM) val item: String = "",
+    @ColumnInfo(name = Schema.ITEM) val item: String = EMPTY_STRING,
     @ColumnInfo(name = Schema.ITEM_COUNT) val item_count: Int? = 0
 ) {
     object Schema {

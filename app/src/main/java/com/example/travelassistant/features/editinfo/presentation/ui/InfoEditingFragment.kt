@@ -47,14 +47,18 @@ class InfoEditingFragment : Fragment() {
         initObservers()
         infoViewModel.apply {
             dataState.observe(viewLifecycleOwner, ::handleState)
-            observe(infoViewModel.commands, ::handleCommand)
+            observe(commands, ::handleCommand)
             loadDetails(System.currentTimeMillis())
         }
 
         _binding?.apply {
             button.setOnClickListener {
                 updateData()
-                infoViewModel.infoAboutTravel.let { it1 -> infoViewModel.updateDetails(it1) }
+                infoViewModel.apply {
+                    updateDetails(infoAboutTravel)
+                    setAlarm(requireContext())
+                    setSecondAlarm(requireContext())
+                }
             }
 
             spinnerHotel.onItemSelectedListener =
@@ -69,7 +73,6 @@ class InfoEditingFragment : Fragment() {
                     override fun onNothingSelected(parent: AdapterView<*>?) {}
                 }
 
-            //TODO переустановить напоминалки
             dateOfJourney.setOnClickListener {
                 pickDate(TIME_ID)
             }
@@ -116,7 +119,7 @@ class InfoEditingFragment : Fragment() {
         val pendingIntent = PendingIntent.getBroadcast(
             requireContext(),
             REQUEST_CODE, intent,
-            PendingIntent.FLAG_ONE_SHOT
+            PendingIntent.FLAG_UPDATE_CURRENT
         )
         if (alarmManager != null) {
             alarmManager.set(AlarmManager.RTC, time, pendingIntent)

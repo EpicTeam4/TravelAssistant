@@ -54,11 +54,6 @@ class FromDestinationFragment : BaseFragment() {
 
             dateOfJourney.setOnClickListener {
                 pickDate(TIME_DEST_ID)
-                infoViewModel.apply {
-                    setDateTime()
-                    infoAboutTravel =
-                        infoAboutTravel.copyInfoAboutTravel(timeInMillisDest = tempDate)
-                }
             }
         }
     }
@@ -95,7 +90,7 @@ class FromDestinationFragment : BaseFragment() {
 
     private fun TravelInfoViewState.Content.handle() {
         if (portsList.isEmpty) ports.forEach { portsList.add(it.name) }
-        _binding?.dateOfJourney?.setText(datetime)
+        _binding?.dateOfJourney?.setText(dateTimeDest)
     }
 
     private fun TravelInfoViewState.Error.handle() {

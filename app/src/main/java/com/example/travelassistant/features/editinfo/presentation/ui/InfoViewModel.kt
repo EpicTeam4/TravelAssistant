@@ -7,8 +7,10 @@ import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.example.travelassistant.TimeNotification
-import com.example.travelassistant.core.Constants
+import com.example.travelassistant.core.Constants.ACTION_NAME
 import com.example.travelassistant.core.Constants.EMPTY_STRING
+import com.example.travelassistant.core.Constants.FROM_DESTINATION
+import com.example.travelassistant.core.Constants.TO_DESTINATION
 import com.example.travelassistant.core.domain.data
 import com.example.travelassistant.core.domain.entity.Hotel
 import com.example.travelassistant.core.domain.entity.InfoAboutTravel
@@ -110,8 +112,8 @@ class InfoViewModel @Inject constructor(
         if (infoAboutTravel.hours > 0 && infoAboutTravel.timeInMillis > 0) {
             val time = infoAboutTravel.timeInMillis - infoAboutTravel.hours
             val intent = Intent(context, TimeNotification::class.java)
-            intent.action = Constants.TO_DESTINATION
-            intent.putExtra("time", time)
+            intent.action = TO_DESTINATION
+            intent.putExtra(ACTION_NAME, time)
             commands.onNext(SetAlarm(intent, time))
         }
     }
@@ -120,8 +122,8 @@ class InfoViewModel @Inject constructor(
         if (infoAboutTravel.hoursFromDest > 0 && infoAboutTravel.timeInMillisDest > 0) {
             val time = infoAboutTravel.timeInMillisDest - infoAboutTravel.hoursFromDest
             val intent = Intent(context, TimeNotification::class.java)
-            intent.action = Constants.FROM_DESTINATION
-            intent.putExtra(Constants.ACTION_NAME, time)
+            intent.action = FROM_DESTINATION
+            intent.putExtra(ACTION_NAME, time)
             commands.onNext(SetAlarm(intent, time))
         }
     }

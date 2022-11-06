@@ -54,11 +54,6 @@ class ToDestinationFragment : BaseFragment() {
 
             dateOfJourney.setOnClickListener {
                 pickDate(TIME_ID)
-                infoViewModel.apply {
-                    setDateTime()
-                    infoAboutTravel =
-                        infoAboutTravel.copyInfoAboutTravel(timeInMillis = infoViewModel.tempDate)
-                }
             }
         }
     }

@@ -1,4 +1,4 @@
-package com.example.travelassistant.features.travelinfo.presentation.adapters
+package com.example.travelassistant.features.luggage.presentation.adapters
 
 import android.view.LayoutInflater
 import android.view.ViewGroup
@@ -6,6 +6,15 @@ import androidx.recyclerview.widget.RecyclerView
 import com.example.travelassistant.R
 import com.example.travelassistant.core.domain.entity.PersonalItem
 import com.example.travelassistant.databinding.FragmentItemBinding
+
+/**
+ * Item adapter - адаптер для списка личных вещей
+ *
+ * @property items - список вещей
+ * @property deleteItem - удаление элемента списка
+ *
+ * @author Marianne Sabanchieva
+ */
 
 class ItemAdapter(
     private val items: MutableList<PersonalItem>,
