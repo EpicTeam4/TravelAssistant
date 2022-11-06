@@ -8,7 +8,8 @@ import com.example.travelassistant.core.commands.CommandsLiveData
 import com.example.travelassistant.core.commands.SendArgsToFragment
 import com.example.travelassistant.core.commands.ViewCommand
 import com.example.travelassistant.core.domain.State
-import com.example.travelassistant.core.domain.entity.FavouriteSights
+import com.example.travelassistant.core.domain.entity.City
+import com.example.travelassistant.core.domain.entity.Sights
 import com.example.travelassistant.core.parseError
 import com.example.travelassistant.features.favourites.domain.usecase.SightsUseCase
 import com.example.travelassistant.features.favourites.presentation.ui.SightsViewState
@@ -38,12 +39,19 @@ class FavouritesViewModel @Inject constructor(
 
     fun loadData() {
         viewModelScope.launch {
-            when (val sights = useCase.getFavouriteSights()) {
+            when (val cities = useCase.getCities()) {
                 is State.Success -> {
-                    handleData(sights = sights.data)
+                    when (val sights = useCase.getFavouriteSights()) {
+                        is State.Success -> {
+                            handleData(cities = cities.data, sights = sights.data)
+                        }
+                        is State.Error -> {
+                            handleError(sights.isNetworkError)
+                        }
+                    }
                 }
                 is State.Error -> {
-                    handleError(sights.isNetworkError)
+                    handleError(cities.isNetworkError)
                 }
             }
         }
@@ -55,9 +63,9 @@ class FavouritesViewModel @Inject constructor(
         }
     }
 
-    private suspend fun handleData(sights: List<FavouriteSights>) {
+    private suspend fun handleData(cities: List<City>, sights: List<Sights>) {
         withContext(Main) {
-            dataContent.value = content.copy(sights = sights)
+            dataContent.value = content.copy(cities = cities, sights = sights)
         }
     }
 

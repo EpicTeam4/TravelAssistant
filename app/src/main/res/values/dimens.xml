@@ -11,8 +11,8 @@
     <dimen name="error_icon_size">150dp</dimen>
     <dimen name="list_layout_margin">8dp</dimen>
 
-    /* fragment_city */
-    <dimen name="city_name_text_size">20sp</dimen>
+    /* fragment_city, fragment_favourites_details */
+    <dimen name="title_text_size">20sp</dimen>
     <dimen name="cardview_layout_margin">8dp</dimen>
 
     /* fragment_from_destination, fragment_to_destination */
@@ -25,5 +25,8 @@
     <dimen name="places_cardview_height">180dp</dimen>
     <dimen name="places_cardview_title_text_size">14sp</dimen>
     <dimen name="places_cardview_text_size">10sp</dimen>
+
+    <dimen name="img_favourite_size">24dp</dimen>
+    <dimen name="fav_item_layout_height">220dp</dimen>
 
 </resources>

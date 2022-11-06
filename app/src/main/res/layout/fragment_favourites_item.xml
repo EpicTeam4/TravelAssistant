@@ -3,21 +3,27 @@
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
-    android:layout_height="match_parent"
+    android:layout_height="@dimen/fav_item_layout_height"
     android:layout_margin="@dimen/list_layout_margin"
     android:orientation="vertical"
     tools:context=".features.favourites.presentation.ui.list.FavouritesFragment">
 
+    <TextView
+        android:id="@+id/itemName"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_margin="@dimen/list_layout_margin"
+        android:gravity="center"
+        android:textColor="@color/black"
+        android:textSize="@dimen/title_text_size"
+        android:textStyle="bold" />
+
     <androidx.recyclerview.widget.RecyclerView
-        android:id="@+id/favourite_sights_main"
+        android:id="@+id/favourite_sights"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:orientation="vertical"
+        android:orientation="horizontal"
         app:layoutManager="androidx.recyclerview.widget.LinearLayoutManager"
-        tools:listitem="@layout/fragment_favourites_item" />
-
-    <include
-        android:id="@+id/errorPanel"
-        layout="@layout/fragment_error" />
+        tools:listitem="@layout/fragment_places_recycler_view_item" />
 
 </LinearLayout>

@@ -14,14 +14,14 @@ import com.example.travelassistant.core.commands.ViewCommand
 import com.example.travelassistant.core.observe
 import com.example.travelassistant.core.toNavigateDirection
 import com.example.travelassistant.databinding.FragmentFavouritesBinding
-import com.example.travelassistant.features.favourites.presentation.adapters.FavouritePlacesAdapter
+import com.example.travelassistant.features.favourites.presentation.adapters.CityWithFavouritePlacesAdapter
 import com.example.travelassistant.features.favourites.presentation.ui.SightsViewState
 
 class FavouritesFragment : Fragment() {
 
     private var _binding: FragmentFavouritesBinding? = null
     private lateinit var recyclerView: RecyclerView
-    private lateinit var sightsAdapter: FavouritePlacesAdapter
+    private lateinit var sightsAdapter: CityWithFavouritePlacesAdapter
     private val sightsViewModel: FavouritesViewModel by activityViewModels()
 
     override fun onCreateView(
@@ -31,8 +31,10 @@ class FavouritesFragment : Fragment() {
     ): View {
         val view = inflater.inflate(R.layout.fragment_favourites, container, false)
 
-        recyclerView = view.findViewById(R.id.favourite_sights) as RecyclerView
-        sightsAdapter = FavouritePlacesAdapter(mutableListOf()) { id -> onSightsClick(id) }
+        recyclerView = view.findViewById(R.id.favourite_sights_main) as RecyclerView
+        sightsAdapter = CityWithFavouritePlacesAdapter(mutableListOf(), mutableListOf()) { id ->
+            onSightsClick(id)
+        }
         recyclerView.adapter = sightsAdapter
 
         return view
@@ -70,7 +72,7 @@ class FavouritesFragment : Fragment() {
     }
 
     private fun SightsViewState.Content.handle() {
-        sightsAdapter.setSights(sights)
+        sightsAdapter.setCitiesAndSights(cities, sights)
     }
 
     private fun SightsViewState.Error.handle() {
@@ -82,7 +84,7 @@ class FavouritesFragment : Fragment() {
 
     private fun refresh(state: SightsViewState) {
         _binding?.apply {
-            favouriteSights.isVisible = state is SightsViewState.Content
+            favouriteSightsMain.isVisible = state is SightsViewState.Content
             errorPanel.root.isVisible = state is SightsViewState.Error
         }
     }

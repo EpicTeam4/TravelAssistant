@@ -4,7 +4,7 @@ import android.view.LayoutInflater
 import android.view.ViewGroup
 import androidx.recyclerview.widget.RecyclerView
 import com.example.travelassistant.R
-import com.example.travelassistant.core.domain.entity.FavouriteSights
+import com.example.travelassistant.core.domain.entity.Sights
 import com.example.travelassistant.databinding.FragmentPlacesRecyclerViewItemBinding
 import com.squareup.picasso.Picasso
 
@@ -18,7 +18,7 @@ import com.squareup.picasso.Picasso
  */
 
 class FavouritePlacesAdapter(
-    private val sights: MutableList<FavouriteSights>,
+    private val sights: MutableList<Sights>,
     private val onItemClicked: (id: Int) -> Unit
 ) : RecyclerView.Adapter<FavouritePlacesAdapter.ViewHolder>() {
 
@@ -42,18 +42,11 @@ class FavouritePlacesAdapter(
                         .load(image)
                         .into(placeImage)
                 }
+                imgFavorite.setImageResource(R.drawable.star_filled)
                 root.setOnClickListener {
                     onItemClicked(id)
                 }
             }
-        }
-    }
-
-    fun setSights(sightList: List<FavouriteSights>) {
-        if (sightList.isNotEmpty()) {
-            sights.clear()
-            sights.addAll(sightList)
-            notifyDataSetChanged()
         }
     }
 
