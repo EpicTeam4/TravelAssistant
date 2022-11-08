@@ -28,6 +28,9 @@ import com.example.travelassistant.features.editinfo.domain.repository.InfoEditi
 import com.example.travelassistant.features.favourites.data.SightsRepositoryImpl
 import com.example.travelassistant.features.favourites.domain.repository.SightsRepository
 import com.example.travelassistant.features.favourites.domain.usecase.SightsUseCase
+import com.example.travelassistant.features.luggage.data.LuggageRepositoryImpl
+import com.example.travelassistant.features.luggage.domain.repository.LuggageRepository
+import com.example.travelassistant.features.luggage.domain.usecase.GetLuggageUseCase
 import com.example.travelassistant.features.travelinfo.data.InfoRepositoryImpl
 import com.example.travelassistant.features.travelinfo.domain.repository.InfoRepository
 import com.example.travelassistant.features.travelinfo.domain.usecase.GetInfoUseCase
@@ -103,7 +106,7 @@ class AppModule {
         useCase.getHotels(location)
 
     @Provides
-    suspend fun providesItemUseCase(useCase: GetInfoUseCase): State<List<PersonalItem>> =
+    suspend fun providesItemUseCase(useCase: GetLuggageUseCase): State<List<PersonalItem>> =
         useCase.getAllItems()
 
     @Provides
@@ -130,6 +133,10 @@ class AppModule {
     @Provides
     fun providesSightsRepository(dataSource: LocalDataSource): SightsRepository =
         SightsRepositoryImpl(dataSource)
+
+    @Provides
+    fun providesLuggageRepository(dataSource: LocalDataSource): LuggageRepository =
+        LuggageRepositoryImpl(dataSource)
 
     @Provides
     @Singleton

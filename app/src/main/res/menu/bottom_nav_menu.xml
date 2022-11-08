@@ -12,6 +12,11 @@
         android:title="@string/details" />
 
     <item
+        android:id="@+id/navigation_luggage"
+        android:icon="@drawable/luggage"
+        android:title="@string/luggage" />
+
+    <item
         android:id="@+id/navigation_cities"
         android:icon="@drawable/city"
         android:title="@string/title_cities" />

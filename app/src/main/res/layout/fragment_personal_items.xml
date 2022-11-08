@@ -5,7 +5,7 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:padding="@dimen/default_margin"
-    tools:context=".features.travelinfo.presentation.ui.destination.PersonalItemsFragment">
+    tools:context=".features.luggage.presentation.ui.PersonalItemsFragment">
 
     <androidx.constraintlayout.widget.ConstraintLayout
         android:id="@+id/contentPanel"
@@ -29,19 +29,10 @@
             android:importantForAutofill="no"
             android:inputType="text"
             android:textSize="@dimen/text_size"
-            app:layout_constraintBottom_toTopOf="@+id/button"
+            app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintLeft_toLeftOf="parent"
             app:layout_constraintRight_toRightOf="parent"
             app:layout_constraintTop_toBottomOf="@id/items" />
-
-        <Button
-            android:id="@+id/button"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:text="@string/save"
-            app:layout_constraintBottom_toBottomOf="parent"
-            app:layout_constraintLeft_toLeftOf="parent"
-            app:layout_constraintRight_toRightOf="parent" />
 
     </androidx.constraintlayout.widget.ConstraintLayout>
 

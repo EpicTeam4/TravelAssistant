@@ -33,6 +33,7 @@ class MainActivity : AppCompatActivity() {
             setOf(
                 R.id.navigation_home,
                 R.id.navigation_details,
+                R.id.navigation_luggage,
                 R.id.navigation_cities,
                 R.id.navigation_favourites
             )

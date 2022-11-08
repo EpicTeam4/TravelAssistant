@@ -3,6 +3,7 @@ package com.example.travelassistant.core.domain.entity
 import androidx.room.ColumnInfo
 import androidx.room.Entity
 import androidx.room.PrimaryKey
+import com.example.travelassistant.core.Constants.EMPTY_STRING
 
 /**
  * Port - сущность базы данных
@@ -23,13 +24,13 @@ import androidx.room.PrimaryKey
 data class Port(
     @PrimaryKey(autoGenerate = true)
     @ColumnInfo(name = Schema.ID) val id: Long = 0,
-    @ColumnInfo(name = Schema.NAME) val name: String = "",
-    @ColumnInfo(name = Schema.ADDRESS) val address: String?,
-    @ColumnInfo(name = Schema.PHONE) val phone: String?,
-    @ColumnInfo(name = Schema.URL) val URL: String?,
-    @ColumnInfo(name = Schema.SUBWAY) val subway: String?,
-    @ColumnInfo(name = Schema.LOCATION) val location: String?,
-    @ColumnInfo(name = Schema.SLUG) val slug: String?
+    @ColumnInfo(name = Schema.NAME) val name: String = EMPTY_STRING,
+    @ColumnInfo(name = Schema.ADDRESS) val address: String? = EMPTY_STRING,
+    @ColumnInfo(name = Schema.PHONE) val phone: String? = EMPTY_STRING,
+    @ColumnInfo(name = Schema.URL) val URL: String? = EMPTY_STRING,
+    @ColumnInfo(name = Schema.SUBWAY) val subway: String? = EMPTY_STRING,
+    @ColumnInfo(name = Schema.LOCATION) val location: String? = EMPTY_STRING,
+    @ColumnInfo(name = Schema.SLUG) val slug: String? = EMPTY_STRING
 ) {
     object Schema {
         const val TABLE_NAME = "airportsrailway"

@@ -68,22 +68,18 @@
         android:id="@+id/hotelFragment"
         android:name="com.example.travelassistant.features.travelinfo.presentation.ui.destination.HotelFragment"
         android:label="@string/hotel">
-        <action
-            android:id="@+id/action_hotelFragment_to_personalItemsFragment"
-            app:destination="@id/personalItemsFragment" />
         <argument
             android:name="cityId"
             app:argType="long" />
-    </fragment>
-    <fragment
-        android:id="@+id/personalItemsFragment"
-        android:name="com.example.travelassistant.features.travelinfo.presentation.ui.destination.PersonalItemsFragment"
-        android:label="@string/luggage">
         <action
-            android:id="@+id/action_personalItemsFragment_to_navigation_home"
+            android:id="@+id/action_hotelFragment_to_navigation_home"
             app:destination="@id/navigation_home"
             app:popUpTo="@id/navigation_home" />
     </fragment>
+    <fragment
+        android:id="@+id/navigation_luggage"
+        android:name="com.example.travelassistant.features.luggage.presentation.ui.PersonalItemsFragment"
+        android:label="@string/luggage"/>
     <fragment
         android:id="@+id/navigation_details"
         android:name="com.example.travelassistant.features.editinfo.presentation.ui.InfoEditingFragment"

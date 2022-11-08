@@ -1,5 +1,9 @@
 package com.example.travelassistant.features.travelinfo.presentation.ui.destination
 
+import android.app.AlarmManager
+import android.app.PendingIntent
+import android.content.Context
+import android.content.Intent
 import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.MenuItem
@@ -10,6 +14,8 @@ import android.widget.ArrayAdapter
 import androidx.core.view.isVisible
 import androidx.fragment.app.activityViewModels
 import com.example.travelassistant.R
+import com.example.travelassistant.core.commands.SetAlarm
+import com.example.travelassistant.core.commands.ViewCommand
 import com.example.travelassistant.databinding.FragmentHotelBinding
 import com.example.travelassistant.features.travelinfo.presentation.ui.TravelInfoViewModel
 import com.example.travelassistant.features.travelinfo.presentation.ui.TravelInfoViewState
@@ -57,7 +63,13 @@ class HotelFragment : BaseFragment() {
         _binding?.apply {
             button.setOnClickListener {
                 setData()
-                infoViewModel.openItemsFragment()
+                with(infoViewModel) {
+                    addDetails(infoAboutTravel)
+                    openHomeFragment()
+
+                    setAlarm(requireContext())
+                    setSecondAlarm(requireContext())
+                }
             }
 
             swipeRefreshLayout.setOnRefreshListener {
@@ -132,8 +144,32 @@ class HotelFragment : BaseFragment() {
         )
     }
 
+    override fun handleCommand(viewCommand: ViewCommand) {
+        super.handleCommand(viewCommand)
+        if (viewCommand is SetAlarm) setAlarm(viewCommand)
+    }
+
+    private fun setAlarm(viewCommand: SetAlarm) {
+        setAlarm(viewCommand.intent, viewCommand.time)
+    }
+
+    private fun setAlarm(intent: Intent, time: Long) {
+        val alarmManager = activity?.getSystemService(Context.ALARM_SERVICE) as AlarmManager
+        val pendingIntent = PendingIntent.getBroadcast(requireContext(),
+            REQUEST_CODE, intent,
+            PendingIntent.FLAG_ONE_SHOT
+        )
+        if (alarmManager != null) {
+            alarmManager.set(AlarmManager.RTC, time, pendingIntent)
+        }
+    }
+
     override fun onOptionsItemSelected(menuItem: MenuItem): Boolean {
         if (menuItem.itemId == android.R.id.home) requireActivity().onBackPressed()
         return super.onOptionsItemSelected(menuItem)
+    }
+
+    companion object {
+        const val REQUEST_CODE = 0
     }
 }
