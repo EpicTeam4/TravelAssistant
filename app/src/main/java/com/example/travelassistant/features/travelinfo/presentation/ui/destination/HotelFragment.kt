@@ -1,9 +1,5 @@
 package com.example.travelassistant.features.travelinfo.presentation.ui.destination
 
-import android.app.AlarmManager
-import android.app.PendingIntent
-import android.content.Context
-import android.content.Intent
 import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.MenuItem
@@ -13,14 +9,21 @@ import android.widget.AdapterView
 import android.widget.ArrayAdapter
 import androidx.core.view.isVisible
 import androidx.fragment.app.activityViewModels
+import androidx.work.Data
+import androidx.work.OneTimeWorkRequest
+import androidx.work.WorkManager
 import com.example.travelassistant.R
+import com.example.travelassistant.TimeNotification
+import com.example.travelassistant.core.Constants.ACTION_NAME
+import com.example.travelassistant.core.Constants.NOTIFICATION_ID
 import com.example.travelassistant.core.commands.SetAlarm
 import com.example.travelassistant.core.commands.ViewCommand
+import com.example.travelassistant.core.observe
 import com.example.travelassistant.databinding.FragmentHotelBinding
 import com.example.travelassistant.features.travelinfo.presentation.ui.TravelInfoViewModel
 import com.example.travelassistant.features.travelinfo.presentation.ui.TravelInfoViewState
-import com.example.travelassistant.core.observe
 import dagger.hilt.android.AndroidEntryPoint
+import java.util.concurrent.TimeUnit
 
 @AndroidEntryPoint
 class HotelFragment : BaseFragment() {
@@ -67,8 +70,8 @@ class HotelFragment : BaseFragment() {
                     addDetails(infoAboutTravel)
                     openHomeFragment()
 
-                    setAlarm(requireContext())
-                    setSecondAlarm(requireContext())
+                    setAlarm()
+                    setSecondAlarm()
                 }
             }
 
@@ -150,18 +153,22 @@ class HotelFragment : BaseFragment() {
     }
 
     private fun setAlarm(viewCommand: SetAlarm) {
-        setAlarm(viewCommand.intent, viewCommand.time)
+        setAlarm(viewCommand.id, viewCommand.time)
     }
 
-    private fun setAlarm(intent: Intent, time: Long) {
-        val alarmManager = activity?.getSystemService(Context.ALARM_SERVICE) as AlarmManager
-        val pendingIntent = PendingIntent.getBroadcast(requireContext(),
-            REQUEST_CODE, intent,
-            PendingIntent.FLAG_ONE_SHOT
-        )
-        if (alarmManager != null) {
-            alarmManager.set(AlarmManager.RTC, time, pendingIntent)
-        }
+    private fun setAlarm(id: Int, time: Long) {
+        val data = Data.Builder()
+            .putLong(ACTION_NAME, time)
+            .putInt(NOTIFICATION_ID, id)
+            .build()
+
+        val myWorkRequest = OneTimeWorkRequest.Builder(TimeNotification::class.java)
+            .setInputData(data)
+            .addTag(id.toString())
+            .setInitialDelay(time, TimeUnit.MILLISECONDS)
+            .build()
+
+        WorkManager.getInstance(requireContext()).enqueue(myWorkRequest)
     }
 
     override fun onOptionsItemSelected(menuItem: MenuItem): Boolean {
@@ -169,7 +176,4 @@ class HotelFragment : BaseFragment() {
         return super.onOptionsItemSelected(menuItem)
     }
 
-    companion object {
-        const val REQUEST_CODE = 0
-    }
 }

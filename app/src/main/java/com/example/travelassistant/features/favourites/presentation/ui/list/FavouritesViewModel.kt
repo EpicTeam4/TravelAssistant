@@ -5,7 +5,7 @@ import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.example.travelassistant.core.commands.CommandsLiveData
-import com.example.travelassistant.core.commands.SendArgsToFragment
+import com.example.travelassistant.core.commands.GoToFragmentAndSendSafeArgs
 import com.example.travelassistant.core.commands.ViewCommand
 import com.example.travelassistant.core.domain.State
 import com.example.travelassistant.core.domain.entity.City
@@ -73,6 +73,6 @@ class FavouritesViewModel @Inject constructor(
         val action =
             FavouritesFragmentDirections.actionNavigationFavouritesToFavouritesDetailsFragment()
         action.placeId = id
-        commands.onNext(SendArgsToFragment(action))
+        commands.onNext(GoToFragmentAndSendSafeArgs(action))
     }
 }

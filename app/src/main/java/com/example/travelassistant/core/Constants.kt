@@ -5,11 +5,11 @@ object Constants {
     const val COUNT_OF_CITIES_SCREEN_COLUMNS = 2
     const val RESULT_DATE_FORMAT = "dd MMM yyyy HH:mm"    //7 aug 2019 09:00
     const val EMPTY_STRING = ""
-    const val DEFAULT_VALUE = -1L
     const val SECONDS_IN_MINUTE = 60
     const val MILLISECONDS_IN_SECONDS = 1000
     const val BASE_URL = "https://kudago.com/public-api/v1.4/"
-    const val TO_DESTINATION = "Туда"
-    const val FROM_DESTINATION = "Обратно"
     const val ACTION_NAME = "time"
+    const val NOTIFICATION_ID = "notification_id"
+    const val NOTIF_ID = 101
+    const val NOTIF_SECOND_ID = 102
 }

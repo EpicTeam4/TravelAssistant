@@ -1,17 +1,13 @@
 package com.example.travelassistant.features.travelinfo.presentation.ui
 
-import android.content.Context
-import android.content.Intent
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.example.travelassistant.R
-import com.example.travelassistant.TimeNotification
-import com.example.travelassistant.core.Constants.ACTION_NAME
 import com.example.travelassistant.core.Constants.EMPTY_STRING
-import com.example.travelassistant.core.Constants.FROM_DESTINATION
-import com.example.travelassistant.core.Constants.TO_DESTINATION
+import com.example.travelassistant.core.Constants.NOTIF_ID
+import com.example.travelassistant.core.Constants.NOTIF_SECOND_ID
 import com.example.travelassistant.core.domain.State
 import com.example.travelassistant.core.domain.data
 import com.example.travelassistant.core.domain.entity.City
@@ -151,23 +147,19 @@ class TravelInfoViewModel @Inject constructor(
 
     /* Alarms */
 
-    fun setAlarm(context: Context) {
+    fun setAlarm() {
         if (infoAboutTravel.hours > 0 && infoAboutTravel.timeInMillis > 0) {
-            val time = infoAboutTravel.timeInMillis - infoAboutTravel.hours
-            val intent = Intent(context, TimeNotification::class.java)
-            intent.action = TO_DESTINATION
-            intent.putExtra("time", time)
-            commands.onNext(SetAlarm(intent, time))
+            val time = infoAboutTravel.timeInMillis - infoAboutTravel.hours - System.currentTimeMillis()
+            val id = NOTIF_ID
+            commands.onNext(SetAlarm(id, time))
         }
     }
 
-    fun setSecondAlarm(context: Context) {
+    fun setSecondAlarm() {
         if (infoAboutTravel.hoursFromDest > 0 && infoAboutTravel.timeInMillisDest > 0) {
-            val time = infoAboutTravel.timeInMillisDest - infoAboutTravel.hoursFromDest
-            val intent = Intent(context, TimeNotification::class.java)
-            intent.action = FROM_DESTINATION
-            intent.putExtra(ACTION_NAME, time)
-            commands.onNext(SetAlarm(intent, time))
+            val time = infoAboutTravel.timeInMillisDest - infoAboutTravel.hoursFromDest - System.currentTimeMillis()
+            val id = NOTIF_SECOND_ID
+            commands.onNext(SetAlarm(id, time))
         }
     }
 
