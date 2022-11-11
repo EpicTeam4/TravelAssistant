@@ -42,7 +42,7 @@ class FavouritePlacesAdapter(
                         .load(image)
                         .into(placeImage)
                 }
-                imgFavorite.setImageResource(R.drawable.star_filled)
+                imgFavourite.isChecked = true
                 root.setOnClickListener {
                     onItemClicked(id)
                 }
