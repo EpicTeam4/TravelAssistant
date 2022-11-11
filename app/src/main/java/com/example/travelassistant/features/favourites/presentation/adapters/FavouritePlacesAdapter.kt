@@ -19,6 +19,7 @@ import com.squareup.picasso.Picasso
 
 class FavouritePlacesAdapter(
     private val sights: MutableList<Sights>,
+    private val deleteSights: (id: Int) -> Unit,
     private val onItemClicked: (id: Int) -> Unit
 ) : RecyclerView.Adapter<FavouritePlacesAdapter.ViewHolder>() {
 
@@ -42,7 +43,10 @@ class FavouritePlacesAdapter(
                         .load(image)
                         .into(placeImage)
                 }
-                imgFavorite.setImageResource(R.drawable.star_filled)
+                imgFavourite.isChecked = true
+                imgFavourite.setOnClickListener {
+                    deleteSights(id)
+                }
                 root.setOnClickListener {
                     onItemClicked(id)
                 }

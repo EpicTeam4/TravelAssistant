@@ -53,6 +53,10 @@ class FavouritesDetailsFragment : Fragment() {
                         .into(placeImage)
                 }
                 placeDescription.text = description
+                placeFavorite.isChecked = true
+                placeFavorite.setOnClickListener {
+                    sightsViewModel.deleteSights(id)
+                }
             }
         }
     }

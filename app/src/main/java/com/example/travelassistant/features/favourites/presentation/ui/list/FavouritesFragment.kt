@@ -32,9 +32,9 @@ class FavouritesFragment : Fragment() {
         val view = inflater.inflate(R.layout.fragment_favourites, container, false)
 
         recyclerView = view.findViewById(R.id.favourite_sights_main) as RecyclerView
-        sightsAdapter = CityWithFavouritePlacesAdapter(mutableListOf(), mutableListOf()) { id ->
-            onSightsClick(id)
-        }
+        sightsAdapter = CityWithFavouritePlacesAdapter(mutableListOf(), mutableListOf(), { id ->
+            deleteSights(id)
+        }) { id -> onSightsClick(id) }
         recyclerView.adapter = sightsAdapter
 
         return view
@@ -87,6 +87,10 @@ class FavouritesFragment : Fragment() {
             favouriteSightsMain.isVisible = state is SightsViewState.Content
             errorPanel.root.isVisible = state is SightsViewState.Error
         }
+    }
+
+    private fun deleteSights(id: Int) {
+        sightsViewModel.deleteSights(id)
     }
 
     private fun onSightsClick(id: Int) {

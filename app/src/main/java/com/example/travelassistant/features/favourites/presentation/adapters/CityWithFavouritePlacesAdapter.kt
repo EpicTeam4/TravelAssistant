@@ -21,6 +21,7 @@ import com.example.travelassistant.databinding.FragmentFavouritesItemBinding
 class CityWithFavouritePlacesAdapter(
     private val cities: MutableList<City>,
     private val sights: MutableList<Sights>,
+    private val deleteSights: (id: Int) -> Unit,
     private val onItemClicked: (id: Int) -> Unit
 ) : RecyclerView.Adapter<CityWithFavouritePlacesAdapter.ViewHolder>() {
 
@@ -40,7 +41,7 @@ class CityWithFavouritePlacesAdapter(
             repeat(sights.size) {
                 val childMembersAdapter = FavouritePlacesAdapter(sights.filter { sights ->
                     sights.slug == cities[position].slug
-                } as MutableList<Sights>) { onItemClicked(it) }
+                }.toMutableList(), { deleteSights(it) } ) { onItemClicked(it) }
                 favouriteSights.adapter = childMembersAdapter
             }
         }

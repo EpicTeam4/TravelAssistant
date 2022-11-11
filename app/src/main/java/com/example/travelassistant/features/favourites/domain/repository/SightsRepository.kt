@@ -13,4 +13,5 @@ interface SightsRepository {
     suspend fun getFavouriteSights(): List<Sights>
     suspend fun getSightsById(id: Int): Sights?
     suspend fun getCities(): List<City>
+    suspend fun deleteSightsFromFavourite(id: Int)
 }

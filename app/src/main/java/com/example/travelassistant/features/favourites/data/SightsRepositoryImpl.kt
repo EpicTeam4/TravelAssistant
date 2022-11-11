@@ -22,4 +22,6 @@ class SightsRepositoryImpl(
 
     override suspend fun getCities(): List<City> = dataSource.getCities()
 
+    override suspend fun deleteSightsFromFavourite(id: Int) =
+        dataSource.deleteSightsFromFavourite(id)
 }

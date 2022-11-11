@@ -33,4 +33,7 @@ class SightsUseCase @Inject constructor(private val repository: SightsRepository
                 repository.getCities()
             }
         }
+
+    suspend fun deleteSightsFromFavourite(id: Int) =
+        withContext(Dispatchers.IO) { repository.deleteSightsFromFavourite(id) }
 }
