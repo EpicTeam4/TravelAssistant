@@ -9,7 +9,7 @@ import androidx.fragment.app.Fragment
 import androidx.fragment.app.activityViewModels
 import androidx.recyclerview.widget.RecyclerView
 import com.example.travelassistant.R
-import com.example.travelassistant.core.commands.SendArgsToFragment
+import com.example.travelassistant.core.commands.GoToFragmentAndSendSafeArgs
 import com.example.travelassistant.core.commands.ViewCommand
 import com.example.travelassistant.core.observe
 import com.example.travelassistant.core.toNavigateDirection
@@ -56,10 +56,10 @@ class FavouritesFragment : Fragment() {
     }
 
     private fun handleCommand(viewCommand: ViewCommand) {
-        if (viewCommand is SendArgsToFragment) goToFragment(viewCommand)
+        if (viewCommand is GoToFragmentAndSendSafeArgs) goToFragment(viewCommand)
     }
 
-    private fun goToFragment(viewCommand: SendArgsToFragment) {
+    private fun goToFragment(viewCommand: GoToFragmentAndSendSafeArgs) {
         requireActivity().toNavigateDirection(viewCommand.nav)
     }
 

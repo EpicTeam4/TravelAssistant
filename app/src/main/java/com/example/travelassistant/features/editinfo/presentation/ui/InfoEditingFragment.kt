@@ -1,11 +1,7 @@
 package com.example.travelassistant.features.editinfo.presentation.ui
 
-import android.app.AlarmManager
 import android.app.DatePickerDialog
-import android.app.PendingIntent
 import android.app.TimePickerDialog
-import android.content.Context
-import android.content.Intent
 import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
@@ -15,7 +11,13 @@ import android.widget.ArrayAdapter
 import androidx.core.view.isVisible
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.activityViewModels
+import androidx.work.Data
+import androidx.work.OneTimeWorkRequest
+import androidx.work.WorkManager
 import com.example.travelassistant.R
+import com.example.travelassistant.TimeNotification
+import com.example.travelassistant.core.Constants.ACTION_NAME
+import com.example.travelassistant.core.Constants.NOTIFICATION_ID
 import com.example.travelassistant.core.observe
 import com.example.travelassistant.core.orDefault
 import com.example.travelassistant.databinding.FragmentEditEventBinding
@@ -23,6 +25,7 @@ import com.example.travelassistant.core.commands.SetAlarm
 import com.example.travelassistant.core.commands.ViewCommand
 import com.example.travelassistant.core.utils.toHours
 import java.util.Calendar
+import java.util.concurrent.TimeUnit
 
 class InfoEditingFragment : Fragment() {
 
@@ -56,8 +59,8 @@ class InfoEditingFragment : Fragment() {
                 updateData()
                 infoViewModel.apply {
                     updateDetails(infoAboutTravel)
-                    setAlarm(requireContext())
-                    setSecondAlarm(requireContext())
+                    infoViewModel.setAlarm()
+                    infoViewModel.setSecondAlarm()
                 }
             }
 
@@ -111,19 +114,24 @@ class InfoEditingFragment : Fragment() {
     }
 
     private fun setAlarm(viewCommand: SetAlarm) {
-        setAlarm(viewCommand.intent, viewCommand.time)
+        setAlarm(viewCommand.id, viewCommand.time)
     }
 
-    private fun setAlarm(intent: Intent, time: Long) {
-        val alarmManager = activity?.getSystemService(Context.ALARM_SERVICE) as AlarmManager
-        val pendingIntent = PendingIntent.getBroadcast(
-            requireContext(),
-            REQUEST_CODE, intent,
-            PendingIntent.FLAG_UPDATE_CURRENT
-        )
-        if (alarmManager != null) {
-            alarmManager.set(AlarmManager.RTC, time, pendingIntent)
-        }
+    private fun setAlarm(id: Int, time: Long) {
+        WorkManager.getInstance(requireContext()).cancelAllWorkByTag(id.toString())
+
+        val data = Data.Builder()
+            .putLong(ACTION_NAME, time)
+            .putInt(NOTIFICATION_ID, id)
+            .build()
+
+        val myWorkRequest = OneTimeWorkRequest.Builder(TimeNotification::class.java)
+            .setInputData(data)
+            .addTag(id.toString())
+            .setInitialDelay(time, TimeUnit.MILLISECONDS)
+            .build()
+
+        WorkManager.getInstance(requireContext()).enqueue(myWorkRequest)
     }
 
     private fun handleState(state: InfoViewState) {
@@ -240,7 +248,6 @@ class InfoEditingFragment : Fragment() {
     }
 
     companion object {
-        const val REQUEST_CODE = 0
         const val TIME_ID = "time"
         const val TIME_DEST_ID = "timeDest"
         const val DEFAULT_POSITION = 0

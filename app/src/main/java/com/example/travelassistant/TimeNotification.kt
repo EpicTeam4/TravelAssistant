@@ -1,57 +1,64 @@
 package com.example.travelassistant
 
-import android.R
 import android.app.NotificationChannel
 import android.app.NotificationManager
-import android.content.BroadcastReceiver
 import android.content.Context
-import android.content.Intent
 import android.graphics.Color
 import android.media.RingtoneManager
 import android.os.Build
 import androidx.core.app.NotificationCompat
 import androidx.core.app.NotificationManagerCompat
-import com.example.travelassistant.R.string
+import androidx.work.Worker
+import androidx.work.WorkerParameters
+import com.example.travelassistant.core.Constants.NOTIFICATION_ID
+import javax.inject.Inject
 
-class TimeNotification : BroadcastReceiver() {
+class TimeNotification @Inject constructor(
+    context: Context,
+    workerParams: WorkerParameters
+) : Worker(context, workerParams) {
 
-    override fun onReceive(context: Context, intent: Intent) {
-        createNotificationChannel(context)
+    override fun doWork(): Result {
+        val id = inputData.getInt(NOTIFICATION_ID, DEFAULT_VALUE)
+        createNotificationChannel(id)
+
+        return Result.success()
     }
 
-    private fun createNotificationChannel(context: Context) {
+    private fun createNotificationChannel(id: Int) {
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
             val notificationChannel = NotificationChannel(
                 CHANNEL_ID,
-                context.getString(string.notification),
+                applicationContext.getString(R.string.notification),
                 NotificationManager.IMPORTANCE_HIGH
             )
             NotificationManagerCompat
-                .from(context)
+                .from(applicationContext)
                 .createNotificationChannel(notificationChannel)
-            notifyNotification(context)
+            notifyNotification(id)
         } else {
-            notifyNotification(context)
+            notifyNotification(id)
         }
     }
 
-    private fun notifyNotification(context: Context) {
-        with(NotificationManagerCompat.from(context)) {
+    private fun notifyNotification(id: Int) {
+        with(NotificationManagerCompat.from(applicationContext)) {
             val alarmSound = RingtoneManager.getDefaultUri(RingtoneManager.TYPE_NOTIFICATION)
-            val notification = NotificationCompat.Builder(context, CHANNEL_ID)
-                .setContentTitle(context.getString(string.notification))
-                .setContentText(context.getString(string.notification_title))
-                .setSmallIcon(R.drawable.btn_star)
+            val notification = NotificationCompat.Builder(applicationContext, CHANNEL_ID)
+                .setContentTitle(applicationContext.getString(R.string.notification))
+                .setContentText(applicationContext.getString(R.string.notification_title))
+                .setSmallIcon(R.drawable.star_filled)
                 .setColor(Color.BLUE)
                 .setSound(alarmSound)
                 .setPriority(NotificationCompat.PRIORITY_HIGH)
                 .build()
 
-            notify(System.currentTimeMillis().toInt(), notification)
+            notify(id, notification)
         }
     }
 
     companion object {
         const val CHANNEL_ID = "channelID"
+        const val DEFAULT_VALUE = 0
     }
 }
