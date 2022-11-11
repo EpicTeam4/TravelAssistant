@@ -48,9 +48,13 @@ val citiesModule = module {
     }
     single {
         val database = get<TravelInfoDatabase>()
+        database.sights()
+    }
+    single {
+        val database = get<TravelInfoDatabase>()
         database.details()
     }
-    single { LocalDataSource(city = get(), airport = get(), item = get(), details = get()) }
+    single { LocalDataSource(city = get(), airport = get(), item = get(), details = get(), sights = get()) }
     single { KudagoClient() }
     single { CitiesRepositoryLocalDbImpl(get()) }
     single { PlacesRepositoryImpl(get()) }
