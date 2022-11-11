@@ -34,4 +34,5 @@ class LocalDataSource @Inject constructor(
 
     suspend fun getFavouriteSights(): List<Sights> = sights.getFavouriteSights()
     suspend fun getSightsById(id: Int): Sights? = sights.getSightsById(id)
+    suspend fun deleteSightsFromFavourite(id: Int) = sights.deleteSightsFromFavourite(id)
 }

@@ -33,4 +33,12 @@ class SightsViewModel @Inject constructor(
             }
         }
     }
+
+    fun deleteSights(id: Int) {
+        viewModelScope.launch {
+            withContext(Main) {
+                useCase.deleteSightsFromFavourite(id)
+            }
+        }
+    }
 }

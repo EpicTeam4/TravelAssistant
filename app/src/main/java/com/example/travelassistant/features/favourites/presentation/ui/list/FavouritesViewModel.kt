@@ -69,6 +69,14 @@ class FavouritesViewModel @Inject constructor(
         }
     }
 
+    fun deleteSights(id: Int) {
+        viewModelScope.launch {
+            withContext(Main) {
+                useCase.deleteSightsFromFavourite(id)
+            }
+        }
+    }
+
     fun openDetails(id: Int) {
         val action =
             FavouritesFragmentDirections.actionNavigationFavouritesToFavouritesDetailsFragment()

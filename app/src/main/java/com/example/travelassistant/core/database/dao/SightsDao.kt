@@ -19,4 +19,7 @@ interface SightsDao {
 
     @Query("Select * From ${Sights.Schema.TABLE_NAME} Where ${Sights.Schema.ID} = :id")
     suspend fun getSightsById(id: Int): Sights?
+
+    @Query("Delete From ${Sights.Schema.TABLE_NAME} Where ${Sights.Schema.ID} = :id")
+    suspend fun deleteSightsFromFavourite(id: Int)
 }
