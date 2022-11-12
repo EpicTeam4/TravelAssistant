@@ -100,4 +100,12 @@
         android:id="@+id/errorPanel"
         layout="@layout/fragment_error" />
 
+    <ProgressBar
+        android:id="@+id/progressBar"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:indeterminate="true"
+        android:layout_gravity="center"
+        android:indeterminateTint="?attr/colorPrimary"/>
+
 </FrameLayout>

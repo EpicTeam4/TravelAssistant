@@ -66,6 +66,7 @@ class FavouritesFragment : Fragment() {
     private fun handleState(state: SightsViewState) {
         refresh(state)
         when (state) {
+            is SightsViewState.Loading -> refresh(state)
             is SightsViewState.Content -> state.handle()
             is SightsViewState.Error -> state.handle()
         }
@@ -84,6 +85,7 @@ class FavouritesFragment : Fragment() {
 
     private fun refresh(state: SightsViewState) {
         _binding?.apply {
+            progressBar.isVisible = state is SightsViewState.Loading
             favouriteSightsMain.isVisible = state is SightsViewState.Content
             errorPanel.root.isVisible = state is SightsViewState.Error
         }

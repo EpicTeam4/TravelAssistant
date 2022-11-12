@@ -39,6 +39,7 @@ class FavouritesViewModel @Inject constructor(
 
     fun loadData() {
         viewModelScope.launch {
+            dataContent.value = SightsViewState.Loading
             when (val cities = useCase.getCities()) {
                 is State.Success -> {
                     when (val sights = useCase.getFavouriteSights()) {

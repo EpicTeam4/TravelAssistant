@@ -14,6 +14,7 @@ import com.example.travelassistant.core.data.model.ErrorModel
  */
 
 sealed class TravelInfoViewState {
+    object Loading : TravelInfoViewState()
     data class Error(val errorModel: ErrorModel) : TravelInfoViewState()
     data class Content(
         val cities: List<City> = listOf(),
