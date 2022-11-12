@@ -4,9 +4,14 @@ import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.example.travelassistant.R
 import com.example.travelassistant.features.cities.domain.CitiesUseCase
+import com.example.travelassistant.features.cities.domain.model.PlaceDomain
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.channels.Channel
-import kotlinx.coroutines.flow.*
+import kotlinx.coroutines.flow.MutableSharedFlow
+import kotlinx.coroutines.flow.MutableStateFlow
+import kotlinx.coroutines.flow.asSharedFlow
+import kotlinx.coroutines.flow.asStateFlow
+import kotlinx.coroutines.flow.receiveAsFlow
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.withContext
 
@@ -38,6 +43,7 @@ class PlacesViewModel(private val citiesUseCase: CitiesUseCase) : ViewModel() {
         when (event) {
             is PlacesContract.Event.OnViewReady -> loadAndShowPlaces(event.cityId)
             is PlacesContract.Event.OnPlaceClick -> showPlace(event.placeId)
+            is PlacesContract.Event.AddPlaceToFavoritesClick -> addPlaceToFavorites(event.place)
         }
     }
 
@@ -66,6 +72,16 @@ class PlacesViewModel(private val citiesUseCase: CitiesUseCase) : ViewModel() {
         sendNavigationEvent(PlacesContract.NavigationEvent.NavigateToPlace(placeId))
     }
 
+    private fun addPlaceToFavorites(place: PlaceDomain) {
+        viewModelScope.launch {
+            if (place.isUserFavorite) {
+                citiesUseCase.deleteSightFromFavourite(place)
+            } else {
+                citiesUseCase.addSightToFavourite(place)
+            }
+        }
+    }
+
     private fun sendState(state: PlacesContract.State) {
         viewModelScope.launch { _uiState.emit(state) }
     }
@@ -77,5 +93,5 @@ class PlacesViewModel(private val citiesUseCase: CitiesUseCase) : ViewModel() {
     fun sendNavigationEvent(event: PlacesContract.NavigationEvent) {
         viewModelScope.launch { _navigationEvent.send(event) }
     }
-    
+
 }

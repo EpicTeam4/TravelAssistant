@@ -1,7 +1,6 @@
 package com.example.travelassistant.features.cities.presentation
 
 import android.os.Bundle
-import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -80,8 +79,7 @@ class CitiesFragment : Fragment() {
 
     private fun handleState(state: CitiesContract.State) {
         when (state) {
-            is CitiesContract.State.Loading -> {  // todo проверить что работает
-                Log.d("=======", "CitiesContract.State.Loading")
+            is CitiesContract.State.Loading -> {
                 binding.progressbar.isVisible = true
                 binding.citiesRecyclerView.isVisible = false
                 binding.errorPanel.root.isVisible = false

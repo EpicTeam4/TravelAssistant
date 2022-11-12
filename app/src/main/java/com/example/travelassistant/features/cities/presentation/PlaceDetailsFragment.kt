@@ -1,7 +1,6 @@
 package com.example.travelassistant.features.cities.presentation
 
 import android.os.Bundle
-import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -67,15 +66,12 @@ class PlaceDetailsFragment : Fragment() {
 
     private fun handleState(state: PlaceContract.State) {
         when (state) {
-            is PlaceContract.State.Loading -> {  // todo проверить что работает
-                Log.d("=======", "PlaceContract.State.Loading")
+            is PlaceContract.State.Loading -> {
                 binding.progressbar.isVisible = true
-//                binding.root.isVisible = false
                 binding.errorPanel.root.isVisible = false
             }
             is PlaceContract.State.Error -> { // todo проверить что работает
                 binding.progressbar.isVisible = false
-//                binding.placesRecyclerView.isVisible = false
                 binding.errorPanel.root.isVisible = true
                 binding.errorPanel.apply {
                     errorIcon.setImageResource(state.errorModel.icon)
@@ -84,10 +80,8 @@ class PlaceDetailsFragment : Fragment() {
             }
             is PlaceContract.State.Content -> {
                 binding.progressbar.isVisible = false
-//                binding.placesRecyclerView.isVisible = true
                 binding.errorPanel.root.isVisible = false
                 setPlace(state.place)
-//                (binding.placesRecyclerView.adapter as PlacesRecyclerViewAdapter).setPlaces(state.places)
             }
         }
     }

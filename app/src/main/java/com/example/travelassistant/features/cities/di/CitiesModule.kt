@@ -32,7 +32,6 @@ val citiesModule = module {
             TravelInfoDatabase::class.java,
             DatabaseConst.DATABASE_INFO_NAME
         )
-            .createFromAsset("${DatabaseConst.DATABASE_INFO_NAME}.db")
             .build()
     }
     single {
@@ -55,19 +54,27 @@ val citiesModule = module {
         val database = get<TravelInfoDatabase>()
         database.sights()
     }
-    single { LocalDataSource(city = get(), airport = get(), item = get(), details = get(), sights = get()) }
+    single {
+        LocalDataSource(
+            city = get(),
+            airport = get(),
+            item = get(),
+            details = get(),
+            sights = get()
+        )
+    }
     single { KudagoClient() }
     single { CitiesRepositoryLocalDbImpl(get()) }
-    single { PlacesRepositoryImpl(get()) }
-    single {
+    single { PlacesRepositoryImpl(get(), get()) }
+    factory {
         CitiesUseCase(
             citiesRepository = CitiesRepositoryLocalDbImpl(get()),
-            placesRepository = PlacesRepositoryImpl(get())
+            placesRepository = PlacesRepositoryImpl(get(), get())
         )
     }
 
     viewModel { CitiesViewModel(get()) }
     viewModel { PlacesViewModel(get()) }
-    viewModel { PlaceDetailViewModel (get()) }
+    viewModel { PlaceDetailViewModel(get()) }
 
 }

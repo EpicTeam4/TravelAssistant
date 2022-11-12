@@ -1,5 +1,8 @@
 package com.example.travelassistant.features.cities.data
 
+import android.util.Log
+import com.example.travelassistant.core.database.dao.SightsDao
+import com.example.travelassistant.core.domain.entity.Sights
 import com.example.travelassistant.core.network.KudagoClient
 import com.example.travelassistant.core.network.model.Place
 import com.example.travelassistant.features.cities.domain.model.Coords
@@ -9,10 +12,13 @@ import com.example.travelassistant.features.cities.domain.repository.PlacesRepos
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.withContext
 
-class PlacesRepositoryImpl(private val kudagoClient: KudagoClient) : PlacesRepository {
+class PlacesRepositoryImpl(
+    private val kudagoClient: KudagoClient,
+    private val sightsDao: SightsDao
+) : PlacesRepository {
 
     private val PLACE_FIELDS_FOR_PLACES_SCREEN =
-        "id,title,images,description,location"
+        "id,title,images,description,slug,location"
 
     private val PLACE_ALL_FIELDS =
         "id,title,short_title,slug,address,location,timetable,phone,is_stub,images," +
@@ -21,13 +27,18 @@ class PlacesRepositoryImpl(private val kudagoClient: KudagoClient) : PlacesRepos
 
     override suspend fun getPlaces(location: String): List<PlaceDomain> {
         return withContext(Dispatchers.IO) {
+            val sights = sightsDao.getFavouriteSights()
+            Log.d("=====", sights.toString())
             kudagoClient.getPlacesWithFieldsOrderByFavoritesCountDesc(
                 location, PLACE_FIELDS_FOR_PLACES_SCREEN
             ).let { response ->
                 return@let response.results
-                    ?.filter { place -> place.location != "online" }
+                    ?.filter { place -> excludeOnlineLocation(place)}
                     ?.map { place ->
-                        mapNetworkPlaceToDomainPlace(place)
+                        mapNetworkPlaceToDomainPlace(
+                            place,
+                            isUserFavorite(sights, place.slug.orEmpty())
+                        )
                     } ?: emptyList()
             }
         }
@@ -35,17 +46,39 @@ class PlacesRepositoryImpl(private val kudagoClient: KudagoClient) : PlacesRepos
 
     override suspend fun getPlace(placeId: String): PlaceDomain {
         return withContext(Dispatchers.IO) {
+            val sights = sightsDao.getFavouriteSights()
+            Log.d("=====", sights.toString())
             kudagoClient.getPlaceWithFields(
                 placeId, PLACE_ALL_FIELDS
             ).let { response ->
-                mapNetworkPlaceToDomainPlace(response)
+                mapNetworkPlaceToDomainPlace(response, isUserFavorite(sights, response.slug.orEmpty()))
             }
+        }
+    }
+
+    override suspend fun addPlaceToFavorites(place: PlaceDomain) {
+        withContext(Dispatchers.IO) {
+            sightsDao.addSightToFavourite(place.title, place.slug)
+        }
+    }
+
+   override suspend fun deletePlaceFromFavorites(place: PlaceDomain) {
+        withContext(Dispatchers.IO) {
+            sightsDao.deleteSightFromFavourite(place.slug)
         }
     }
 
 }
 
-fun mapNetworkPlaceToDomainPlace(source: Place): PlaceDomain {
+    private fun excludeOnlineLocation(place: Place): Boolean {
+        return place.location != "online"
+    }
+
+fun isUserFavorite(sights: List<Sights>, slug: String): Boolean {
+    return sights.firstOrNull { sight -> sight.slug.equals(slug) } != null
+}
+
+fun mapNetworkPlaceToDomainPlace(source: Place, isUserFavorite: Boolean): PlaceDomain {
     return PlaceDomain(
         id = source.id.toString(),
         title = source.title.orEmpty(),
@@ -57,16 +90,21 @@ fun mapNetworkPlaceToDomainPlace(source: Place): PlaceDomain {
         phone = source.phone.orEmpty(),
         isStub = source.is_stub ?: false,
         images = source.images?.map { i -> Image(i?.image.orEmpty()) } ?: emptyList(),
-        shortDescription = source.description.orEmpty().replace("<[^>]*>".toRegex(), ""),
-        description = source.body_text.orEmpty().replace("<[^>]*>".toRegex(), ""),
+        shortDescription = source.description.orEmpty().deleteHtmlTags(),
+        description = source.body_text.orEmpty().deleteHtmlTags(),
         siteUrl = source.site_url.orEmpty(),
         foreignUrl = source.foreign_url.orEmpty(),
-        coordinates = Coords(source.coords?.lat ?: 0.0f, source.coords?.lon ?: 0.0f),
+        coordinates = Coords(source.coords?.lat ?: 0.0f, source.coords?.lon ?: 0.0f), // todo можно вынести в extension типа Float?.orZero() = if (this == null) 0.0f else this
         subway = source.subway.orEmpty(),
         favoritesCount = source.favorites_count ?: 0,
         commentsCount = source.comments_count ?: 0,
         isClosed = source.is_closed ?: false,
         categories = source.categories?.map { i -> i.orEmpty() } ?: emptyList(),
         tags = source.tags?.map { i -> i.orEmpty() } ?: emptyList(),
+        isUserFavorite = isUserFavorite
     )
+}
+
+fun String.deleteHtmlTags(): String {
+    return this.replace("<[^>]*>".toRegex(), "")
 }
