@@ -4,6 +4,7 @@ import com.example.travelassistant.features.cities.domain.model.PlaceDomain
 
 interface PlacesRepository {
 
-    suspend fun getPlaces(location: String): Result<List<PlaceDomain>>
+    suspend fun getPlaces(location: String): List<PlaceDomain>
+    suspend fun getPlace(placeId: String): PlaceDomain
 
 }
