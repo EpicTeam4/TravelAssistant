@@ -71,6 +71,7 @@ class InfoEditingFragment : Fragment() {
                         itemSelected: View, selectedItemPosition: Int, selectedId: Long
                     ) {
                         infoViewModel.selectedHotelPos = selectedItemPosition
+                        infoViewModel.dataState.observe(viewLifecycleOwner, ::handleState)
                     }
 
                     override fun onNothingSelected(parent: AdapterView<*>?) {}
@@ -84,6 +85,11 @@ class InfoEditingFragment : Fragment() {
                 pickDate(TIME_DEST_ID)
             }
         }
+    }
+
+    override fun onResume() {
+        super.onResume()
+        infoViewModel.selectedHotelPos = DEFAULT_VALUE
     }
 
     override fun onDestroyView() {
@@ -137,6 +143,7 @@ class InfoEditingFragment : Fragment() {
     private fun handleState(state: InfoViewState) {
         refresh(state)
         when (state) {
+            is InfoViewState.Loading -> refresh(state)
             is InfoViewState.Content -> state.handle()
             is InfoViewState.Error -> state.handle()
         }
@@ -145,13 +152,13 @@ class InfoEditingFragment : Fragment() {
     private fun InfoViewState.Content.handle() {
         _binding?.apply {
             with(infoViewModel) {
-                dateOfJourney.setText(convertMillisToText(event?.timeInMillis))
+                dateOfJourney.setText(convertMillisToText(infoAboutTravel.timeInMillis))
                 spinner.setSelection(event?.portId.orDefault() - 1)
                 flight.setText(event?.flightNum)
                 seat.setText(event?.seat)
                 route.setText(event?.wayDescription)
                 spinnerTime.setSelection(convertHoursToAdapterPosition(event?.hours))
-                dateOfJourneyDest.setText(convertMillisToText(event?.timeInMillisDest))
+                dateOfJourneyDest.setText(convertMillisToText(infoAboutTravel.timeInMillisDest))
                 spinnerDest.setSelection(event?.destPortId.orDefault() - 1)
                 flightDest.setText(event?.flightNumFromDest)
                 seatDest.setText(event?.seatFromDest)
@@ -165,14 +172,34 @@ class InfoEditingFragment : Fragment() {
                     val hotel = hotels.single { it.id == event?.hotelId }.title
                     val index = hotels.indexOfFirst { it.title == hotel }
 
-                    if (index != -1) {
-                        spinnerHotel.setSelection(index)
-                        hotelAddress.text = hotels[index].address
-                        hotelPhone.text = hotels[index].phone
-                        hotelSubway.text = hotels[index].subway
-                        selectedHotelId = hotels[index].id
+                    if (index != DEFAULT_VALUE) {
+                        if (selectedHotelPos == DEFAULT_VALUE) {
+                            spinnerHotel.setSelection(index)
+                            hotelAddress.text = hotels[index].address
+                            hotelPhone.text = hotels[index].phone
+                            hotelSubway.text = hotels[index].subway
+                            selectedHotelId = hotels[index].id
+                        } else {
+                            spinnerHotel.setSelection(selectedHotelPos)
+                            hotelAddress.text = hotels[selectedHotelPos].address
+                            hotelPhone.text = hotels[selectedHotelPos].phone
+                            hotelSubway.text = hotels[selectedHotelPos].subway
+                            selectedHotelId = hotels[selectedHotelPos].id
+                        }
                     } else {
-                        spinnerHotel.setSelection(DEFAULT_POSITION)
+                        if (selectedHotelPos == DEFAULT_VALUE) {
+                            spinnerHotel.setSelection(DEFAULT_POSITION)
+                            hotelAddress.text = hotels[DEFAULT_POSITION].address
+                            hotelPhone.text = hotels[DEFAULT_POSITION].phone
+                            hotelSubway.text = hotels[DEFAULT_POSITION].subway
+                            selectedHotelId = hotels[DEFAULT_POSITION].id
+                        } else {
+                            spinnerHotel.setSelection(selectedHotelPos)
+                            hotelAddress.text = hotels[selectedHotelPos].address
+                            hotelPhone.text = hotels[selectedHotelPos].phone
+                            hotelSubway.text = hotels[selectedHotelPos].subway
+                            selectedHotelId = hotels[selectedHotelPos].id
+                        }
                     }
                 }
             }
@@ -191,6 +218,7 @@ class InfoEditingFragment : Fragment() {
 
     private fun refresh(state: InfoViewState) {
         _binding?.apply {
+            progressBar.isVisible = state is InfoViewState.Loading
             contentPanel.isVisible = state is InfoViewState.Content
             errorPanel.root.isVisible = state is InfoViewState.Error
         }
@@ -234,9 +262,15 @@ class InfoEditingFragment : Fragment() {
                                 hours = hourOfDay, minutes = minute
                             )
                         if (id == TIME_ID) {
-                            infoViewModel.getDateInMillis()
+                            with(infoViewModel) {
+                                getDateInMillis()
+                                dataState.observe(viewLifecycleOwner, ::handleState)
+                            }
                         } else {
-                            infoViewModel.getDateDestInMillis()
+                            with(infoViewModel) {
+                                getDateDestInMillis()
+                                dataState.observe(viewLifecycleOwner, ::handleState)
+                            }
                         }
                     },
                     currentDate[Calendar.HOUR_OF_DAY],
@@ -251,5 +285,6 @@ class InfoEditingFragment : Fragment() {
         const val TIME_ID = "time"
         const val TIME_DEST_ID = "timeDest"
         const val DEFAULT_POSITION = 0
+        const val DEFAULT_VALUE = -1
     }
 }

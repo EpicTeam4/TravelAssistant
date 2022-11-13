@@ -65,6 +65,7 @@ class PersonalItemsFragment : Fragment() {
     private fun handleState(state: LuggageViewState) {
         refresh(state)
         when (state) {
+            is LuggageViewState.Loading -> refresh(state)
             is LuggageViewState.Content -> state.handle()
             is LuggageViewState.Error -> state.handle()
         }
@@ -75,16 +76,17 @@ class PersonalItemsFragment : Fragment() {
     }
 
     private fun LuggageViewState.Error.handle() {
-        with(_binding?.errorPanel) {
-            this?.errorIcon?.setImageResource(errorModel.icon)
-            this?.errorTitle?.setText(errorModel.title)
+        _binding?.errorPanel?.apply {
+            errorIcon.setImageResource(errorModel.icon)
+            errorTitle.setText(errorModel.title)
         }
     }
 
     private fun refresh(state: LuggageViewState) {
-        with(_binding) {
-            this?.contentPanel?.isVisible = state is LuggageViewState.Content
-            this?.errorPanel?.root?.isVisible = state is LuggageViewState.Error
+        _binding?.apply {
+            progressBar.isVisible  = state is LuggageViewState.Loading
+            contentPanel.isVisible = state is LuggageViewState.Content
+            errorPanel.root.isVisible = state is LuggageViewState.Error
         }
     }
 

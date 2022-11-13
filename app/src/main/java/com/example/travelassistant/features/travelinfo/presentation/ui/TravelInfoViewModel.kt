@@ -63,6 +63,7 @@ class TravelInfoViewModel @Inject constructor(
 
     fun loadData() {
         viewModelScope.launch {
+            dataContent.value = TravelInfoViewState.Loading
             val (cities, ports) = coroutineScope {
                 val citiesResult = async { useCase.getCities() }
                 val portsResult = async { useCase.getPorts() }
@@ -85,6 +86,7 @@ class TravelInfoViewModel @Inject constructor(
 
     fun loadHotels(id: Long) {
         viewModelScope.launch {
+            dataContent.value = TravelInfoViewState.Loading
             val citySlug = useCase.getCityById(id)
             coroutineScope {
                 when (val hotels = citySlug?.slug.let { useCase.getHotels(it.toString()) }) {

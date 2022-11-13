@@ -46,7 +46,7 @@ class InfoViewModel @Inject constructor(
     var content = InfoViewState.Content()
     var selectedDateTime = InfoEditingDateTime()
     var tempDate: Long = 0
-    var selectedHotelPos = 0
+    var selectedHotelPos = -1
     var selectedHotelId = 0
 
     val commands = CommandsLiveData<ViewCommand>()
@@ -56,6 +56,7 @@ class InfoViewModel @Inject constructor(
 
     fun loadDetails(date: Long) {
         viewModelScope.launch {
+            dataContent.value = InfoViewState.Loading
             val (event, ports, hotels) = coroutineScope {
                 val eventResult = async { useCase.getDetails(date) }
                 val portsResult = async { useCase.getPorts() }

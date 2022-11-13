@@ -10,6 +10,7 @@ import com.example.travelassistant.core.domain.entity.PersonalItem
  */
 
 sealed class LuggageViewState {
+    object Loading : LuggageViewState()
     data class Error(val errorModel: ErrorModel) : LuggageViewState()
     data class Content(val items: List<PersonalItem> = listOf()) : LuggageViewState()
 }

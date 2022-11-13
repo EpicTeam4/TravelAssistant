@@ -11,6 +11,7 @@ import com.example.travelassistant.core.domain.entity.Sights
  */
 
 sealed class SightsViewState {
+    object Loading : SightsViewState()
     data class Error(val errorModel: ErrorModel) : SightsViewState()
     data class Content(
         val cities: List<City> = listOf(),

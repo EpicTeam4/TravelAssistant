@@ -35,6 +35,7 @@ class LuggageViewModel @Inject constructor(private val useCase: GetLuggageUseCas
 
     fun loadData() {
         viewModelScope.launch {
+            dataContent.value = LuggageViewState.Loading
             when (val items = useCase.getAllItems()) {
                 is State.Success -> handleData(items = items.data)
                 is State.Error -> handleError(true)

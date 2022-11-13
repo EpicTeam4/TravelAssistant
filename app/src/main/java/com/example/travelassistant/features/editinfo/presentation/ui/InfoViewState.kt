@@ -12,6 +12,7 @@ import com.example.travelassistant.core.domain.entity.Port
  */
 
 sealed class InfoViewState {
+    object Loading : InfoViewState()
     data class Error(val errorModel: ErrorModel) : InfoViewState()
     data class Content(
         val event: InfoAboutTravel? = null,

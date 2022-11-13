@@ -83,6 +83,7 @@ class ToDestinationFragment : BaseFragment() {
     private fun handleState(state: TravelInfoViewState) {
         refresh(state)
         when (state) {
+            is TravelInfoViewState.Loading -> refresh(state)
             is TravelInfoViewState.Content -> state.handle()
             is TravelInfoViewState.Error -> state.handle()
         }
@@ -102,6 +103,7 @@ class ToDestinationFragment : BaseFragment() {
 
     private fun refresh(state: TravelInfoViewState) {
         _binding?.apply {
+            progressBar.isVisible = state is TravelInfoViewState.Loading
             contentPanel.isVisible = state is TravelInfoViewState.Content
             errorPanel.root.isVisible = state is TravelInfoViewState.Error
         }
