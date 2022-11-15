@@ -29,7 +29,7 @@ data class Port(
     @ColumnInfo(name = Schema.PHONE) val phone: String? = EMPTY_STRING,
     @ColumnInfo(name = Schema.URL) val URL: String? = EMPTY_STRING,
     @ColumnInfo(name = Schema.SUBWAY) val subway: String? = EMPTY_STRING,
-    @ColumnInfo(name = Schema.LOCATION) val location: String? = EMPTY_STRING,
+    @ColumnInfo(name = Schema.LOCATION) val location: Long? = 0,
     @ColumnInfo(name = Schema.SLUG) val slug: String? = EMPTY_STRING
 ) {
     object Schema {

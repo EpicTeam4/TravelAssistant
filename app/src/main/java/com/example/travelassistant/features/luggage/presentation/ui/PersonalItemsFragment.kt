@@ -11,7 +11,6 @@ import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.example.travelassistant.R
 import com.example.travelassistant.core.Constants.EMPTY_STRING
-import com.example.travelassistant.core.observe
 import com.example.travelassistant.databinding.FragmentPersonalItemsBinding
 import com.example.travelassistant.features.luggage.presentation.adapters.ItemAdapter
 
@@ -52,7 +51,6 @@ class PersonalItemsFragment : Fragment() {
 
         with(luggageViewModel) {
             loadData()
-            //observe(commands, ::handleCommand)
             dataState.observe(viewLifecycleOwner, ::handleState)
         }
     }

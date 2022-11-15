@@ -59,8 +59,8 @@ class InfoEditingFragment : Fragment() {
                 updateData()
                 infoViewModel.apply {
                     updateDetails(infoAboutTravel)
-                    infoViewModel.setAlarm()
-                    infoViewModel.setSecondAlarm()
+                    setAlarm()
+                    setSecondAlarm()
                 }
             }
 
@@ -163,9 +163,7 @@ class InfoEditingFragment : Fragment() {
                 flightDest.setText(event?.flightNumFromDest)
                 seatDest.setText(event?.seatFromDest)
                 routeDest.setText(event?.wayDescriptionFromDest)
-                spinnerTimeDest.setSelection(
-                    convertHoursToAdapterPosition(event?.hoursFromDest)
-                )
+                spinnerTimeDest.setSelection(convertHoursToAdapterPosition(event?.hoursFromDest))
                 wayToHotel.setText(event?.wayToHotel)
 
                 if (hotels?.isNotEmpty() == true) {

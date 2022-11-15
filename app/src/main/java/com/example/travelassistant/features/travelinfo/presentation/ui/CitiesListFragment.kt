@@ -50,9 +50,11 @@ class CitiesListFragment : BaseFragment() {
 
         _binding = FragmentCitiesBinding.bind(view)
 
-        infoViewModel.dataState.observe(viewLifecycleOwner, ::handleState)
-        observe(infoViewModel.commands, ::handleCommand)
-        infoViewModel.loadData()
+        infoViewModel.apply {
+            dataState.observe(viewLifecycleOwner, ::handleState)
+            observe(commands, ::handleCommand)
+            loadData(false)
+        }
     }
 
     override fun onDestroyView() {
@@ -89,7 +91,9 @@ class CitiesListFragment : BaseFragment() {
     }
 
     private fun onCityClick(id: Long) {
-        infoViewModel.infoAboutTravel = infoViewModel.infoAboutTravel.copyInfoAboutTravel(city_id = id)
-        infoViewModel.openToDestination()
+        with(infoViewModel) {
+            infoAboutTravel = infoAboutTravel.copyInfoAboutTravel(city_id = id)
+            openToDestination()
+        }
     }
 }

@@ -14,12 +14,6 @@ import com.example.travelassistant.core.database.dao.SightsDao
 import com.example.travelassistant.core.database.dao.PersonalItemDao
 import com.example.travelassistant.core.database.dao.TravelInfoDao
 import com.example.travelassistant.core.domain.LocalDataSource
-import com.example.travelassistant.core.domain.State
-import com.example.travelassistant.core.domain.entity.City
-import com.example.travelassistant.core.domain.entity.Hotel
-import com.example.travelassistant.core.domain.entity.PersonalItem
-import com.example.travelassistant.core.domain.entity.Port
-import com.example.travelassistant.core.domain.entity.InfoAboutTravel
 import com.example.travelassistant.core.network.ApiMapperHotel
 import com.example.travelassistant.core.network.KudagoClient
 import com.example.travelassistant.core.network.KudagoClientApi
@@ -27,13 +21,12 @@ import com.example.travelassistant.features.editinfo.data.InfoEditingRepositoryI
 import com.example.travelassistant.features.editinfo.domain.repository.InfoEditingRepository
 import com.example.travelassistant.features.favourites.data.SightsRepositoryImpl
 import com.example.travelassistant.features.favourites.domain.repository.SightsRepository
-import com.example.travelassistant.features.favourites.domain.usecase.SightsUseCase
+import com.example.travelassistant.features.hometown.data.HometownRepositoryImpl
+import com.example.travelassistant.features.hometown.domain.repository.HometownRepository
 import com.example.travelassistant.features.luggage.data.LuggageRepositoryImpl
 import com.example.travelassistant.features.luggage.domain.repository.LuggageRepository
-import com.example.travelassistant.features.luggage.domain.usecase.GetLuggageUseCase
 import com.example.travelassistant.features.travelinfo.data.InfoRepositoryImpl
 import com.example.travelassistant.features.travelinfo.domain.repository.InfoRepository
-import com.example.travelassistant.features.travelinfo.domain.usecase.GetInfoUseCase
 import dagger.Module
 import dagger.Provides
 import dagger.hilt.InstallIn
@@ -92,32 +85,7 @@ class AppModule {
             .create(KudagoClientApi::class.java)
 
     @Provides
-    suspend fun providesInfoUseCase(useCase: GetInfoUseCase): State<List<City>> =
-        useCase.getCities()
-
-    @Provides
-    suspend fun providesPortUseCase(useCase: GetInfoUseCase): State<List<Port>> = useCase.getPorts()
-
-    @Provides
-    suspend fun providesHotelUseCase(
-        useCase: GetInfoUseCase,
-        location: String
-    ): State<List<Hotel>> =
-        useCase.getHotels(location)
-
-    @Provides
-    suspend fun providesItemUseCase(useCase: GetLuggageUseCase): State<List<PersonalItem>> =
-        useCase.getAllItems()
-
-    @Provides
-    suspend fun providesDetailsUseCase(useCase: GetInfoUseCase, info: InfoAboutTravel) =
-        useCase.addDetails(info)
-
-    @Provides
-    suspend fun providesSightsUseCase(useCase: SightsUseCase) = useCase.getFavouriteSights()
-
-    @Provides
-    fun bindsInfoRepository(
+    fun providesInfoRepository(
         dataSource: LocalDataSource,
         hotelMapper: ApiMapperHotel
     ): InfoRepository =
@@ -137,6 +105,10 @@ class AppModule {
     @Provides
     fun providesLuggageRepository(dataSource: LocalDataSource): LuggageRepository =
         LuggageRepositoryImpl(dataSource)
+
+    @Provides
+    fun providesHometownRepository(dataSource: LocalDataSource): HometownRepository =
+        HometownRepositoryImpl(dataSource)
 
     @Provides
     @Singleton
