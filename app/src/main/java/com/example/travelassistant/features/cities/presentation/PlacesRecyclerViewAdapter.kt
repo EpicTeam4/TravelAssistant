@@ -9,7 +9,8 @@ import com.squareup.picasso.Picasso
 
 class PlacesRecyclerViewAdapter(
     private val places: MutableList<PlaceDomain>,
-    private val onItemClicked: (placeId: String) -> Unit
+    private val onItemClicked: (placeId: String) -> Unit,
+    private val onAddPlaceToFavoritesClicked: (place: PlaceDomain) -> Unit
 ) :
     RecyclerView.Adapter<PlacesRecyclerViewAdapter.ViewHolder>() {
 
@@ -35,6 +36,10 @@ class PlacesRecyclerViewAdapter(
                             .load(it.url)
                             .into(placeImage)
                     }
+                }
+                imgFavourite.isChecked = isUserFavorite
+                imgFavourite.setOnClickListener {
+                    onAddPlaceToFavoritesClicked(this)
                 }
                 root.setOnClickListener {
                     onItemClicked(id)

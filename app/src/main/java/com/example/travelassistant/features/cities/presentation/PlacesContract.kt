@@ -15,8 +15,9 @@ class PlacesContract {
     }
 
     sealed class Event {
-        data class OnViewReady(val cityId: String): Event()
+        data class OnViewReady(val cityId: String) : Event()
         data class OnPlaceClick(val placeId: String) : Event()
+        data class AddPlaceToFavoritesClick(val place: PlaceDomain) : Event()
     }
 
 }

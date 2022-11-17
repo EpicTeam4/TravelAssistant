@@ -14,6 +14,7 @@ import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.example.travelassistant.R
 import com.example.travelassistant.databinding.FragmentPlacesBinding
+import com.example.travelassistant.features.cities.domain.model.PlaceDomain
 import kotlinx.coroutines.launch
 import org.koin.androidx.viewmodel.ext.android.viewModel
 
@@ -37,11 +38,18 @@ class PlacesFragment : Fragment() {
         container: ViewGroup?,
         savedInstanceState: Bundle?
     ): View {
-        placesAdapter = PlacesRecyclerViewAdapter(mutableListOf()) { placeId ->
-            placesViewModel.sendEvent(
-                PlacesContract.Event.OnPlaceClick(placeId)
-            )
-        }
+        placesAdapter =
+            PlacesRecyclerViewAdapter(mutableListOf(),
+                onItemClicked = { placeId: String ->
+                    placesViewModel.sendEvent(
+                        PlacesContract.Event.OnPlaceClick(placeId)
+                    )
+                },
+                onAddPlaceToFavoritesClicked = { place: PlaceDomain ->
+                    placesViewModel.sendEvent(
+                        PlacesContract.Event.AddPlaceToFavoritesClick(place)
+                    )
+                })
 
         _binding = FragmentPlacesBinding.inflate(inflater, container, false)
 
@@ -85,8 +93,7 @@ class PlacesFragment : Fragment() {
 
     private fun handleState(state: PlacesContract.State) {
         when (state) {
-            is PlacesContract.State.Loading -> {  // todo проверить что работает
-                Log.d("=======", "PlacesContract.State.Loading")
+            is PlacesContract.State.Loading -> {
                 binding.progressbar.isVisible = true
                 binding.placesRecyclerView.isVisible = false
                 binding.errorPanel.root.isVisible = false

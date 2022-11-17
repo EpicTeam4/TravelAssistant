@@ -5,7 +5,7 @@ import com.example.travelassistant.features.cities.domain.model.PlaceDomain
 import com.example.travelassistant.features.cities.domain.repository.CitiesRepository
 import com.example.travelassistant.features.cities.domain.repository.PlacesRepository
 
-class CitiesUseCase(
+class CitiesUseCase( // todo поделить на разные юз-кейсы?
     private val citiesRepository: CitiesRepository,
     private val placesRepository: PlacesRepository
 ) {
@@ -25,9 +25,17 @@ class CitiesUseCase(
         return safeCall { placesRepository.getPlace(placeId) }
     }
 
+    suspend fun addSightToFavourite(place: PlaceDomain) {
+        safeCall { placesRepository.addPlaceToFavorites(place) }
+    }
+
+    suspend fun deleteSightFromFavourite(place: PlaceDomain) {
+        safeCall { placesRepository.deletePlaceFromFavorites(place) }
+    }
+
     private fun makeUrl(cityId: String): String {
         val imageResource = cityImageResourceMap[cityId]
-        return "file:///android_asset/" + (imageResource ?: "default-city.jpg")
+        return "file:///android_asset/" + (imageResource ?: "default-city.jpg") // todo Уверен, что CitiesUseCase должен отвечать за формирование ссылок?
     }
 
     companion object {
