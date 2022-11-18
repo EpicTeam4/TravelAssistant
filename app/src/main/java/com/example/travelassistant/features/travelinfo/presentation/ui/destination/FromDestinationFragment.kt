@@ -41,7 +41,7 @@ class FromDestinationFragment : BaseFragment() {
 
         initObservers()
         observe(infoViewModel.commands, ::handleCommand)
-        infoViewModel.loadData()
+        infoViewModel.loadData(false)
 
         _binding?.apply {
             button.setOnClickListener {
@@ -124,11 +124,13 @@ class FromDestinationFragment : BaseFragment() {
     }
 
     private fun setData() {
-        infoViewModel.infoAboutTravel = infoViewModel.infoAboutTravel.copyInfoAboutTravel(
-            flightNumFromDest = _binding?.flight?.text.toString(),
-            seatFromDest = _binding?.seat?.text.toString(),
-            wayDescriptionFromDest = _binding?.route?.text.toString()
-        )
+        _binding?.apply {
+            infoViewModel.infoAboutTravel = infoViewModel.infoAboutTravel.copyInfoAboutTravel(
+                flightNumFromDest = flight.text.toString(),
+                seatFromDest = seat.text.toString(),
+                wayDescriptionFromDest = route.text.toString()
+            )
+        }
     }
 
     override fun onOptionsItemSelected(menuItem: MenuItem): Boolean {

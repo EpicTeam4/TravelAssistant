@@ -16,7 +16,7 @@
     <string name="save">Сохранить</string>
     <string name="subway">Станция метро</string>
     <string name="network_error">Не удалось загрузить данные</string>
-    <string name="unknown_error">Непредвиденная ошибка</string>
+    <string name="unknown_error">Нет данных для отображения</string>
     <string name="add_item">Добавить элемент багажа</string>
     <string name="to_dest">Туда</string>
     <string name="from_dest">Обратно</string>
@@ -25,6 +25,7 @@
     <string name="details">Детали</string>
     <string name="notification">Напоминание о поездке</string>
     <string name="notification_title">Скоро состоится ваша поездка, пора собираться!</string>
+    <string name="default_city">Ваш город</string>
     <string-array name="time">
         <item>не напоминать</item>
         <item>за 3 часа</item>

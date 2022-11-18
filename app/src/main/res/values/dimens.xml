@@ -29,4 +29,7 @@
     <dimen name="img_favourite_size">24dp</dimen>
     <dimen name="fav_item_layout_height">220dp</dimen>
 
+    /* fragment_hometown */
+    <dimen name="content_panel_layout_height">200dp</dimen>
+
 </resources>

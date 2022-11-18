@@ -45,9 +45,11 @@ class FavouritesFragment : Fragment() {
 
         _binding = FragmentFavouritesBinding.bind(view)
 
-        sightsViewModel.dataState.observe(viewLifecycleOwner, ::handleState)
-        observe(sightsViewModel.commands, ::handleCommand)
-        sightsViewModel.loadData()
+        sightsViewModel.apply {
+            dataState.observe(viewLifecycleOwner, ::handleState)
+            observe(commands, ::handleCommand)
+            loadData()
+        }
     }
 
     override fun onDestroyView() {

@@ -4,8 +4,6 @@ import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
-import com.example.travelassistant.core.commands.CommandsLiveData
-import com.example.travelassistant.core.commands.ViewCommand
 import com.example.travelassistant.core.domain.State
 import com.example.travelassistant.core.domain.entity.PersonalItem
 import com.example.travelassistant.core.parseError
@@ -28,8 +26,6 @@ class LuggageViewModel @Inject constructor(private val useCase: GetLuggageUseCas
     var luggageItem = PersonalItem()
     var content = LuggageViewState.Content()
 
-    val commands = CommandsLiveData<ViewCommand>()
-
     private val dataContent = MutableLiveData<LuggageViewState>()
     val dataState: LiveData<LuggageViewState> get() = dataContent
 
@@ -38,7 +34,7 @@ class LuggageViewModel @Inject constructor(private val useCase: GetLuggageUseCas
             dataContent.value = LuggageViewState.Loading
             when (val items = useCase.getAllItems()) {
                 is State.Success -> handleData(items = items.data)
-                is State.Error -> handleError(true)
+                is State.Error -> handleError(items.isNetworkError)
             }
         }
     }

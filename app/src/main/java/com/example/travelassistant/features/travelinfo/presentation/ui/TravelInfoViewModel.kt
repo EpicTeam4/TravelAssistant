@@ -4,6 +4,7 @@ import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
+import com.example.travelassistant.DataStoreManager
 import com.example.travelassistant.R
 import com.example.travelassistant.core.Constants.EMPTY_STRING
 import com.example.travelassistant.core.Constants.NOTIF_ID
@@ -39,6 +40,7 @@ import javax.inject.Inject
 @HiltViewModel
 class TravelInfoViewModel @Inject constructor(
     private val useCase: GetInfoUseCase,
+    private val datastore: DataStoreManager,
     val formatter: DateTimeFormatter
 ) : ViewModel() {
 
@@ -47,6 +49,7 @@ class TravelInfoViewModel @Inject constructor(
     var selectedHotelPos = 0
     var tempDate: Long = 0
     var content = TravelInfoViewState.Content()
+    var cityId = 0
 
     val commands = CommandsLiveData<ViewCommand>()
 
@@ -61,7 +64,7 @@ class TravelInfoViewModel @Inject constructor(
         }
     }
 
-    fun loadData() {
+    fun loadData(hometown: Boolean) {
         viewModelScope.launch {
             dataContent.value = TravelInfoViewState.Loading
             val (cities, ports) = coroutineScope {
@@ -70,10 +73,19 @@ class TravelInfoViewModel @Inject constructor(
 
                 citiesResult.await().data to portsResult.await().data
             }
+
             if (cities != null && ports != null) {
-                handleData(cities = cities, ports = ports,)
+                handleData(cities = cities, ports = if (hometown) {
+                    if(cityId != DEFAULT_VALUE) {
+                        ports.filter { it.location == cityId.toLong() }
+                    } else {
+                        ports
+                    }
+                } else {
+                    ports.filter { it.location == infoAboutTravel.city_id }
+                })
             } else {
-                handleError(true)
+                handleError(false)
             }
         }
     }
@@ -81,6 +93,9 @@ class TravelInfoViewModel @Inject constructor(
     private suspend fun handleData(cities: List<City>, ports: List<Port>) {
         withContext(Main) {
             dataContent.value = content.copy(cities = cities, ports = ports)
+            datastore.cityId.collect() {
+                cityId = it
+            }
         }
     }
 
@@ -151,7 +166,8 @@ class TravelInfoViewModel @Inject constructor(
 
     fun setAlarm() {
         if (infoAboutTravel.hours > 0 && infoAboutTravel.timeInMillis > 0) {
-            val time = infoAboutTravel.timeInMillis - infoAboutTravel.hours - System.currentTimeMillis()
+            val time =
+                infoAboutTravel.timeInMillis - infoAboutTravel.hours - System.currentTimeMillis()
             val id = NOTIF_ID
             commands.onNext(SetAlarm(id, time))
         }
@@ -159,7 +175,8 @@ class TravelInfoViewModel @Inject constructor(
 
     fun setSecondAlarm() {
         if (infoAboutTravel.hoursFromDest > 0 && infoAboutTravel.timeInMillisDest > 0) {
-            val time = infoAboutTravel.timeInMillisDest - infoAboutTravel.hoursFromDest - System.currentTimeMillis()
+            val time =
+                infoAboutTravel.timeInMillisDest - infoAboutTravel.hoursFromDest - System.currentTimeMillis()
             val id = NOTIF_SECOND_ID
             commands.onNext(SetAlarm(id, time))
         }
@@ -181,5 +198,9 @@ class TravelInfoViewModel @Inject constructor(
 
     fun openHomeFragment() {
         commands.onNext(GoToFragment(R.id.action_hotelFragment_to_navigation_home))
+    }
+
+    companion object {
+        const val DEFAULT_VALUE = 0
     }
 }

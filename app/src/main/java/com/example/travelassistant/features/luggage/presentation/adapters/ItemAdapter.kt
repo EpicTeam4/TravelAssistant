@@ -32,9 +32,11 @@ class ItemAdapter(
     )
 
     override fun onBindViewHolder(holder: ViewHolder, position: Int) {
-        holder.binding.itemName.text = items[position].item
-        holder.binding.del.setOnClickListener {
-            deleteItem(items[position].id)
+        with (holder.binding) {
+            itemName.text = items[position].item
+            del.setOnClickListener {
+                deleteItem(items[position].id)
+            }
         }
     }
 

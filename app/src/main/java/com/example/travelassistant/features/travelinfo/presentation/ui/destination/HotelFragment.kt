@@ -47,9 +47,11 @@ class HotelFragment : BaseFragment() {
 
         _binding = FragmentHotelBinding.bind(view)
 
-        infoViewModel.loadHotels(infoViewModel.infoAboutTravel.city_id)
-        initObservers()
-        observe(infoViewModel.commands, ::handleCommand)
+        infoViewModel.apply {
+            loadHotels(infoAboutTravel.city_id)
+            initObservers()
+            observe(commands, ::handleCommand)
+        }
 
         _binding?.spinner?.onItemSelectedListener = object : AdapterView.OnItemSelectedListener {
             override fun onItemSelected(
@@ -118,12 +120,13 @@ class HotelFragment : BaseFragment() {
 
         _binding?.apply {
             if (hotels.isNotEmpty()) {
-                val id = hotels[infoViewModel.selectedHotelPos].id
-                infoViewModel.infoAboutTravel =
-                    infoViewModel.infoAboutTravel.copyInfoAboutTravel(hotelId = id)
-                hotelAddress.text = hotels[infoViewModel.selectedHotelPos].address
-                hotelPhone.text = hotels[infoViewModel.selectedHotelPos].phone
-                hotelSubway.text = hotels[infoViewModel.selectedHotelPos].subway
+                infoViewModel.apply {
+                    val id = hotels[selectedHotelPos].id
+                    infoAboutTravel = infoAboutTravel.copyInfoAboutTravel(hotelId = id)
+                    hotelAddress.text = hotels[selectedHotelPos].address
+                    hotelPhone.text = hotels[selectedHotelPos].phone
+                    hotelSubway.text = hotels[selectedHotelPos].subway
+                }
             }
         }
     }

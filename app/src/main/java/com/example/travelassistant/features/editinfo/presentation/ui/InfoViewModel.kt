@@ -74,7 +74,7 @@ class InfoViewModel @Inject constructor(
                     hotels = hotels.data as List<Hotel>
                 )
             } else {
-                handleError(true)
+                handleError(false)
             }
         }
     }
@@ -107,7 +107,8 @@ class InfoViewModel @Inject constructor(
 
     fun setAlarm() {
         if (infoAboutTravel.hours > 0 && infoAboutTravel.timeInMillis > 0) {
-            val time = infoAboutTravel.timeInMillis - infoAboutTravel.hours - System.currentTimeMillis()
+            val time =
+                infoAboutTravel.timeInMillis - infoAboutTravel.hours - System.currentTimeMillis()
             val id = NOTIF_ID
             commands.onNext(SetAlarm(id, time))
         }
@@ -115,7 +116,8 @@ class InfoViewModel @Inject constructor(
 
     fun setSecondAlarm() {
         if (infoAboutTravel.hoursFromDest > 0 && infoAboutTravel.timeInMillisDest > 0) {
-            val time = infoAboutTravel.timeInMillisDest - infoAboutTravel.hoursFromDest - System.currentTimeMillis()
+            val time =
+                infoAboutTravel.timeInMillisDest - infoAboutTravel.hoursFromDest - System.currentTimeMillis()
             val id = NOTIF_SECOND_ID
             commands.onNext(SetAlarm(id, time))
         }

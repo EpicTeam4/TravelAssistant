@@ -15,15 +15,6 @@ inline fun <T> safeCall(action: () -> T): State<T> {
     }
 }
 
-inline fun safeVoidCall(action: () -> Void): State<Unit> {
-    return try {
-        action.invoke()
-        State.Success(Unit)
-    } catch (throwable: Throwable) {
-        State.Error(throwable.isNetworkException())
-    }
-}
-
 fun Throwable?.isNetworkException(): Boolean {
     return when (this) {
         is ConnectException,
