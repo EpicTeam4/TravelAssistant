@@ -53,7 +53,7 @@ class CitiesListFragment : BaseFragment() {
         infoViewModel.apply {
             dataState.observe(viewLifecycleOwner, ::handleState)
             observe(commands, ::handleCommand)
-            loadData(false)
+            loadData()
         }
     }
 

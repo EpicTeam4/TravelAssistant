@@ -4,7 +4,6 @@ import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
-import com.example.travelassistant.DataStoreManager
 import com.example.travelassistant.core.domain.State
 import com.example.travelassistant.core.domain.entity.City
 import com.example.travelassistant.core.parseError
@@ -23,8 +22,7 @@ import javax.inject.Inject
 
 @HiltViewModel
 class HometownViewModel @Inject constructor(
-    private val useCase: GetHometownUseCase,
-    private val datastore: DataStoreManager
+    private val useCase: GetHometownUseCase
 ) : ViewModel() {
 
     var content = HometownViewState.Content()
@@ -34,20 +32,31 @@ class HometownViewModel @Inject constructor(
 
     fun loadData() {
         viewModelScope.launch {
+            useCase.getHometown().collect() {
+                loadCities(it)
+            }
+        }
+    }
+
+    private fun loadCities(cityId: Int) {
+        viewModelScope.launch {
             dataContent.value = HometownViewState.Loading
             when (val cities = useCase.getCities()) {
-                is State.Success -> handleData(cities = cities.data)
+                is State.Success -> handleData(
+                    cities = cities.data, cityId = if (cityId != DEFAULT_VALUE) {
+                        cityId - 1
+                    } else {
+                        DEFAULT_VALUE
+                    }
+                )
                 is State.Error -> handleError(false)
             }
         }
     }
 
-    private suspend fun handleData(cities: List<City>) {
+    private suspend fun handleData(cities: List<City>, cityId: Int) {
         withContext(Dispatchers.Main) {
-            dataContent.value = content.copy(cities = cities)
-            datastore.cityId.collect() {
-                dataContent.value = content.copy(cityId = it)
-            }
+            dataContent.value = content.copy(cities = cities, cityId = cityId)
         }
     }
 
@@ -57,9 +66,13 @@ class HometownViewModel @Inject constructor(
         }
     }
 
-    fun savePreferences(cityId: Int){
+    fun savePreferences(cityId: Int) {
         viewModelScope.launch {
-            datastore.rewriteData(cityId)
+            useCase.rewriteHometown(cityId)
         }
+    }
+
+    companion object {
+        const val DEFAULT_VALUE = 0
     }
 }

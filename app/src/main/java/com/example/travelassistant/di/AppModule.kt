@@ -13,6 +13,7 @@ import com.example.travelassistant.core.database.dao.CityDao
 import com.example.travelassistant.core.database.dao.SightsDao
 import com.example.travelassistant.core.database.dao.PersonalItemDao
 import com.example.travelassistant.core.database.dao.TravelInfoDao
+import com.example.travelassistant.core.domain.DataStoreManager
 import com.example.travelassistant.core.domain.LocalDataSource
 import com.example.travelassistant.core.network.ApiMapperHotel
 import com.example.travelassistant.core.network.KudagoClient
@@ -87,16 +88,18 @@ class AppModule {
     @Provides
     fun providesInfoRepository(
         dataSource: LocalDataSource,
-        hotelMapper: ApiMapperHotel
+        hotelMapper: ApiMapperHotel,
+        prefs: DataStoreManager
     ): InfoRepository =
-        InfoRepositoryImpl(dataSource, hotelMapper)
+        InfoRepositoryImpl(dataSource, hotelMapper, prefs)
 
     @Provides
     fun providesEditInfoRepository(
         dataSource: LocalDataSource,
-        hotelMapper: ApiMapperHotel
+        hotelMapper: ApiMapperHotel,
+        prefs: DataStoreManager
     ): InfoEditingRepository =
-        InfoEditingRepositoryImpl(dataSource, hotelMapper)
+        InfoEditingRepositoryImpl(dataSource, hotelMapper, prefs)
 
     @Provides
     fun providesSightsRepository(dataSource: LocalDataSource): SightsRepository =
@@ -107,8 +110,11 @@ class AppModule {
         LuggageRepositoryImpl(dataSource)
 
     @Provides
-    fun providesHometownRepository(dataSource: LocalDataSource): HometownRepository =
-        HometownRepositoryImpl(dataSource)
+    fun providesHometownRepository(
+        dataSource: LocalDataSource,
+        prefs: DataStoreManager
+    ): HometownRepository =
+        HometownRepositoryImpl(dataSource, prefs)
 
     @Provides
     @Singleton

@@ -31,6 +31,7 @@ class InfoEditingFragment : Fragment() {
 
     private lateinit var portsList: ArrayAdapter<String>
     private lateinit var hotelsList: ArrayAdapter<String>
+    private lateinit var portsDestList: ArrayAdapter<String>
     private var _binding: FragmentEditEventBinding? = null
     private val infoViewModel: InfoViewModel by activityViewModels()
 
@@ -103,6 +104,11 @@ class InfoEditingFragment : Fragment() {
                 setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item)
             }
 
+        portsDestList =
+            (ArrayAdapter<String>(requireContext(), android.R.layout.simple_spinner_item)).apply {
+                setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item)
+            }
+
         hotelsList =
             (ArrayAdapter<String>(requireContext(), android.R.layout.simple_spinner_item)).apply {
                 setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item)
@@ -110,7 +116,7 @@ class InfoEditingFragment : Fragment() {
 
         _binding?.apply {
             spinner.adapter = portsList
-            spinnerDest.adapter = portsList
+            spinnerDest.adapter = portsDestList
             spinnerHotel.adapter = hotelsList
         }
     }
@@ -203,6 +209,7 @@ class InfoEditingFragment : Fragment() {
             }
 
             if (portsList.isEmpty) ports?.forEach { portsList.add(it.name) }
+            if (portsDestList.isEmpty) portsDest?.forEach { portsDestList.add(it.name) }
             if (hotelsList.isEmpty) hotels?.forEach { hotelsList.add(it.title) }
         }
     }

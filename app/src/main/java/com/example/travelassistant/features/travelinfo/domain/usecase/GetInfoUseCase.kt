@@ -8,6 +8,7 @@ import com.example.travelassistant.core.domain.entity.InfoAboutTravel
 import com.example.travelassistant.core.domain.usecase.safeCall
 import com.example.travelassistant.features.travelinfo.domain.repository.InfoRepository
 import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.withContext
 import javax.inject.Inject
 
@@ -39,6 +40,11 @@ class GetInfoUseCase @Inject constructor(private val infoRepository: InfoReposit
 
     suspend fun addDetails(info: InfoAboutTravel) =
         withContext(Dispatchers.IO) { infoRepository.addDetails(info) }
+
+    suspend fun getHometown(): Flow<Int> =
+        withContext(Dispatchers.IO) {
+            infoRepository.getHometown()
+        }
 
     companion object {
         private const val ASSETS_FOLDER = "file:///android_asset/"

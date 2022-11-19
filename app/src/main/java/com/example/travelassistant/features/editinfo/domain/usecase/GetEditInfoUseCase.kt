@@ -8,6 +8,7 @@ import com.example.travelassistant.core.domain.entity.InfoAboutTravel
 import com.example.travelassistant.core.domain.usecase.safeCall
 import com.example.travelassistant.features.editinfo.domain.repository.InfoEditingRepository
 import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.withContext
 import javax.inject.Inject
 
@@ -33,5 +34,10 @@ class GetEditInfoUseCase @Inject constructor(private val infoRepository: InfoEdi
 
     suspend fun updateDetails(info: InfoAboutTravel) =
         withContext(Dispatchers.IO) { infoRepository.updateDetails(info) }
+
+    suspend fun getHometown(): Flow<Int> =
+        withContext(Dispatchers.IO) {
+            infoRepository.getHometown()
+        }
 
 }
