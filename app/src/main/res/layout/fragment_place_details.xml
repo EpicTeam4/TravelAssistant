@@ -3,54 +3,102 @@
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
-    android:layout_height="match_parent"
+    android:layout_height="wrap_content"
     tools:context=".features.cities.presentation.PlaceDetailsFragment">
 
-    <ImageView
-        android:id="@+id/place_details_image"
-        android:layout_width="match_parent"
-        android:layout_height="300dp"
-        android:layout_gravity="center|top"
+    <TextView
+        android:id="@+id/place_details_title"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
         android:layout_marginStart="8dp"
         android:layout_marginTop="8dp"
         android:layout_marginEnd="8dp"
-        android:scaleType="center"
-        app:layout_constraintEnd_toEndOf="parent"
+        android:gravity="center|top"
+        android:textAppearance="?android:attr/textAppearanceLarge"
+        android:textColor="@color/black"
+        android:textSize="@dimen/place_details_title_text_size"
+        app:layout_constraintEnd_toStartOf="@+id/img_favourite"
         app:layout_constraintHorizontal_bias="0.0"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent" />
 
-    <TextView
-        android:id="@+id/place_details_title"
+    <com.google.android.material.checkbox.MaterialCheckBox
+        android:id="@+id/img_favourite"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_gravity="end"
+        android:button="@drawable/fav_selector"
+        app:layout_constraintRight_toRightOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
+        app:useMaterialThemeColors="false" />
+
+    <androidx.recyclerview.widget.RecyclerView
+        android:id="@+id/place_details_images_recycler_view"
         android:layout_width="match_parent"
-        android:layout_height="52dp"
+        android:layout_height="316dp"
+        android:layout_marginTop="8dp"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/place_details_title"
+        tools:ignore="SpeakableTextPresentCheck"
+        tools:listitem="@layout/fragment_place_details_recycler_view_item"></androidx.recyclerview.widget.RecyclerView>
+
+    <TextView
+        android:id="@+id/adressLabel"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
         android:layout_marginStart="8dp"
         android:layout_marginTop="8dp"
-        android:layout_marginEnd="8dp"
-        android:gravity="center|top"
-        android:textAppearance="?android:attr/textAppearanceLarge"
-        android:textColor="@color/black"
-        android:textSize="@dimen/places_cardview_title_text_size"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="0.0"
+        android:text="Адрес:"
+        android:textSize="@dimen/place_details_text_size"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/place_details_image" />
+        app:layout_constraintTop_toBottomOf="@+id/place_details_images_recycler_view" />
+
+    <TextView
+        android:id="@+id/timeTableValue"
+        android:layout_width="wrap_content"
+        android:layout_height="0dp"
+        android:layout_marginStart="8dp"
+        android:layout_marginTop="8dp"
+        android:textSize="@dimen/place_details_text_size"
+        app:layout_constraintStart_toEndOf="@+id/timeTableLabel"
+        app:layout_constraintTop_toBottomOf="@+id/adressValue" />
+
+    <TextView
+        android:id="@+id/adressValue"
+        android:layout_width="wrap_content"
+        android:layout_height="0dp"
+        android:layout_marginStart="8dp"
+        android:layout_marginTop="8dp"
+        android:textSize="@dimen/place_details_text_size"
+        app:layout_constraintStart_toEndOf="@+id/adressLabel"
+        app:layout_constraintTop_toBottomOf="@+id/place_details_images_recycler_view" />
+
+    <TextView
+        android:id="@+id/timeTableLabel"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="8dp"
+        android:layout_marginTop="8dp"
+        android:text="Режим работы:"
+        android:textSize="@dimen/place_details_text_size"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/adressLabel" />
 
     <TextView
         android:id="@+id/place_details_description"
         android:layout_width="match_parent"
-        android:layout_height="242dp"
+        android:layout_height="wrap_content"
         android:layout_marginStart="8dp"
         android:layout_marginTop="8dp"
         android:layout_marginEnd="8dp"
         android:gravity="center|top"
         android:textAppearance="?android:attr/textAppearanceLarge"
         android:textColor="@color/black"
-        android:textSize="@dimen/places_cardview_text_size"
+        android:textSize="@dimen/place_details_text_size"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="0.0"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/place_details_title" />
+        app:layout_constraintTop_toBottomOf="@id/timeTableValue" />
 
     <ProgressBar
         android:id="@+id/progressbar"

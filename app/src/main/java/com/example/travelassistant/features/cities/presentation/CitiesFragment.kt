@@ -84,7 +84,7 @@ class CitiesFragment : Fragment() {
                 binding.citiesRecyclerView.isVisible = false
                 binding.errorPanel.root.isVisible = false
             }
-            is CitiesContract.State.Error -> { // todo проверить что работает
+            is CitiesContract.State.Error -> {
                 binding.progressbar.isVisible = false
                 binding.citiesRecyclerView.isVisible = false
                 binding.errorPanel.root.isVisible = true

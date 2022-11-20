@@ -1,6 +1,5 @@
 package com.example.travelassistant.features.cities.data
 
-import android.util.Log
 import com.example.travelassistant.core.database.dao.SightsDao
 import com.example.travelassistant.core.domain.entity.Sights
 import com.example.travelassistant.core.network.KudagoClient
@@ -28,7 +27,6 @@ class PlacesRepositoryImpl(
     override suspend fun getPlaces(location: String): List<PlaceDomain> {
         return withContext(Dispatchers.IO) {
             val sights = sightsDao.getFavouriteSights()
-            Log.d("=====", sights.toString())
             kudagoClient.getPlacesWithFieldsOrderByFavoritesCountDesc(
                 location, PLACE_FIELDS_FOR_PLACES_SCREEN
             ).let { response ->
@@ -47,7 +45,6 @@ class PlacesRepositoryImpl(
     override suspend fun getPlace(placeId: String): PlaceDomain {
         return withContext(Dispatchers.IO) {
             val sights = sightsDao.getFavouriteSights()
-            Log.d("=====", sights.toString())
             kudagoClient.getPlaceWithFields(
                 placeId, PLACE_ALL_FIELDS
             ).let { response ->

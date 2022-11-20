@@ -45,6 +45,7 @@ class PlaceDetailViewModel(private val citiesUseCase: CitiesUseCase) : ViewModel
     private fun handleEvent(event: PlaceContract.Event) {
         when (event) {
             is PlaceContract.Event.OnViewReady -> loadAndShowPlace(event.placeId)
+            is PlaceContract.Event.AddPlaceToFavoritesClick -> addPlaceToFavorites()
         }
     }
 
@@ -67,6 +68,21 @@ class PlaceDetailViewModel(private val citiesUseCase: CitiesUseCase) : ViewModel
                     )
                 }
             }
+        }
+    }
+
+    private fun addPlaceToFavorites() {
+        _uiState.value.let { state ->
+            if (state is PlaceContract.State.Content) {
+                viewModelScope.launch {
+                    if (state.place.isUserFavorite) {
+                        citiesUseCase.deleteSightFromFavourite(state.place)
+                    } else {
+                        citiesUseCase.addSightToFavourite(state.place)
+                    }
+                }
+            }
+
         }
     }
 

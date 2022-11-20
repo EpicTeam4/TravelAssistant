@@ -1,0 +1,15 @@
+<androidx.cardview.widget.CardView xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:layout_width="wrap_content"
+    android:layout_height="wrap_content"
+    android:layout_margin="@dimen/cardview_layout_margin"
+    app:cardCornerRadius="@dimen/cardview_elevation"
+    app:cardPreventCornerOverlap="false">
+
+    <ImageView
+        android:id="@+id/place_details_image"
+        android:layout_width="@dimen/place_details_image_width"
+        android:layout_height="@dimen/place_details_image_height"
+        android:scaleType="centerCrop" />
+
+</androidx.cardview.widget.CardView>
