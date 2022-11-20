@@ -110,7 +110,7 @@
         android:label="@string/title_favourites_details">
         <argument
             android:name="placeId"
-            android:defaultValue="-1"
-            app:argType="integer" />
+            app:argType="string"
+            android:defaultValue='""' />
     </fragment>
 </navigation>

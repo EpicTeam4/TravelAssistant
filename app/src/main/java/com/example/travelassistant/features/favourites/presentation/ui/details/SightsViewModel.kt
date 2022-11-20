@@ -4,7 +4,7 @@ import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
-import com.example.travelassistant.core.domain.entity.Sights
+import com.example.travelassistant.features.cities.domain.model.PlaceDomain
 import com.example.travelassistant.features.favourites.domain.usecase.SightsUseCase
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.Dispatchers.Main
@@ -23,10 +23,10 @@ class SightsViewModel @Inject constructor(
     private val useCase: SightsUseCase
 ) : ViewModel() {
 
-    private val dataContent = MutableLiveData<Sights>()
-    val dataState: LiveData<Sights> get() = dataContent
+    private val dataContent = MutableLiveData<PlaceDomain>()
+    val dataState: LiveData<PlaceDomain> get() = dataContent
 
-    fun loadSights(id: Int) {
+    fun loadSights(id: String) {
         viewModelScope.launch {
             withContext(Main) {
                 dataContent.value = useCase.getSightsById(id)
@@ -34,7 +34,7 @@ class SightsViewModel @Inject constructor(
         }
     }
 
-    fun deleteSights(id: Int) {
+    fun deleteSights(id: PlaceDomain) {
         viewModelScope.launch {
             withContext(Main) {
                 useCase.deleteSightsFromFavourite(id)

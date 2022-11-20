@@ -9,8 +9,8 @@ import com.example.travelassistant.core.commands.GoToFragmentAndSendSafeArgs
 import com.example.travelassistant.core.commands.ViewCommand
 import com.example.travelassistant.core.domain.State
 import com.example.travelassistant.core.domain.entity.City
-import com.example.travelassistant.core.domain.entity.Sights
 import com.example.travelassistant.core.parseError
+import com.example.travelassistant.features.cities.domain.model.PlaceDomain
 import com.example.travelassistant.features.favourites.domain.usecase.SightsUseCase
 import com.example.travelassistant.features.favourites.presentation.ui.SightsViewState
 import dagger.hilt.android.lifecycle.HiltViewModel
@@ -42,12 +42,16 @@ class FavouritesViewModel @Inject constructor(
             dataContent.value = SightsViewState.Loading
             when (val cities = useCase.getCities()) {
                 is State.Success -> {
-                    when (val sights = useCase.getFavouriteSights()) {
-                        is State.Success -> {
-                            handleData(cities = cities.data, sights = sights.data)
-                        }
-                        is State.Error -> {
-                            handleError(sights.isNetworkError)
+                    cities.data.forEach { city ->
+                        if (city.slug?.isNotEmpty() == true) {
+                            when (val sights = useCase.getFavouriteSights(city.slug)) {
+                                is State.Success -> {
+                                    handleData(cities = cities.data, sights = sights.data)
+                                }
+                                is State.Error -> {
+                                    handleError(sights.isNetworkError)
+                                }
+                            }
                         }
                     }
                 }
@@ -64,13 +68,13 @@ class FavouritesViewModel @Inject constructor(
         }
     }
 
-    private suspend fun handleData(cities: List<City>, sights: List<Sights>) {
+    private suspend fun handleData(cities: List<City>, sights: List<PlaceDomain>) {
         withContext(Main) {
             dataContent.value = content.copy(cities = cities, sights = sights)
         }
     }
 
-    fun deleteSights(id: Int) {
+    fun deleteSights(id: PlaceDomain) {
         viewModelScope.launch {
             withContext(Main) {
                 useCase.deleteSightsFromFavourite(id)
@@ -78,7 +82,7 @@ class FavouritesViewModel @Inject constructor(
         }
     }
 
-    fun openDetails(id: Int) {
+    fun openDetails(id: String) {
         val action =
             FavouritesFragmentDirections.actionNavigationFavouritesToFavouritesDetailsFragment()
         action.placeId = id

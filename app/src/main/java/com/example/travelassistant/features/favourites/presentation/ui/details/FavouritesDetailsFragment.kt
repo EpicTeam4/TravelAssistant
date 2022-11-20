@@ -5,19 +5,25 @@ import android.view.LayoutInflater
 import android.view.MenuItem
 import android.view.View
 import android.view.ViewGroup
+import androidx.core.view.isVisible
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.activityViewModels
 import androidx.navigation.fragment.navArgs
+import androidx.recyclerview.widget.LinearLayoutManager
+import androidx.recyclerview.widget.RecyclerView
 import com.example.travelassistant.R
-import com.example.travelassistant.core.domain.entity.Sights
-import com.example.travelassistant.databinding.FragmentFavouritesDetailsBinding
-import com.squareup.picasso.Picasso
+import com.example.travelassistant.databinding.FragmentPlaceDetailsBinding
+import com.example.travelassistant.features.cities.domain.model.PlaceDomain
+import com.example.travelassistant.features.cities.presentation.PlaceDetailsFragmentArgs
+import com.example.travelassistant.features.favourites.presentation.adapters.ImagesAdapter
 
 class FavouritesDetailsFragment : Fragment() {
 
-    private var _binding: FragmentFavouritesDetailsBinding? = null
-    private val args: FavouritesDetailsFragmentArgs by navArgs()
+    private var _binding: FragmentPlaceDetailsBinding? = null
+    private val args: PlaceDetailsFragmentArgs by navArgs()
     private val sightsViewModel: SightsViewModel by activityViewModels()
+    private lateinit var recyclerView: RecyclerView
+    private lateinit var imagesAdapter: ImagesAdapter
 
     override fun onCreateView(
         inflater: LayoutInflater,
@@ -26,13 +32,20 @@ class FavouritesDetailsFragment : Fragment() {
     ): View {
         setHasOptionsMenu(true)
         activity?.actionBar?.setDisplayHomeAsUpEnabled(true)
-        return inflater.inflate(R.layout.fragment_favourites_details, container, false)
+        return inflater.inflate(R.layout.fragment_place_details, container, false)
     }
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
 
-        _binding = FragmentFavouritesDetailsBinding.bind(view)
+        _binding = FragmentPlaceDetailsBinding.bind(view)
+
+        imagesAdapter = ImagesAdapter(mutableListOf())
+        recyclerView = (view.findViewById(R.id.place_details_images_recycler_view) as RecyclerView)
+            .apply {
+                layoutManager = LinearLayoutManager(activity, RecyclerView.HORIZONTAL, false)
+                adapter = imagesAdapter
+            }
 
         sightsViewModel.dataState.observe(viewLifecycleOwner, ::getDetails)
         sightsViewModel.loadSights(args.placeId)
@@ -43,20 +56,19 @@ class FavouritesDetailsFragment : Fragment() {
         _binding = null
     }
 
-    private fun getDetails(details: Sights) {
+    private fun getDetails(details: PlaceDomain) {
         _binding?.apply {
+            progressbar.isVisible = false
             with(details) {
-                placeTitle.text = name
-                if (image?.isNotEmpty() == true) {
-                    Picasso.get()
-                        .load(image)
-                        .into(placeImage)
+                placeDetailsTitle.text = title
+                placeDetailsDescription.text = description
+                adressValue.text = address
+                timeTableValue.text = timeTable
+                imgFavourite.isChecked = true
+                imgFavourite.setOnClickListener {
+                    sightsViewModel.deleteSights(this)
                 }
-                placeDescription.text = description
-                placeFavorite.isChecked = true
-                placeFavorite.setOnClickListener {
-                    sightsViewModel.deleteSights(id)
-                }
+                imagesAdapter.setImages(images.map { it.url })
             }
         }
     }
