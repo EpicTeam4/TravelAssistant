@@ -26,7 +26,7 @@
                 android:id="@+id/place_image"
                 android:layout_width="@dimen/places_cardview_height"
                 android:layout_height="@dimen/places_cardview_height"
-                android:scaleType="center" />
+                android:scaleType="centerCrop" />
 
         </androidx.cardview.widget.CardView>
 

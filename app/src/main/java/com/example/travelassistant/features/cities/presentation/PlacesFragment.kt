@@ -1,7 +1,6 @@
 package com.example.travelassistant.features.cities.presentation
 
 import android.os.Bundle
-import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -98,7 +97,7 @@ class PlacesFragment : Fragment() {
                 binding.placesRecyclerView.isVisible = false
                 binding.errorPanel.root.isVisible = false
             }
-            is PlacesContract.State.Error -> { // todo проверить что работает
+            is PlacesContract.State.Error -> {
                 binding.progressbar.isVisible = false
                 binding.placesRecyclerView.isVisible = false
                 binding.errorPanel.root.isVisible = true
