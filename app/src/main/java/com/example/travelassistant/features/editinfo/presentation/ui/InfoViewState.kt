@@ -17,6 +17,8 @@ sealed class InfoViewState {
     data class Content(
         val event: InfoAboutTravel? = null,
         val ports: List<Port>? = listOf(),
-        val hotels: List<Hotel>? = listOf()
+        val portsDest: List<Port>? = listOf(),
+        val hotels: List<Hotel>? = listOf(),
+        val cityId: Int = 0
     ) : InfoViewState()
 }

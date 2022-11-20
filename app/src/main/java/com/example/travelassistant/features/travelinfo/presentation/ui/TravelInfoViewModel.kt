@@ -4,7 +4,6 @@ import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
-import com.example.travelassistant.DataStoreManager
 import com.example.travelassistant.R
 import com.example.travelassistant.core.Constants.EMPTY_STRING
 import com.example.travelassistant.core.Constants.NOTIF_ID
@@ -40,7 +39,6 @@ import javax.inject.Inject
 @HiltViewModel
 class TravelInfoViewModel @Inject constructor(
     private val useCase: GetInfoUseCase,
-    private val datastore: DataStoreManager,
     val formatter: DateTimeFormatter
 ) : ViewModel() {
 
@@ -49,7 +47,6 @@ class TravelInfoViewModel @Inject constructor(
     var selectedHotelPos = 0
     var tempDate: Long = 0
     var content = TravelInfoViewState.Content()
-    var cityId = 0
 
     val commands = CommandsLiveData<ViewCommand>()
 
@@ -64,7 +61,15 @@ class TravelInfoViewModel @Inject constructor(
         }
     }
 
-    fun loadData(hometown: Boolean) {
+    fun loadData() {
+        viewModelScope.launch {
+            useCase.getHometown().collect() {
+                loadCitiesPorts(it)
+            }
+        }
+    }
+
+    private fun loadCitiesPorts(cityId: Int) {
         viewModelScope.launch {
             dataContent.value = TravelInfoViewState.Loading
             val (cities, ports) = coroutineScope {
@@ -75,27 +80,20 @@ class TravelInfoViewModel @Inject constructor(
             }
 
             if (cities != null && ports != null) {
-                handleData(cities = cities, ports = if (hometown) {
-                    if(cityId != DEFAULT_VALUE) {
-                        ports.filter { it.location == cityId.toLong() }
-                    } else {
-                        ports
-                    }
+                handleData(cities = cities, ports = if (cityId != DEFAULT_VALUE) {
+                    ports.filter { it.location == cityId.toLong() }
                 } else {
-                    ports.filter { it.location == infoAboutTravel.city_id }
-                })
+                    ports
+                }, portsDest = ports.filter { it.location == infoAboutTravel.city_id })
             } else {
                 handleError(false)
             }
         }
     }
 
-    private suspend fun handleData(cities: List<City>, ports: List<Port>) {
+    private suspend fun handleData(cities: List<City>, ports: List<Port>, portsDest: List<Port>) {
         withContext(Main) {
-            dataContent.value = content.copy(cities = cities, ports = ports)
-            datastore.cityId.collect() {
-                cityId = it
-            }
+            dataContent.value = content.copy(cities = cities, ports = ports, portsDest = portsDest)
         }
     }
 

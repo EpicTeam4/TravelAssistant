@@ -19,9 +19,11 @@ sealed class TravelInfoViewState {
     data class Content(
         val cities: List<City> = listOf(),
         val ports: List<Port> = listOf(),
+        val portsDest: List<Port> = listOf(),
         val hotels: List<Hotel> = listOf(),
         val items: List<PersonalItem> = listOf(),
         val datetime: String = EMPTY_STRING,
-        val dateTimeDest: String = EMPTY_STRING
+        val dateTimeDest: String = EMPTY_STRING,
+        val cityId: Int = 0
     ) : TravelInfoViewState()
 }

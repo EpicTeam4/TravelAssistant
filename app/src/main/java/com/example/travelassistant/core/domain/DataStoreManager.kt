@@ -1,4 +1,4 @@
-package com.example.travelassistant
+package com.example.travelassistant.core.domain
 
 import android.content.Context
 import androidx.datastore.preferences.core.edit
@@ -18,13 +18,13 @@ class DataStoreManager @Inject constructor(@ApplicationContext context: Context)
     private val settingsDataStore = context.dataStore
     private val id = intPreferencesKey(CITY_ID_KEY)
 
-    suspend fun rewriteData(cityId: Int) {
+    suspend fun rewriteHometown(cityId: Int) {
         settingsDataStore.edit { settings ->
             settings[id] = cityId
         }
     }
 
-    val cityId: Flow<Int> = settingsDataStore.data
+    fun getHometown(): Flow<Int> = settingsDataStore.data
         .map { preferences ->
             preferences[id] ?: DEFAULT_ID
         }

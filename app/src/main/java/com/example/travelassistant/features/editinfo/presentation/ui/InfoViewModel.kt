@@ -56,6 +56,14 @@ class InfoViewModel @Inject constructor(
 
     fun loadDetails(date: Long) {
         viewModelScope.launch {
+            useCase.getHometown().collect() {
+                loadInfoDetails(it, date)
+            }
+        }
+    }
+
+    private fun loadInfoDetails(cityId: Int, date: Long) {
+        viewModelScope.launch {
             dataContent.value = InfoViewState.Loading
             val (event, ports, hotels) = coroutineScope {
                 val eventResult = async { useCase.getDetails(date) }
@@ -70,7 +78,13 @@ class InfoViewModel @Inject constructor(
                 infoAboutTravel = event.data as InfoAboutTravel
                 handleDetailsData(
                     event = event.data as InfoAboutTravel,
-                    ports = ports.data as List<Port>?,
+                    ports = if (cityId != DEFAULT_VALUE) {
+                        (ports.data as List<Port>).filter { port -> port.location == cityId.toLong() }
+                    } else {
+                        ports.data as List<Port>
+                    },
+                    portsDest = (ports.data as List<Port>)
+                        .filter { port -> port.location == infoAboutTravel.city_id },
                     hotels = hotels.data as List<Hotel>
                 )
             } else {
@@ -86,10 +100,11 @@ class InfoViewModel @Inject constructor(
     }
 
     private suspend fun handleDetailsData(
-        event: InfoAboutTravel?, ports: List<Port>?, hotels: List<Hotel>
+        event: InfoAboutTravel?, ports: List<Port>?, portsDest: List<Port>?, hotels: List<Hotel>
     ) {
         withContext(Dispatchers.Main) {
-            dataContent.value = content.copy(event = event, ports = ports, hotels = hotels)
+            dataContent.value =
+                content.copy(event = event, ports = ports, portsDest = portsDest, hotels = hotels)
         }
     }
 
@@ -163,5 +178,6 @@ class InfoViewModel @Inject constructor(
 
     companion object {
         const val default_hours_position = 0
+        const val DEFAULT_VALUE = 0
     }
 }

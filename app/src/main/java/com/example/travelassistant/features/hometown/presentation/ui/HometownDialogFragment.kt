@@ -67,11 +67,7 @@ class HometownDialogFragment : DialogFragment() {
 
     private fun HometownViewState.Content.handle() {
         if (citiesList.isEmpty) cities.forEach { citiesList.add(it.name) }
-        if (cityId != DEFAULT_VALUE) {
-            _binding?.spinner?.setSelection(cityId - 1)
-        } else {
-            _binding?.spinner?.setSelection(DEFAULT_VALUE)
-        }
+        _binding?.spinner?.setSelection(cityId)
     }
 
     private fun HometownViewState.Error.handle() {
@@ -90,7 +86,6 @@ class HometownDialogFragment : DialogFragment() {
     }
 
     companion object {
-        const val DEFAULT_VALUE = 0
         const val TAG = "myDialog"
         fun newInstance(): HometownDialogFragment {
             return HometownDialogFragment()

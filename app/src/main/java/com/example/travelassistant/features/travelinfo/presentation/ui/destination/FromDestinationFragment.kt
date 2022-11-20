@@ -41,7 +41,7 @@ class FromDestinationFragment : BaseFragment() {
 
         initObservers()
         observe(infoViewModel.commands, ::handleCommand)
-        infoViewModel.loadData(false)
+        infoViewModel.loadData()
 
         _binding?.apply {
             button.setOnClickListener {
@@ -90,7 +90,7 @@ class FromDestinationFragment : BaseFragment() {
     }
 
     private fun TravelInfoViewState.Content.handle() {
-        if (portsList.isEmpty) ports.forEach { portsList.add(it.name) }
+        if (portsList.isEmpty) portsDest.forEach { portsList.add(it.name) }
         _binding?.dateOfJourney?.setText(dateTimeDest)
     }
 

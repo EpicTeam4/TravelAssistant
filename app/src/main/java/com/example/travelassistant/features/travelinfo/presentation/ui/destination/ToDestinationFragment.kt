@@ -41,7 +41,7 @@ class ToDestinationFragment : BaseFragment() {
 
         initObservers()
         observe(infoViewModel.commands, ::handleCommand)
-        infoViewModel.loadData(true)
+        infoViewModel.loadData()
 
         _binding?.apply {
             button.setOnClickListener {

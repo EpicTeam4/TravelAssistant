@@ -4,6 +4,7 @@ import com.example.travelassistant.core.domain.entity.Port
 import com.example.travelassistant.core.domain.entity.City
 import com.example.travelassistant.core.domain.entity.Hotel
 import com.example.travelassistant.core.domain.entity.InfoAboutTravel
+import kotlinx.coroutines.flow.Flow
 
 /**
  * Репозиторий для списка предустановленных городов, аэропортов и их детализации
@@ -21,4 +22,5 @@ interface InfoEditingRepository {
     suspend fun getDetails(date: Long): InfoAboutTravel?
     suspend fun updateDetails(info: InfoAboutTravel)
 
+    suspend fun getHometown(): Flow<Int>
 }
