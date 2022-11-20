@@ -99,8 +99,8 @@ class AppModule {
         InfoEditingRepositoryImpl(dataSource, hotelMapper)
 
     @Provides
-    fun providesSightsRepository(dataSource: LocalDataSource): SightsRepository =
-        SightsRepositoryImpl(dataSource)
+    fun providesSightsRepository(kudagoClient: KudagoClient, dataSource: LocalDataSource): SightsRepository =
+        SightsRepositoryImpl(kudagoClient, dataSource)
 
     @Provides
     fun providesLuggageRepository(dataSource: LocalDataSource): LuggageRepository =

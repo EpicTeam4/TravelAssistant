@@ -9,8 +9,9 @@ import okhttp3.OkHttpClient
 import okhttp3.Response
 import retrofit2.Retrofit
 import retrofit2.converter.gson.GsonConverterFactory
+import javax.inject.Inject
 
-class KudagoClient {
+class KudagoClient @Inject constructor() {
 
     private val retrofit: KudagoClientApi = Retrofit.Builder()
         .addConverterFactory(GsonConverterFactory.create())

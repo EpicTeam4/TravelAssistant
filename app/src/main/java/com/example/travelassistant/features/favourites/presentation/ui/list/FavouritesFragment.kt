@@ -14,6 +14,7 @@ import com.example.travelassistant.core.commands.ViewCommand
 import com.example.travelassistant.core.observe
 import com.example.travelassistant.core.toNavigateDirection
 import com.example.travelassistant.databinding.FragmentFavouritesBinding
+import com.example.travelassistant.features.cities.domain.model.PlaceDomain
 import com.example.travelassistant.features.favourites.presentation.adapters.CityWithFavouritePlacesAdapter
 import com.example.travelassistant.features.favourites.presentation.ui.SightsViewState
 
@@ -93,11 +94,11 @@ class FavouritesFragment : Fragment() {
         }
     }
 
-    private fun deleteSights(id: Int) {
+    private fun deleteSights(id: PlaceDomain) {
         sightsViewModel.deleteSights(id)
     }
 
-    private fun onSightsClick(id: Int) {
+    private fun onSightsClick(id: String) {
         sightsViewModel.openDetails(id)
     }
 }

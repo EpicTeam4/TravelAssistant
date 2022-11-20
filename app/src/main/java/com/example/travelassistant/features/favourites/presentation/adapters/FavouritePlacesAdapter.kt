@@ -4,8 +4,8 @@ import android.view.LayoutInflater
 import android.view.ViewGroup
 import androidx.recyclerview.widget.RecyclerView
 import com.example.travelassistant.R
-import com.example.travelassistant.core.domain.entity.Sights
 import com.example.travelassistant.databinding.FragmentPlacesRecyclerViewItemBinding
+import com.example.travelassistant.features.cities.domain.model.PlaceDomain
 import com.squareup.picasso.Picasso
 
 /**
@@ -18,9 +18,9 @@ import com.squareup.picasso.Picasso
  */
 
 class FavouritePlacesAdapter(
-    private val sights: MutableList<Sights>,
-    private val deleteSights: (id: Int) -> Unit,
-    private val onItemClicked: (id: Int) -> Unit
+    private val sights: MutableList<PlaceDomain>,
+    private val deleteSights: (id: PlaceDomain) -> Unit,
+    private val onItemClicked: (id: String) -> Unit
 ) : RecyclerView.Adapter<FavouritePlacesAdapter.ViewHolder>() {
 
     class ViewHolder(val binding: FragmentPlacesRecyclerViewItemBinding) :
@@ -36,16 +36,16 @@ class FavouritePlacesAdapter(
     override fun onBindViewHolder(holder: ViewHolder, position: Int) {
         with(holder.binding) {
             with(sights[position]) {
-                placeTitle.text = name
-                placeDescription.text = description
-                if (image?.isNotEmpty() == true) {
+                if (images.first().url.isNotEmpty()) {
                     Picasso.get()
-                        .load(image)
+                        .load(images.first().url)
                         .into(placeImage)
                 }
+                placeTitle.text = title
+                placeDescription.text = description
                 imgFavourite.isChecked = true
                 imgFavourite.setOnClickListener {
-                    deleteSights(id)
+                    deleteSights(this)
                 }
                 root.setOnClickListener {
                     onItemClicked(id)

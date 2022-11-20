@@ -5,8 +5,9 @@ import android.view.ViewGroup
 import androidx.recyclerview.widget.RecyclerView
 import com.example.travelassistant.R
 import com.example.travelassistant.core.domain.entity.City
-import com.example.travelassistant.core.domain.entity.Sights
 import com.example.travelassistant.databinding.FragmentFavouritesItemBinding
+import com.example.travelassistant.features.cities.domain.model.PlaceDomain
+import com.squareup.picasso.Picasso
 
 /**
  * City with favourite places adapter - родительский адаптер
@@ -20,9 +21,9 @@ import com.example.travelassistant.databinding.FragmentFavouritesItemBinding
 
 class CityWithFavouritePlacesAdapter(
     private val cities: MutableList<City>,
-    private val sights: MutableList<Sights>,
-    private val deleteSights: (id: Int) -> Unit,
-    private val onItemClicked: (id: Int) -> Unit
+    private val sights: MutableList<PlaceDomain>,
+    private val deleteSights: (id: PlaceDomain) -> Unit,
+    private val onItemClicked: (id: String) -> Unit
 ) : RecyclerView.Adapter<CityWithFavouritePlacesAdapter.ViewHolder>() {
 
     class ViewHolder(val binding: FragmentFavouritesItemBinding) :
@@ -37,19 +38,25 @@ class CityWithFavouritePlacesAdapter(
 
     override fun onBindViewHolder(holder: ViewHolder, position: Int) {
         with(holder.binding) {
-            itemName.text = cities[position].name
-            repeat(sights.size) {
-                val childMembersAdapter = FavouritePlacesAdapter(sights.filter { sights ->
-                    sights.slug == cities[position].slug
-                }.toMutableList(), { deleteSights(it) } ) { onItemClicked(it) }
-                favouriteSights.adapter = childMembersAdapter
+            with(cities[position]) {
+                if (image?.isNotEmpty() == true) {
+                    Picasso.get()
+                        .load(image)
+                        .into(img)
+                }
+                itemName.text = name
+                repeat(sights.size) {
+                    val childMembersAdapter =
+                        FavouritePlacesAdapter(sights, { deleteSights(it) }) { onItemClicked(it) }
+                    favouriteSights.adapter = childMembersAdapter
+                }
             }
         }
     }
 
     override fun getItemCount() = cities.size
 
-    fun setCitiesAndSights(citiesList: List<City>, sightsList: List<Sights>) {
+    fun setCitiesAndSights(citiesList: List<City>, sightsList: List<PlaceDomain>) {
         if (citiesList.isNotEmpty()) {
             cities.clear()
             cities.addAll(citiesList)
