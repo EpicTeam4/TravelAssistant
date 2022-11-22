@@ -41,11 +41,7 @@ class PersonalItemsFragment : Fragment() {
 
         _binding?.apply {
             addItem.setOnClickListener {
-                with(luggageViewModel) {
-                    luggageItem = luggageItem.copyItem(item = newItem.text.toString())
-                    addItem(luggageItem)
-                    newItem.setText(EMPTY_STRING)
-                }
+                addNewItem()
             }
         }
 
@@ -90,5 +86,14 @@ class PersonalItemsFragment : Fragment() {
 
     private fun deleteItem(id: Int) {
         luggageViewModel.deleteItem(id)
+    }
+
+    private fun addNewItem() {
+        with(luggageViewModel) {
+            luggageItem = luggageItem.copyItem(item = _binding?.newItem?.text.toString())
+            addItem(luggageItem)
+            itemsAdapter.addItem(luggageItem)
+            _binding?.newItem?.setText(EMPTY_STRING)
+        }
     }
 }

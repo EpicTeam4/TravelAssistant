@@ -47,7 +47,9 @@ class CityWithFavouritePlacesAdapter(
                 itemName.text = name
                 repeat(sights.size) {
                     val childMembersAdapter =
-                        FavouritePlacesAdapter(sights, { deleteSights(it) }) { onItemClicked(it) }
+                        FavouritePlacesAdapter(sights.filter { sight ->
+                            sight.location == slug
+                        }.toMutableList(), { deleteSights(it) }) { onItemClicked(it) }
                     favouriteSights.adapter = childMembersAdapter
                 }
             }
@@ -64,7 +66,6 @@ class CityWithFavouritePlacesAdapter(
         }
 
         if (sightsList.isNotEmpty()) {
-            sights.clear()
             sights.addAll(sightsList)
             notifyDataSetChanged()
         }

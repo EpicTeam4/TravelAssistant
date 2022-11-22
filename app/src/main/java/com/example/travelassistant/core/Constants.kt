@@ -12,4 +12,10 @@ object Constants {
     const val NOTIFICATION_ID = "notification_id"
     const val NOTIF_ID = 101
     const val NOTIF_SECOND_ID = 102
+    const val HOTEL_FOR_ANIMALS = "зоогостиница"
+    const val FOR_DOGS = "для собак"
+    const val FOR_ANIMALS = "животных"
+    const val RAILWAY = "railway"
+    const val AIRPORT = "airport"
+    const val NOTIFICATION_TEXT = "notification_text"
 }

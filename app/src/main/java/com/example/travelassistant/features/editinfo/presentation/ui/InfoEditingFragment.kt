@@ -8,6 +8,7 @@ import android.view.View
 import android.view.ViewGroup
 import android.widget.AdapterView
 import android.widget.ArrayAdapter
+import androidx.core.view.isInvisible
 import androidx.core.view.isVisible
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.activityViewModels
@@ -17,7 +18,11 @@ import androidx.work.WorkManager
 import com.example.travelassistant.R
 import com.example.travelassistant.TimeNotification
 import com.example.travelassistant.core.Constants.ACTION_NAME
+import com.example.travelassistant.core.Constants.AIRPORT
+import com.example.travelassistant.core.Constants.EMPTY_STRING
 import com.example.travelassistant.core.Constants.NOTIFICATION_ID
+import com.example.travelassistant.core.Constants.NOTIFICATION_TEXT
+import com.example.travelassistant.core.Constants.RAILWAY
 import com.example.travelassistant.core.observe
 import com.example.travelassistant.core.orDefault
 import com.example.travelassistant.databinding.FragmentEditEventBinding
@@ -30,8 +35,10 @@ import java.util.concurrent.TimeUnit
 class InfoEditingFragment : Fragment() {
 
     private lateinit var portsList: ArrayAdapter<String>
+    private lateinit var railwayList: ArrayAdapter<String>
     private lateinit var hotelsList: ArrayAdapter<String>
     private lateinit var portsDestList: ArrayAdapter<String>
+    private lateinit var railwayDestList: ArrayAdapter<String>
     private var _binding: FragmentEditEventBinding? = null
     private val infoViewModel: InfoViewModel by activityViewModels()
 
@@ -56,6 +63,33 @@ class InfoEditingFragment : Fragment() {
         }
 
         _binding?.apply {
+            infoViewModel.apply {
+
+                avia.setOnClickListener {
+                    spinner.isInvisible = false
+                    spinnerRailway.isInvisible = true
+                    setPortType(true)
+                }
+
+                railway.setOnClickListener {
+                    spinner.isInvisible = true
+                    spinnerRailway.isInvisible = false
+                    setPortType(false)
+                }
+
+                aviaDest.setOnClickListener {
+                    spinnerDest.isInvisible = false
+                    spinnerRailwayDest.isInvisible = true
+                    setPortDestType(true)
+                }
+
+                railwayDest.setOnClickListener {
+                    spinnerDest.isInvisible = true
+                    spinnerRailwayDest.isInvisible = false
+                    setPortDestType(false)
+                }
+            }
+
             button.setOnClickListener {
                 updateData()
                 infoViewModel.apply {
@@ -78,11 +112,11 @@ class InfoEditingFragment : Fragment() {
                     override fun onNothingSelected(parent: AdapterView<*>?) {}
                 }
 
-            dateOfJourney.setOnClickListener {
+            calendar.setOnClickListener {
                 pickDate(TIME_ID)
             }
 
-            dateOfJourneyDest.setOnClickListener {
+            calendarDest.setOnClickListener {
                 pickDate(TIME_DEST_ID)
             }
         }
@@ -100,23 +134,35 @@ class InfoEditingFragment : Fragment() {
 
     private fun initObservers() {
         portsList =
-            (ArrayAdapter<String>(requireContext(), android.R.layout.simple_spinner_item)).apply {
+            (ArrayAdapter<String>(requireContext(), R.layout.spinner_item)).apply {
+                setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item)
+            }
+
+        railwayList =
+            (ArrayAdapter<String>(requireContext(), R.layout.spinner_item)).apply {
                 setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item)
             }
 
         portsDestList =
-            (ArrayAdapter<String>(requireContext(), android.R.layout.simple_spinner_item)).apply {
+            (ArrayAdapter<String>(requireContext(), R.layout.spinner_item)).apply {
+                setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item)
+            }
+
+        railwayDestList =
+            (ArrayAdapter<String>(requireContext(), R.layout.spinner_item)).apply {
                 setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item)
             }
 
         hotelsList =
-            (ArrayAdapter<String>(requireContext(), android.R.layout.simple_spinner_item)).apply {
+            (ArrayAdapter<String>(requireContext(), R.layout.spinner_item)).apply {
                 setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item)
             }
 
         _binding?.apply {
             spinner.adapter = portsList
+            spinnerRailway.adapter = railwayList
             spinnerDest.adapter = portsDestList
+            spinnerRailwayDest.adapter = railwayDestList
             spinnerHotel.adapter = hotelsList
         }
     }
@@ -126,15 +172,16 @@ class InfoEditingFragment : Fragment() {
     }
 
     private fun setAlarm(viewCommand: SetAlarm) {
-        setAlarm(viewCommand.id, viewCommand.time)
+        setAlarm(viewCommand.id, viewCommand.time, viewCommand.alarmText)
     }
 
-    private fun setAlarm(id: Int, time: Long) {
+    private fun setAlarm(id: Int, time: Long, alarmText: String) {
         WorkManager.getInstance(requireContext()).cancelAllWorkByTag(id.toString())
 
         val data = Data.Builder()
             .putLong(ACTION_NAME, time)
             .putInt(NOTIFICATION_ID, id)
+            .putString(NOTIFICATION_TEXT, alarmText)
             .build()
 
         val myWorkRequest = OneTimeWorkRequest.Builder(TimeNotification::class.java)
@@ -159,20 +206,44 @@ class InfoEditingFragment : Fragment() {
         _binding?.apply {
             with(infoViewModel) {
                 dateOfJourney.setText(convertMillisToText(infoAboutTravel.timeInMillis))
-                spinner.setSelection(event?.portId.orDefault() - 1)
+                if (infoAboutTravel.portType == AIRPORT) {
+                    if (infoAboutTravel.portId <= airports.size) {
+                        spinner.setSelection(infoAboutTravel.portId)
+                    } else {
+                        spinner.setSelection(DEFAULT_POSITION)
+                    }
+                } else {
+                    if (infoAboutTravel.portId <= railways.size) {
+                        spinnerRailway.setSelection(infoAboutTravel.portId)
+                    } else {
+                        spinnerRailway.setSelection(DEFAULT_POSITION)
+                    }
+                }
                 flight.setText(event?.flightNum)
                 seat.setText(event?.seat)
                 route.setText(event?.wayDescription)
                 spinnerTime.setSelection(convertHoursToAdapterPosition(event?.hours))
                 dateOfJourneyDest.setText(convertMillisToText(infoAboutTravel.timeInMillisDest))
-                spinnerDest.setSelection(event?.destPortId.orDefault() - 1)
+                if (infoAboutTravel.destPortType == AIRPORT) {
+                    if (infoAboutTravel.destPortId <= airportsDest.size) {
+                        spinnerDest.setSelection(infoAboutTravel.destPortId)
+                    } else {
+                        spinnerDest.setSelection(DEFAULT_POSITION)
+                    }
+                } else {
+                    if (infoAboutTravel.destPortId <= railwaysDest.size) {
+                        spinnerRailwayDest.setSelection(infoAboutTravel.destPortId)
+                    } else {
+                        spinnerRailwayDest.setSelection(DEFAULT_POSITION)
+                    }
+                }
                 flightDest.setText(event?.flightNumFromDest)
                 seatDest.setText(event?.seatFromDest)
                 routeDest.setText(event?.wayDescriptionFromDest)
                 spinnerTimeDest.setSelection(convertHoursToAdapterPosition(event?.hoursFromDest))
                 wayToHotel.setText(event?.wayToHotel)
 
-                if (hotels?.isNotEmpty() == true) {
+                if (hotels.isNotEmpty()) {
                     val hotel = hotels.single { it.id == event?.hotelId }.title
                     val index = hotels.indexOfFirst { it.title == hotel }
 
@@ -206,11 +277,28 @@ class InfoEditingFragment : Fragment() {
                         }
                     }
                 }
+
+                if (dateOfJourney.text.toString() != EMPTY_STRING && infoAboutTravel.hours.toInt() != 0) {
+                    notify.isActivated
+                    notify.setImageResource(R.drawable.alarm_on)
+                } else {
+                    notify.isActivated = false
+                    notify.setImageResource(R.drawable.alarm_off)
+                }
+                if (dateOfJourneyDest.text.toString() != EMPTY_STRING && infoAboutTravel.hoursFromDest.toInt() != 0) {
+                    notifyDest.isActivated
+                    notifyDest.setImageResource(R.drawable.alarm_on)
+                } else {
+                    notifyDest.isActivated = false
+                    notifyDest.setImageResource(R.drawable.alarm_off)
+                }
             }
 
-            if (portsList.isEmpty) ports?.forEach { portsList.add(it.name) }
-            if (portsDestList.isEmpty) portsDest?.forEach { portsDestList.add(it.name) }
-            if (hotelsList.isEmpty) hotels?.forEach { hotelsList.add(it.title) }
+            if (portsList.isEmpty) airports.forEach { portsList.add(it.name) }
+            if (railwayList.isEmpty) railways.forEach { railwayList.add(it.name) }
+            if (portsDestList.isEmpty) airportsDest.forEach { portsDestList.add(it.name) }
+            if (railwayDestList.isEmpty) railwaysDest.forEach { railwayDestList.add(it.name) }
+            if (hotelsList.isEmpty) hotels.forEach { hotelsList.add(it.title) }
         }
     }
 
@@ -233,12 +321,40 @@ class InfoEditingFragment : Fragment() {
         _binding?.apply {
             with(infoViewModel) {
                 infoAboutTravel = infoAboutTravel.copyInfoAboutTravel(
-                    portId = spinner.selectedItemPosition.orDefault() + 1,
+                    portId = when (infoAboutTravel.portType) {
+                        EMPTY_STRING -> {
+                            setPortType(true)
+                            spinner.selectedItemPosition.orDefault()
+                        }
+                        AIRPORT -> {
+                            spinner.selectedItemPosition.orDefault()
+                        }
+                        RAILWAY -> {
+                            spinnerRailway.selectedItemPosition.orDefault()
+                        }
+                        else -> {
+                            spinner.selectedItemPosition.orDefault()
+                        }
+                    },
                     flightNum = flight.text.toString(),
                     seat = seat.text.toString(),
                     wayDescription = route.text.toString(),
                     hours = spinnerTime.selectedItemPosition.orDefault().toHours(),
-                    destPortId = spinnerDest.selectedItemPosition.orDefault() + 1,
+                    destPortId = when (infoAboutTravel.destPortType) {
+                        EMPTY_STRING -> {
+                            setPortDestType(true)
+                            spinnerDest.selectedItemPosition.orDefault()
+                        }
+                        AIRPORT -> {
+                            spinnerDest.selectedItemPosition.orDefault()
+                        }
+                        RAILWAY -> {
+                            spinnerRailwayDest.selectedItemPosition.orDefault()
+                        }
+                        else -> {
+                            spinnerDest.selectedItemPosition.orDefault()
+                        }
+                    },
                     flightNumFromDest = flightDest.text.toString(),
                     seatFromDest = seatDest.text.toString(),
                     wayDescriptionFromDest = route.text.toString(),
@@ -246,6 +362,21 @@ class InfoEditingFragment : Fragment() {
                     hotelId = selectedHotelId,
                     wayToHotel = wayToHotel.text.toString()
                 )
+
+                if (dateOfJourney.text.toString() != EMPTY_STRING && infoAboutTravel.hours.toInt() != 0) {
+                    notify.isActivated
+                    notify.setImageResource(R.drawable.alarm_on)
+                } else {
+                    notify.isActivated = false
+                    notify.setImageResource(R.drawable.alarm_off)
+                }
+                if (dateOfJourneyDest.text.toString() != EMPTY_STRING && infoAboutTravel.hoursFromDest.toInt() != 0) {
+                    notifyDest.isActivated
+                    notifyDest.setImageResource(R.drawable.alarm_on)
+                } else {
+                    notifyDest.isActivated = false
+                    notifyDest.setImageResource(R.drawable.alarm_off)
+                }
             }
         }
     }

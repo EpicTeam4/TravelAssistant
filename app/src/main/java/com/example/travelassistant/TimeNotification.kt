@@ -11,6 +11,7 @@ import androidx.core.app.NotificationManagerCompat
 import androidx.work.Worker
 import androidx.work.WorkerParameters
 import com.example.travelassistant.core.Constants.NOTIFICATION_ID
+import com.example.travelassistant.core.Constants.NOTIFICATION_TEXT
 import javax.inject.Inject
 
 class TimeNotification @Inject constructor(
@@ -20,12 +21,17 @@ class TimeNotification @Inject constructor(
 
     override fun doWork(): Result {
         val id = inputData.getInt(NOTIFICATION_ID, DEFAULT_VALUE)
-        createNotificationChannel(id)
+        val text = inputData.getString(NOTIFICATION_TEXT)
+        if (text != null) {
+            createNotificationChannel(id, text)
+        } else {
+            createNotificationChannel(id, applicationContext.getString(R.string.notification_title))
+        }
 
         return Result.success()
     }
 
-    private fun createNotificationChannel(id: Int) {
+    private fun createNotificationChannel(id: Int, text: String) {
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
             val notificationChannel = NotificationChannel(
                 CHANNEL_ID,
@@ -35,18 +41,18 @@ class TimeNotification @Inject constructor(
             NotificationManagerCompat
                 .from(applicationContext)
                 .createNotificationChannel(notificationChannel)
-            notifyNotification(id)
+            notifyNotification(id, text)
         } else {
-            notifyNotification(id)
+            notifyNotification(id, text)
         }
     }
 
-    private fun notifyNotification(id: Int) {
+    private fun notifyNotification(id: Int, text: String) {
         with(NotificationManagerCompat.from(applicationContext)) {
             val alarmSound = RingtoneManager.getDefaultUri(RingtoneManager.TYPE_NOTIFICATION)
             val notification = NotificationCompat.Builder(applicationContext, CHANNEL_ID)
                 .setContentTitle(applicationContext.getString(R.string.notification))
-                .setContentText(applicationContext.getString(R.string.notification_title))
+                .setContentText(text)
                 .setSmallIcon(R.drawable.star_filled)
                 .setColor(Color.BLUE)
                 .setSound(alarmSound)

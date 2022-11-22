@@ -22,8 +22,8 @@
 
         <EditText
             android:id="@+id/newItem"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
+            android:layout_width="377dp"
+            android:layout_height="41dp"
             android:ems="10"
             android:hint="@string/add_item"
             android:importantForAutofill="no"
@@ -56,6 +56,7 @@
         android:clickable="true"
         android:focusable="true"
         android:src="@drawable/add_item"
+        app:backgroundTint="@color/primaryColor"
         tools:ignore="ContentDescription,RtlHardcoded" />
 
 </FrameLayout>

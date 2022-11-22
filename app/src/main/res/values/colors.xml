@@ -1,5 +1,11 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
+    <color name="tiffany">#0ABAB5</color>
+    <color name="cian">#00E0FF</color>
+    <color name="primaryColor">#0BA4EA</color>
+    <color name="primaryColorVariant">#067388</color>
+    <color name="alarmColor">#0F9F21</color>
+
     <color name="purple_200">#FFBB86FC</color>
     <color name="purple_500">#FF6200EE</color>
     <color name="purple_700">#FF3700B3</color>

@@ -5,9 +5,11 @@ import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.example.travelassistant.R
+import com.example.travelassistant.core.Constants.AIRPORT
 import com.example.travelassistant.core.Constants.EMPTY_STRING
 import com.example.travelassistant.core.Constants.NOTIF_ID
 import com.example.travelassistant.core.Constants.NOTIF_SECOND_ID
+import com.example.travelassistant.core.Constants.RAILWAY
 import com.example.travelassistant.core.domain.State
 import com.example.travelassistant.core.domain.data
 import com.example.travelassistant.core.domain.entity.City
@@ -45,7 +47,6 @@ class TravelInfoViewModel @Inject constructor(
     var selectedDateTime = DateTime()
     var infoAboutTravel = InfoAboutTravel()
     var selectedHotelPos = 0
-    var tempDate: Long = 0
     var content = TravelInfoViewState.Content()
 
     val commands = CommandsLiveData<ViewCommand>()
@@ -80,20 +81,44 @@ class TravelInfoViewModel @Inject constructor(
             }
 
             if (cities != null && ports != null) {
-                handleData(cities = cities, ports = if (cityId != DEFAULT_VALUE) {
-                    ports.filter { it.location == cityId.toLong() }
-                } else {
-                    ports
-                }, portsDest = ports.filter { it.location == infoAboutTravel.city_id })
+                handleData(cities = cities,
+                    airports = if (cityId != DEFAULT_VALUE) {
+                        ports.filter { it.location == cityId.toLong() && it.slug == "airport" }
+                    } else {
+                        ports.filter { it.slug == "airport" }
+                    },
+                    railways = if (cityId != DEFAULT_VALUE) {
+                        ports.filter { it.location == cityId.toLong() && it.slug == "railway" }
+                    } else {
+                        ports.filter { it.slug == "railway" }
+                    },
+                    airportsDest = ports.filter {
+                        it.location == infoAboutTravel.city_id && it.slug == "airport"
+                    },
+                    railwaysDest = ports.filter {
+                        it.location == infoAboutTravel.city_id && it.slug == "railway"
+                    })
             } else {
                 handleError(false)
             }
         }
     }
 
-    private suspend fun handleData(cities: List<City>, ports: List<Port>, portsDest: List<Port>) {
+    private suspend fun handleData(
+        cities: List<City>,
+        airports: List<Port>,
+        railways: List<Port>,
+        airportsDest: List<Port>,
+        railwaysDest: List<Port>
+    ) {
         withContext(Main) {
-            dataContent.value = content.copy(cities = cities, ports = ports, portsDest = portsDest)
+            dataContent.value = content.copy(
+                cities = cities,
+                airports = airports,
+                railways = railways,
+                airportsDest = airportsDest,
+                railwaysDest = railwaysDest
+            )
         }
     }
 
@@ -125,26 +150,26 @@ class TravelInfoViewModel @Inject constructor(
     /* Date & Time */
 
     fun getDateInMillis() {
-        tempDate = with(selectedDateTime) {
-            formatter.getSelectedDateTimeInMillis(year, month, day, hours, minutes)
-        }
-        infoAboutTravel = infoAboutTravel.copyInfoAboutTravel(timeInMillis = tempDate)
+        infoAboutTravel =
+            infoAboutTravel.copyInfoAboutTravel(timeInMillis = with(selectedDateTime) {
+                formatter.getSelectedDateTimeInMillis(year, month, day, hours, minutes)
+            })
 
         setDateTime()
     }
 
     fun getDateDestInMillis() {
-        tempDate = with(selectedDateTime) {
-            formatter.getSelectedDateTimeInMillis(year, month, day, hours, minutes)
-        }
-        infoAboutTravel = infoAboutTravel.copyInfoAboutTravel(timeInMillisDest = tempDate)
+        infoAboutTravel =
+            infoAboutTravel.copyInfoAboutTravel(timeInMillisDest = with(selectedDateTime) {
+                formatter.getSelectedDateTimeInMillis(year, month, day, hours, minutes)
+            })
 
         setDateTimeDest()
     }
 
     private fun setDateTime() {
         viewModelScope.launch {
-            val datetime = formatter.convertLongDateToString(tempDate)
+            val datetime = formatter.convertLongDateToString(infoAboutTravel.timeInMillis)
             if (datetime != EMPTY_STRING) {
                 dataContent.value = content.copy(datetime = datetime)
             }
@@ -153,10 +178,34 @@ class TravelInfoViewModel @Inject constructor(
 
     private fun setDateTimeDest() {
         viewModelScope.launch {
-            val datetimeDest = formatter.convertLongDateToString(tempDate)
+            val datetimeDest = formatter.convertLongDateToString(infoAboutTravel.timeInMillisDest)
             if (datetimeDest != EMPTY_STRING) {
                 dataContent.value = content.copy(dateTimeDest = datetimeDest)
             }
+        }
+    }
+
+    fun getDateTime(): String {
+        return formatter.convertLongDateToString(infoAboutTravel.timeInMillis)
+    }
+
+    fun getDestDateTime(): String {
+        return formatter.convertLongDateToString(infoAboutTravel.timeInMillisDest)
+    }
+
+    fun setPortType(avia: Boolean) {
+        infoAboutTravel = if (avia) {
+            infoAboutTravel.copyInfoAboutTravel(portType = AIRPORT)
+        } else {
+            infoAboutTravel.copyInfoAboutTravel(portType = RAILWAY)
+        }
+    }
+
+    fun setPortDestType(avia: Boolean) {
+        infoAboutTravel = if (avia) {
+            infoAboutTravel.copyInfoAboutTravel(destPortType = AIRPORT)
+        } else {
+            infoAboutTravel.copyInfoAboutTravel(destPortType = RAILWAY)
         }
     }
 
@@ -167,7 +216,7 @@ class TravelInfoViewModel @Inject constructor(
             val time =
                 infoAboutTravel.timeInMillis - infoAboutTravel.hours - System.currentTimeMillis()
             val id = NOTIF_ID
-            commands.onNext(SetAlarm(id, time))
+            commands.onNext(SetAlarm(id, time, infoAboutTravel.wayDescription))
         }
     }
 
@@ -176,7 +225,7 @@ class TravelInfoViewModel @Inject constructor(
             val time =
                 infoAboutTravel.timeInMillisDest - infoAboutTravel.hoursFromDest - System.currentTimeMillis()
             val id = NOTIF_SECOND_ID
-            commands.onNext(SetAlarm(id, time))
+            commands.onNext(SetAlarm(id, time, infoAboutTravel.wayDescriptionFromDest))
         }
     }
 
