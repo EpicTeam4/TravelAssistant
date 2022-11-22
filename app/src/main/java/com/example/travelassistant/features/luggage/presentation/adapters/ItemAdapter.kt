@@ -36,6 +36,7 @@ class ItemAdapter(
             itemName.text = items[position].item
             del.setOnClickListener {
                 deleteItem(items[position].id)
+                notifyItemRemoved(items.size)
             }
         }
     }
@@ -46,6 +47,11 @@ class ItemAdapter(
             items.addAll(itemsList)
             notifyDataSetChanged()
         }
+    }
+
+    fun addItem(item: PersonalItem) {
+        items.add(item)
+        notifyItemInserted(items.size)
     }
 
     override fun getItemCount() = items.size

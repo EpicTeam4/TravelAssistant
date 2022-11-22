@@ -1,5 +1,8 @@
 package com.example.travelassistant.features.travelinfo.domain.usecase
 
+import com.example.travelassistant.core.Constants.FOR_ANIMALS
+import com.example.travelassistant.core.Constants.FOR_DOGS
+import com.example.travelassistant.core.Constants.HOTEL_FOR_ANIMALS
 import com.example.travelassistant.core.domain.State
 import com.example.travelassistant.core.domain.entity.Port
 import com.example.travelassistant.core.domain.entity.City
@@ -36,7 +39,14 @@ class GetInfoUseCase @Inject constructor(private val infoRepository: InfoReposit
         withContext(Dispatchers.IO) { safeCall { infoRepository.getPorts() } }
 
     suspend fun getHotels(location: String): State<List<Hotel>> =
-        withContext(Dispatchers.IO) { safeCall { infoRepository.getHotels(location) } }
+        withContext(Dispatchers.IO) {
+            safeCall {
+                infoRepository.getHotels(location).filter { hotel ->
+                    !(hotel.title.contains(FOR_ANIMALS) && !hotel.title.contains(FOR_DOGS)
+                            && !hotel.title.contains(HOTEL_FOR_ANIMALS))
+                }
+            }
+        }
 
     suspend fun addDetails(info: InfoAboutTravel) =
         withContext(Dispatchers.IO) { infoRepository.addDetails(info) }

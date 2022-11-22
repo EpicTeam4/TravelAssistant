@@ -18,8 +18,10 @@ sealed class TravelInfoViewState {
     data class Error(val errorModel: ErrorModel) : TravelInfoViewState()
     data class Content(
         val cities: List<City> = listOf(),
-        val ports: List<Port> = listOf(),
-        val portsDest: List<Port> = listOf(),
+        val airports: List<Port> = listOf(),
+        val railways: List<Port> = listOf(),
+        val airportsDest: List<Port> = listOf(),
+        val railwaysDest: List<Port> = listOf(),
         val hotels: List<Hotel> = listOf(),
         val items: List<PersonalItem> = listOf(),
         val datetime: String = EMPTY_STRING,

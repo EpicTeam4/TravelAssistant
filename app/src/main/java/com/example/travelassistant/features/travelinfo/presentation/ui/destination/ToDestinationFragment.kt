@@ -6,15 +6,19 @@ import android.view.MenuItem
 import android.view.View
 import android.view.ViewGroup
 import android.widget.ArrayAdapter
+import androidx.core.view.isInvisible
 import androidx.core.view.isVisible
 import androidx.fragment.app.activityViewModels
 import com.example.travelassistant.R
+import com.example.travelassistant.core.Constants.AIRPORT
+import com.example.travelassistant.core.Constants.EMPTY_STRING
+import com.example.travelassistant.core.Constants.RAILWAY
+import com.example.travelassistant.core.observe
 import com.example.travelassistant.core.orDefault
+import com.example.travelassistant.core.utils.toHours
 import com.example.travelassistant.databinding.FragmentToDestinationBinding
 import com.example.travelassistant.features.travelinfo.presentation.ui.TravelInfoViewModel
 import com.example.travelassistant.features.travelinfo.presentation.ui.TravelInfoViewState
-import com.example.travelassistant.core.observe
-import com.example.travelassistant.core.utils.toHours
 import dagger.hilt.android.AndroidEntryPoint
 
 @AndroidEntryPoint
@@ -22,6 +26,7 @@ class ToDestinationFragment : BaseFragment() {
 
     private var _binding: FragmentToDestinationBinding? = null
     private lateinit var portsList: ArrayAdapter<String>
+    private lateinit var railwayList: ArrayAdapter<String>
     private val infoViewModel: TravelInfoViewModel by activityViewModels()
 
     override fun onCreateView(
@@ -44,25 +49,44 @@ class ToDestinationFragment : BaseFragment() {
         infoViewModel.loadData()
 
         _binding?.apply {
-            button.setOnClickListener {
-                getSelectedPortId()
-                getSelectedTime()
-                setData()
+            with(infoViewModel) {
 
-                infoViewModel.openFromDestination()
+                avia.setOnClickListener{
+                    spinner.isInvisible = false
+                    spinnerRailway.isInvisible = true
+                    setPortType(true)
+                }
+
+                railway.setOnClickListener {
+                    spinner.isInvisible = true
+                    spinnerRailway.isInvisible = false
+                    setPortType(false)
+                }
+
+                button.setOnClickListener {
+                    getSelectedTime()
+                    setData()
+
+                    when (infoAboutTravel.portType) {
+                        EMPTY_STRING -> {
+                            setPortType(true)
+                            getSelectedPortId()
+                        }
+                        AIRPORT -> {
+                            getSelectedPortId()
+                        }
+                        RAILWAY -> {
+                            getSelectedRailwayPortId()
+                        }
+                    }
+
+                    openFromDestination()
+                }
             }
 
-            dateOfJourney.setOnClickListener {
+            calendar.setOnClickListener {
                 pickDate(TIME_ID)
             }
-        }
-    }
-
-    override fun onResume() {
-        super.onResume()
-        _binding?.apply {
-            spinner.setSelection(infoViewModel.infoAboutTravel.portId-1)
-            spinnerTime.selectedItemPosition.let { spinnerTime.setSelection(it) }
         }
     }
 
@@ -72,12 +96,17 @@ class ToDestinationFragment : BaseFragment() {
     }
 
     private fun initObservers() {
-        portsList = (ArrayAdapter<String>(requireContext(), android.R.layout.simple_spinner_item)).apply {
-                setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item)
-            }
+        portsList = (ArrayAdapter<String>(requireContext(), R.layout.spinner_item)).apply {
+            setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item)
+        }
+
+        railwayList = (ArrayAdapter<String>(requireContext(), R.layout.spinner_item)).apply {
+            setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item)
+        }
 
         infoViewModel.dataState.observe(viewLifecycleOwner, ::handleState)
         _binding?.spinner?.adapter = portsList
+        _binding?.spinnerRailway?.adapter = railwayList
     }
 
     private fun handleState(state: TravelInfoViewState) {
@@ -90,8 +119,25 @@ class ToDestinationFragment : BaseFragment() {
     }
 
     private fun TravelInfoViewState.Content.handle() {
-        if (portsList.isEmpty) ports.forEach { portsList.add(it.name) }
-        _binding?.dateOfJourney?.setText(datetime)
+        if (portsList.isEmpty) airports.forEach { portsList.add(it.name) }
+        if (railwayList.isEmpty) railways.forEach { railwayList.add(it.name) }
+
+        _binding?.apply {
+            with(infoViewModel) {
+                dateOfJourney.setText(getDateTime())
+                if (infoAboutTravel.portType == AIRPORT) {
+                    spinner.setSelection(infoAboutTravel.portId)
+                } else {
+                    spinnerRailway.setSelection(infoAboutTravel.portId)
+                }
+                spinnerTime.selectedItemPosition.let { infoAboutTravel.hours }
+
+                if (dateOfJourney.text.toString() != EMPTY_STRING && infoAboutTravel.hours.toInt() != 0) {
+                    notify.isActivated
+                    notify.setImageResource(R.drawable.alarm_on)
+                }
+            }
+        }
     }
 
     private fun TravelInfoViewState.Error.handle() {
@@ -109,18 +155,22 @@ class ToDestinationFragment : BaseFragment() {
         }
     }
 
-    private fun getSelectedPortId(): Int {
+    private fun getSelectedPortId() {
         infoViewModel.infoAboutTravel = infoViewModel.infoAboutTravel.copyInfoAboutTravel(
-            portId = _binding?.spinner?.selectedItemPosition.orDefault() + 1
+            portId = _binding?.spinner?.selectedItemPosition.orDefault()
         )
-        return infoViewModel.infoAboutTravel.portId
     }
 
-    private fun getSelectedTime(): Long {
+    private fun getSelectedRailwayPortId() {
+        infoViewModel.infoAboutTravel = infoViewModel.infoAboutTravel.copyInfoAboutTravel(
+            portId = _binding?.spinnerRailway?.selectedItemPosition.orDefault()
+        )
+    }
+
+    private fun getSelectedTime() {
         infoViewModel.infoAboutTravel = infoViewModel.infoAboutTravel.copyInfoAboutTravel(
             hours = _binding?.spinnerTime?.selectedItemPosition.orDefault().toHours()
         )
-        return infoViewModel.infoAboutTravel.hours
     }
 
     private fun setData() {

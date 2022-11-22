@@ -27,6 +27,7 @@
                     android:id="@+id/spinner"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
+                    android:theme="@style/SpinnerTextViewItem"
                     app:layout_constraintTop_toTopOf="parent" />
 
                 <TextView
@@ -93,9 +94,9 @@
             android:id="@+id/progressBar"
             android:layout_width="match_parent"
             android:layout_height="match_parent"
-            android:indeterminate="true"
             android:layout_gravity="center"
-            android:indeterminateTint="?attr/colorPrimary"/>
+            android:indeterminate="true"
+            android:indeterminateTint="?attr/colorPrimary" />
 
     </FrameLayout>
 

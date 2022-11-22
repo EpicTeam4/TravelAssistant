@@ -16,9 +16,11 @@ sealed class InfoViewState {
     data class Error(val errorModel: ErrorModel) : InfoViewState()
     data class Content(
         val event: InfoAboutTravel? = null,
-        val ports: List<Port>? = listOf(),
-        val portsDest: List<Port>? = listOf(),
-        val hotels: List<Hotel>? = listOf(),
+        val airports: List<Port> = listOf(),
+        val railways: List<Port> = listOf(),
+        val airportsDest: List<Port> = listOf(),
+        val railwaysDest: List<Port> = listOf(),
+        val hotels: List<Hotel> = listOf(),
         val cityId: Int = 0
     ) : InfoViewState()
 }

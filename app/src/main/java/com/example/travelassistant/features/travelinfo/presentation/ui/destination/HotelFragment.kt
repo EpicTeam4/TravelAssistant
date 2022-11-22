@@ -16,8 +16,10 @@ import com.example.travelassistant.R
 import com.example.travelassistant.TimeNotification
 import com.example.travelassistant.core.Constants.ACTION_NAME
 import com.example.travelassistant.core.Constants.NOTIFICATION_ID
+import com.example.travelassistant.core.Constants.NOTIFICATION_TEXT
 import com.example.travelassistant.core.commands.SetAlarm
 import com.example.travelassistant.core.commands.ViewCommand
+import com.example.travelassistant.core.domain.entity.InfoAboutTravel
 import com.example.travelassistant.core.observe
 import com.example.travelassistant.databinding.FragmentHotelBinding
 import com.example.travelassistant.features.travelinfo.presentation.ui.TravelInfoViewModel
@@ -74,6 +76,8 @@ class HotelFragment : BaseFragment() {
 
                     setAlarm()
                     setSecondAlarm()
+
+                    infoAboutTravel = InfoAboutTravel()
                 }
             }
 
@@ -96,7 +100,7 @@ class HotelFragment : BaseFragment() {
 
     private fun initObservers() {
         hotelsList =
-            (ArrayAdapter<String>(requireContext(), android.R.layout.simple_spinner_item)).apply {
+            (ArrayAdapter<String>(requireContext(), R.layout.spinner_item)).apply {
                 setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item)
             }
         _binding?.spinner?.adapter = hotelsList
@@ -158,13 +162,14 @@ class HotelFragment : BaseFragment() {
     }
 
     private fun setAlarm(viewCommand: SetAlarm) {
-        setAlarm(viewCommand.id, viewCommand.time)
+        setAlarm(viewCommand.id, viewCommand.time, viewCommand.alarmText)
     }
 
-    private fun setAlarm(id: Int, time: Long) {
+    private fun setAlarm(id: Int, time: Long, alarmText: String) {
         val data = Data.Builder()
             .putLong(ACTION_NAME, time)
             .putInt(NOTIFICATION_ID, id)
+            .putString(NOTIFICATION_TEXT, alarmText)
             .build()
 
         val myWorkRequest = OneTimeWorkRequest.Builder(TimeNotification::class.java)

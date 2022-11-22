@@ -37,5 +37,6 @@
 
     /* fragment_hometown */
     <dimen name="content_panel_layout_height">200dp</dimen>
+    <dimen name="imagebutton_to_detail">4dp</dimen>
 
 </resources>

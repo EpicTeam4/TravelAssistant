@@ -12,6 +12,7 @@ data class InfoAboutTravel(
     @ColumnInfo(name = Schema.CITY_ID) val city_id: Long = 0,
     @ColumnInfo(name = Schema.TIME) val timeInMillis: Long = 0,
     @ColumnInfo(name = Schema.PORT_ID) val portId: Int = 0,
+    @ColumnInfo(name = Schema.PORT_TYPE) val portType: String = EMPTY_STRING,
     @ColumnInfo(name = Schema.FLIGHT) val flightNum: String = EMPTY_STRING,
     @ColumnInfo(name = Schema.SEAT) val seat: String = EMPTY_STRING,
     @ColumnInfo(name = Schema.WAY) val wayDescription: String = EMPTY_STRING,
@@ -19,6 +20,7 @@ data class InfoAboutTravel(
     @ColumnInfo(name = Schema.TIME_DEST) val timeInMillisDest: Long = 0,
     @ColumnInfo(name = Schema.HOURS_DEST) val hoursFromDest: Long = 0,
     @ColumnInfo(name = Schema.PORT_ID_DEST) val destPortId: Int = 0,
+    @ColumnInfo(name = Schema.DEST_PORT_TYPE) val destPortType: String = EMPTY_STRING,
     @ColumnInfo(name = Schema.FLIGHT_DEST) val flightNumFromDest: String = EMPTY_STRING,
     @ColumnInfo(name = Schema.SEAT_DEST) val seatFromDest: String = EMPTY_STRING,
     @ColumnInfo(name = Schema.WAY_DEST) val wayDescriptionFromDest: String = EMPTY_STRING,
@@ -31,6 +33,7 @@ data class InfoAboutTravel(
         const val CITY_ID = "city_id"
         const val TIME = "timeInMillis"
         const val PORT_ID = "portId"
+        const val PORT_TYPE = "portType"
         const val FLIGHT = "flightNum"
         const val SEAT = "seat"
         const val WAY = "wayDescription"
@@ -38,6 +41,7 @@ data class InfoAboutTravel(
         const val TIME_DEST = "timeInMillisDest"
         const val HOURS_DEST = "hoursFromDest"
         const val PORT_ID_DEST = "destPortId"
+        const val DEST_PORT_TYPE = "destPortType"
         const val FLIGHT_DEST = "flightNumFromDest"
         const val SEAT_DEST = "seatFromDest"
         const val WAY_DEST = "wayDescriptionFromDest"
@@ -50,6 +54,7 @@ data class InfoAboutTravel(
         city_id: Long = this.city_id,
         timeInMillis: Long = this.timeInMillis,
         portId: Int = this.portId,
+        portType: String = this.portType,
         flightNum: String = this.flightNum,
         seat: String = this.seat,
         wayDescription: String = this.wayDescription,
@@ -57,6 +62,7 @@ data class InfoAboutTravel(
         timeInMillisDest: Long = this.timeInMillisDest,
         hoursFromDest: Long = this.hoursFromDest,
         destPortId: Int = this.destPortId,
+        destPortType: String = this.destPortType,
         flightNumFromDest: String = this.flightNumFromDest,
         seatFromDest: String = this.seatFromDest,
         wayDescriptionFromDest: String = this.wayDescriptionFromDest,
@@ -67,6 +73,7 @@ data class InfoAboutTravel(
             city_id,
             timeInMillis,
             portId,
+            portType,
             flightNum,
             seat,
             wayDescription,
@@ -74,6 +81,7 @@ data class InfoAboutTravel(
             timeInMillisDest,
             hoursFromDest,
             destPortId,
+            destPortType,
             flightNumFromDest,
             seatFromDest,
             wayDescriptionFromDest,
