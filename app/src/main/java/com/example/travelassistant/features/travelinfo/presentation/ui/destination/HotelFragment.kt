@@ -7,6 +7,7 @@ import android.view.View
 import android.view.ViewGroup
 import android.widget.AdapterView
 import android.widget.ArrayAdapter
+import androidx.core.view.isInvisible
 import androidx.core.view.isVisible
 import androidx.fragment.app.activityViewModels
 import androidx.work.Data
@@ -81,6 +82,16 @@ class HotelFragment : BaseFragment() {
                 }
             }
 
+            noHotel.setOnCheckedChangeListener { _, isChecked ->
+                spinner.isInvisible = isChecked
+                title.isInvisible = !isChecked
+                if (isChecked) {
+                    hotelAddress.text.clear()
+                    hotelPhone.text.clear()
+                    hotelSubway.text.clear()
+                }
+            }
+
             swipeRefreshLayout.setOnRefreshListener {
                 infoViewModel.loadHotels(infoViewModel.infoAboutTravel.city_id)
                 swipeRefreshLayout.isRefreshing = false
@@ -126,10 +137,17 @@ class HotelFragment : BaseFragment() {
             if (hotels.isNotEmpty()) {
                 infoViewModel.apply {
                     val id = hotels[selectedHotelPos].id
-                    infoAboutTravel = infoAboutTravel.copyInfoAboutTravel(hotelId = id)
-                    hotelAddress.text = hotels[selectedHotelPos].address
-                    hotelPhone.text = hotels[selectedHotelPos].phone
-                    hotelSubway.text = hotels[selectedHotelPos].subway
+                    infoAboutTravel = infoAboutTravel.copyInfoAboutTravel(
+                        hotelId = id,
+                        hotelName = hotels[selectedHotelPos].title,
+                        hotelAddress = hotels[selectedHotelPos].address,
+                        hotelPhone = hotels[selectedHotelPos].phone,
+                        hotelSubway = hotels[selectedHotelPos].subway
+                    )
+
+                    hotelAddress.setText(infoAboutTravel.hotelAddress)
+                    hotelPhone.setText(infoAboutTravel.hotelPhone)
+                    hotelSubway.setText(infoAboutTravel.hotelSubway)
                 }
             }
         }
@@ -151,9 +169,22 @@ class HotelFragment : BaseFragment() {
     }
 
     private fun setData() {
-        infoViewModel.infoAboutTravel = infoViewModel.infoAboutTravel.copyInfoAboutTravel(
-            wayToHotel = _binding?.wayToHotel?.text.toString()
-        )
+        _binding?.apply {
+            with(infoViewModel) {
+                if (noHotel.isChecked) {
+                    infoAboutTravel = infoAboutTravel.copyInfoAboutTravel(
+                        hotelId = DEFAULT,
+                        hotelName = title.text.toString(),
+                        hotelAddress = hotelAddress.text.toString(),
+                        hotelPhone = hotelPhone.text.toString(),
+                        hotelSubway = hotelSubway.text.toString()
+                    )
+                }
+                infoAboutTravel = infoAboutTravel.copyInfoAboutTravel(
+                    wayToHotel = wayToHotel.text.toString()
+                )
+            }
+        }
     }
 
     override fun handleCommand(viewCommand: ViewCommand) {
@@ -184,6 +215,10 @@ class HotelFragment : BaseFragment() {
     override fun onOptionsItemSelected(menuItem: MenuItem): Boolean {
         if (menuItem.itemId == android.R.id.home) requireActivity().onBackPressed()
         return super.onOptionsItemSelected(menuItem)
+    }
+
+    companion object {
+        const val DEFAULT = 0
     }
 
 }

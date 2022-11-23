@@ -96,7 +96,7 @@ class InfoViewModel @Inject constructor(
                     railwaysDest = (ports.data as List<Port>).filter {
                         port -> port.location == infoAboutTravel.city_id && port.slug == "railway"
                     },
-                    hotels = hotels.data as List<Hotel>
+                    hotels = emptyList()
                 )
             } else {
                 handleError(false)

@@ -54,12 +54,14 @@ class ToDestinationFragment : BaseFragment() {
                 avia.setOnClickListener{
                     spinner.isInvisible = false
                     spinnerRailway.isInvisible = true
+                    seat.setHint(R.string.van_seat_num)
                     setPortType(true)
                 }
 
                 railway.setOnClickListener {
                     spinner.isInvisible = true
                     spinnerRailway.isInvisible = false
+                    seat.setHint(R.string.van_seat_number)
                     setPortType(false)
                 }
 
@@ -125,19 +127,16 @@ class ToDestinationFragment : BaseFragment() {
         _binding?.apply {
             with(infoViewModel) {
                 dateOfJourney.setText(getDateTime())
-                if (infoAboutTravel.portType == AIRPORT) {
-                    spinner.setSelection(infoAboutTravel.portId)
-                } else {
+                if (infoAboutTravel.portType == RAILWAY) {
+                    railway.callOnClick()
                     spinnerRailway.setSelection(infoAboutTravel.portId)
+                } else {
+                    spinner.setSelection(infoAboutTravel.portId)
                 }
                 spinnerTime.selectedItemPosition.let { infoAboutTravel.hours }
-
-                if (dateOfJourney.text.toString() != EMPTY_STRING && infoAboutTravel.hours.toInt() != 0) {
-                    notify.isActivated
-                    notify.setImageResource(R.drawable.alarm_on)
-                }
             }
         }
+        changeIcon()
     }
 
     private fun TravelInfoViewState.Error.handle() {
@@ -180,6 +179,20 @@ class ToDestinationFragment : BaseFragment() {
                 seat = seat.text.toString(),
                 wayDescription = route.text.toString()
             )
+        }
+    }
+
+    private fun changeIcon() {
+        _binding?.apply {
+            infoViewModel.apply {
+                if (dateOfJourney.text.toString() != EMPTY_STRING && infoAboutTravel.hours.toInt() != 0) {
+                    notify.isActivated
+                    notify.setImageResource(R.drawable.alarm_on)
+                } else {
+                    notify.isActivated = false
+                    notify.setImageResource(R.drawable.alarm_off)
+                }
+            }
         }
     }
 
