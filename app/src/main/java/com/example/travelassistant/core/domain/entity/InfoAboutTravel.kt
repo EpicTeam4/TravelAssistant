@@ -25,6 +25,10 @@ data class InfoAboutTravel(
     @ColumnInfo(name = Schema.SEAT_DEST) val seatFromDest: String = EMPTY_STRING,
     @ColumnInfo(name = Schema.WAY_DEST) val wayDescriptionFromDest: String = EMPTY_STRING,
     @ColumnInfo(name = Schema.HOTEL_ID) val hotelId: Int = 0,
+    @ColumnInfo(name = Schema.HOTEL_NAME) val hotelName: String = EMPTY_STRING,
+    @ColumnInfo(name = Schema.HOTEL_ADDRESS) val hotelAddress: String = EMPTY_STRING,
+    @ColumnInfo(name = Schema.HOTEL_PHONE) val hotelPhone: String = EMPTY_STRING,
+    @ColumnInfo(name = Schema.HOTEL_SUBWAY) val hotelSubway: String = EMPTY_STRING,
     @ColumnInfo(name = Schema.WAY_HOTEL) val wayToHotel: String = EMPTY_STRING
 ) {
     object Schema {
@@ -46,6 +50,10 @@ data class InfoAboutTravel(
         const val SEAT_DEST = "seatFromDest"
         const val WAY_DEST = "wayDescriptionFromDest"
         const val HOTEL_ID = "hotelId"
+        const val HOTEL_NAME = "hotelName"
+        const val HOTEL_ADDRESS = "hotelAddress"
+        const val HOTEL_PHONE = "hotelPhone"
+        const val HOTEL_SUBWAY = "hotelSubway"
         const val WAY_HOTEL = "wayToHotel"
     }
 
@@ -67,6 +75,10 @@ data class InfoAboutTravel(
         seatFromDest: String = this.seatFromDest,
         wayDescriptionFromDest: String = this.wayDescriptionFromDest,
         hotelId: Int = this.hotelId,
+        hotelName: String = this.hotelName,
+        hotelAddress: String = this.hotelAddress,
+        hotelPhone: String = this.hotelPhone,
+        hotelSubway: String = this.hotelSubway,
         wayToHotel: String = this.wayToHotel
     ) = InfoAboutTravel(
             id,
@@ -86,6 +98,10 @@ data class InfoAboutTravel(
             seatFromDest,
             wayDescriptionFromDest,
             hotelId,
+            hotelName,
+            hotelAddress,
+            hotelPhone,
+            hotelSubway,
             wayToHotel
         )
 }

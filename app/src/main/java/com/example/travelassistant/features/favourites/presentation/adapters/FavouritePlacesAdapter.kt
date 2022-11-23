@@ -46,6 +46,8 @@ class FavouritePlacesAdapter(
                 imgFavourite.isChecked = true
                 imgFavourite.setOnClickListener {
                     deleteSights(this)
+                    sights.removeAt(position)
+                    notifyDataSetChanged()
                 }
                 root.setOnClickListener {
                     onItemClicked(id)

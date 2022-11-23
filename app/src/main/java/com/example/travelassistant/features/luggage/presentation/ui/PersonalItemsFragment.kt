@@ -89,11 +89,14 @@ class PersonalItemsFragment : Fragment() {
     }
 
     private fun addNewItem() {
+        val item = _binding?.newItem?.text.toString()
         with(luggageViewModel) {
-            luggageItem = luggageItem.copyItem(item = _binding?.newItem?.text.toString())
-            addItem(luggageItem)
-            itemsAdapter.addItem(luggageItem)
-            _binding?.newItem?.setText(EMPTY_STRING)
+            if (item != EMPTY_STRING) {
+                luggageItem = luggageItem.copyItem(item = item)
+                itemsAdapter.addItem(luggageItem)
+                addItem(luggageItem)
+            }
         }
+        _binding?.newItem?.text?.clear()
     }
 }
