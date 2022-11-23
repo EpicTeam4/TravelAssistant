@@ -149,7 +149,7 @@
                 android:layout_height="wrap_content"
                 android:layout_marginTop="@dimen/layout_margin_top"
                 android:ems="10"
-                android:hint="@string/van_seat_number"
+                android:hint="@string/van_seat_num"
                 android:importantForAutofill="no"
                 android:inputType="text"
                 android:textSize="@dimen/text_size"
@@ -306,7 +306,7 @@
                 android:layout_height="wrap_content"
                 android:layout_marginTop="@dimen/layout_margin_top"
                 android:ems="10"
-                android:hint="@string/van_seat_number"
+                android:hint="@string/van_seat_num"
                 android:importantForAutofill="no"
                 android:inputType="text"
                 android:textSize="@dimen/text_size"
@@ -339,40 +339,55 @@
                 android:textStyle="bold"
                 app:layout_constraintTop_toBottomOf="@+id/routeDest" />
 
-            <Spinner
-                android:id="@+id/spinnerHotel"
+            <EditText
+                android:id="@+id/titleHotel"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_marginTop="@dimen/layout_margin_top"
-                android:theme="@style/SpinnerTextViewItem"
+                android:drawableStart="@drawable/hotel_title"
+                android:drawablePadding="4dp"
+                android:hint="@string/hotel_title"
+                android:importantForAutofill="no"
+                android:inputType="text"
+                android:textColor="@color/black"
+                android:textSize="@dimen/text_size"
                 app:layout_constraintTop_toBottomOf="@+id/hotel" />
 
-            <TextView
+            <EditText
                 android:id="@+id/hotelAddress"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:layout_marginTop="@dimen/layout_margin_top"
+                android:drawableStart="@drawable/hotel_location"
+                android:drawablePadding="4dp"
                 android:hint="@string/hotel_address"
+                android:importantForAutofill="no"
+                android:inputType="text"
                 android:textColor="@color/black"
                 android:textSize="@dimen/text_size"
-                app:layout_constraintTop_toBottomOf="@+id/spinnerHotel" />
+                app:layout_constraintTop_toBottomOf="@+id/titleHotel" />
 
-            <TextView
+            <EditText
                 android:id="@+id/hotelPhone"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:layout_marginTop="@dimen/layout_margin_top"
+                android:drawableStart="@drawable/hotel_phone"
+                android:drawablePadding="4dp"
                 android:hint="@string/hotel_phone"
+                android:importantForAutofill="no"
+                android:inputType="phone"
                 android:textColor="@color/black"
                 android:textSize="@dimen/text_size"
                 app:layout_constraintTop_toBottomOf="@+id/hotelAddress" />
 
-            <TextView
+            <EditText
                 android:id="@+id/hotelSubway"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:layout_marginTop="@dimen/layout_margin_top"
+                android:drawableStart="@drawable/hotel_subway"
+                android:drawablePadding="4dp"
                 android:hint="@string/subway"
+                android:importantForAutofill="no"
+                android:inputType="text"
                 android:textColor="@color/black"
                 android:textSize="@dimen/text_size"
                 app:layout_constraintTop_toBottomOf="@+id/hotelPhone" />

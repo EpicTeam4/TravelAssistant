@@ -150,7 +150,7 @@
                 android:layout_height="wrap_content"
                 android:layout_marginTop="@dimen/layout_margin_top"
                 android:ems="10"
-                android:hint="@string/van_seat_number"
+                android:hint="@string/van_seat_num"
                 android:importantForAutofill="no"
                 android:inputType="text"
                 android:textSize="@dimen/text_size"

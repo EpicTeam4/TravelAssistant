@@ -6,7 +6,6 @@ import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import android.widget.AdapterView
 import android.widget.ArrayAdapter
 import androidx.core.view.isInvisible
 import androidx.core.view.isVisible
@@ -68,24 +67,28 @@ class InfoEditingFragment : Fragment() {
                 avia.setOnClickListener {
                     spinner.isInvisible = false
                     spinnerRailway.isInvisible = true
+                    seat.setHint(R.string.van_seat_num)
                     setPortType(true)
                 }
 
                 railway.setOnClickListener {
                     spinner.isInvisible = true
                     spinnerRailway.isInvisible = false
+                    seat.setHint(R.string.van_seat_number)
                     setPortType(false)
                 }
 
                 aviaDest.setOnClickListener {
                     spinnerDest.isInvisible = false
                     spinnerRailwayDest.isInvisible = true
+                    seat.setHint(R.string.van_seat_num)
                     setPortDestType(true)
                 }
 
                 railwayDest.setOnClickListener {
                     spinnerDest.isInvisible = true
                     spinnerRailwayDest.isInvisible = false
+                    seat.setHint(R.string.van_seat_number)
                     setPortDestType(false)
                 }
             }
@@ -98,19 +101,6 @@ class InfoEditingFragment : Fragment() {
                     setSecondAlarm()
                 }
             }
-
-            spinnerHotel.onItemSelectedListener =
-                object : AdapterView.OnItemSelectedListener {
-                    override fun onItemSelected(
-                        parent: AdapterView<*>?,
-                        itemSelected: View, selectedItemPosition: Int, selectedId: Long
-                    ) {
-                        infoViewModel.selectedHotelPos = selectedItemPosition
-                        infoViewModel.dataState.observe(viewLifecycleOwner, ::handleState)
-                    }
-
-                    override fun onNothingSelected(parent: AdapterView<*>?) {}
-                }
 
             calendar.setOnClickListener {
                 pickDate(TIME_ID)
@@ -163,7 +153,6 @@ class InfoEditingFragment : Fragment() {
             spinnerRailway.adapter = railwayList
             spinnerDest.adapter = portsDestList
             spinnerRailwayDest.adapter = railwayDestList
-            spinnerHotel.adapter = hotelsList
         }
     }
 
@@ -206,17 +195,18 @@ class InfoEditingFragment : Fragment() {
         _binding?.apply {
             with(infoViewModel) {
                 dateOfJourney.setText(convertMillisToText(infoAboutTravel.timeInMillis))
-                if (infoAboutTravel.portType == AIRPORT) {
-                    if (infoAboutTravel.portId <= airports.size) {
-                        spinner.setSelection(infoAboutTravel.portId)
-                    } else {
-                        spinner.setSelection(DEFAULT_POSITION)
-                    }
-                } else {
+                if (infoAboutTravel.portType == RAILWAY) {
+                    railway.callOnClick()
                     if (infoAboutTravel.portId <= railways.size) {
                         spinnerRailway.setSelection(infoAboutTravel.portId)
                     } else {
                         spinnerRailway.setSelection(DEFAULT_POSITION)
+                    }
+                } else {
+                    if (infoAboutTravel.portId <= airports.size) {
+                        spinner.setSelection(infoAboutTravel.portId)
+                    } else {
+                        spinner.setSelection(DEFAULT_POSITION)
                     }
                 }
                 flight.setText(event?.flightNum)
@@ -224,59 +214,29 @@ class InfoEditingFragment : Fragment() {
                 route.setText(event?.wayDescription)
                 spinnerTime.setSelection(convertHoursToAdapterPosition(event?.hours))
                 dateOfJourneyDest.setText(convertMillisToText(infoAboutTravel.timeInMillisDest))
-                if (infoAboutTravel.destPortType == AIRPORT) {
-                    if (infoAboutTravel.destPortId <= airportsDest.size) {
-                        spinnerDest.setSelection(infoAboutTravel.destPortId)
-                    } else {
-                        spinnerDest.setSelection(DEFAULT_POSITION)
-                    }
-                } else {
+                if (infoAboutTravel.destPortType == RAILWAY) {
+                    railway.callOnClick()
                     if (infoAboutTravel.destPortId <= railwaysDest.size) {
                         spinnerRailwayDest.setSelection(infoAboutTravel.destPortId)
                     } else {
                         spinnerRailwayDest.setSelection(DEFAULT_POSITION)
+                    }
+                } else {
+                    if (infoAboutTravel.destPortId <= airportsDest.size) {
+                        spinnerDest.setSelection(infoAboutTravel.destPortId)
+                    } else {
+                        spinnerDest.setSelection(DEFAULT_POSITION)
                     }
                 }
                 flightDest.setText(event?.flightNumFromDest)
                 seatDest.setText(event?.seatFromDest)
                 routeDest.setText(event?.wayDescriptionFromDest)
                 spinnerTimeDest.setSelection(convertHoursToAdapterPosition(event?.hoursFromDest))
+                titleHotel.setText(event?.hotelName)
+                hotelAddress.setText(event?.hotelAddress)
+                hotelPhone.setText(event?.hotelPhone)
+                hotelSubway.setText(event?.hotelSubway)
                 wayToHotel.setText(event?.wayToHotel)
-
-                if (hotels.isNotEmpty()) {
-                    val hotel = hotels.single { it.id == event?.hotelId }.title
-                    val index = hotels.indexOfFirst { it.title == hotel }
-
-                    if (index != DEFAULT_VALUE) {
-                        if (selectedHotelPos == DEFAULT_VALUE) {
-                            spinnerHotel.setSelection(index)
-                            hotelAddress.text = hotels[index].address
-                            hotelPhone.text = hotels[index].phone
-                            hotelSubway.text = hotels[index].subway
-                            selectedHotelId = hotels[index].id
-                        } else {
-                            spinnerHotel.setSelection(selectedHotelPos)
-                            hotelAddress.text = hotels[selectedHotelPos].address
-                            hotelPhone.text = hotels[selectedHotelPos].phone
-                            hotelSubway.text = hotels[selectedHotelPos].subway
-                            selectedHotelId = hotels[selectedHotelPos].id
-                        }
-                    } else {
-                        if (selectedHotelPos == DEFAULT_VALUE) {
-                            spinnerHotel.setSelection(DEFAULT_POSITION)
-                            hotelAddress.text = hotels[DEFAULT_POSITION].address
-                            hotelPhone.text = hotels[DEFAULT_POSITION].phone
-                            hotelSubway.text = hotels[DEFAULT_POSITION].subway
-                            selectedHotelId = hotels[DEFAULT_POSITION].id
-                        } else {
-                            spinnerHotel.setSelection(selectedHotelPos)
-                            hotelAddress.text = hotels[selectedHotelPos].address
-                            hotelPhone.text = hotels[selectedHotelPos].phone
-                            hotelSubway.text = hotels[selectedHotelPos].subway
-                            selectedHotelId = hotels[selectedHotelPos].id
-                        }
-                    }
-                }
 
                 if (dateOfJourney.text.toString() != EMPTY_STRING && infoAboutTravel.hours.toInt() != 0) {
                     notify.isActivated
@@ -360,6 +320,10 @@ class InfoEditingFragment : Fragment() {
                     wayDescriptionFromDest = route.text.toString(),
                     hoursFromDest = spinnerTimeDest.selectedItemPosition.orDefault().toHours(),
                     hotelId = selectedHotelId,
+                    hotelName = titleHotel.text.toString(),
+                    hotelAddress = hotelAddress.text.toString(),
+                    hotelPhone = hotelPhone.text.toString(),
+                    hotelSubway = hotelSubway.text.toString(),
                     wayToHotel = wayToHotel.text.toString()
                 )
 

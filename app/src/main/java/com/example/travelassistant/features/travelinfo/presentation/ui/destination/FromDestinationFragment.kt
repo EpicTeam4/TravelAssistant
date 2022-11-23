@@ -55,12 +55,14 @@ class FromDestinationFragment : BaseFragment() {
                 avia.setOnClickListener{
                     spinner.isInvisible = false
                     spinnerRailway.isInvisible = true
+                    seat.setHint(R.string.van_seat_num)
                     setPortDestType(true)
                 }
 
                 railway.setOnClickListener {
                     spinner.isInvisible = true
                     spinnerRailway.isInvisible = false
+                    seat.setHint(R.string.van_seat_number)
                     setPortDestType(false)
                 }
 
@@ -126,19 +128,16 @@ class FromDestinationFragment : BaseFragment() {
         _binding?.apply {
             with(infoViewModel) {
                 dateOfJourney.setText(getDestDateTime())
-                if (infoAboutTravel.destPortType == AIRPORT) {
-                    spinner.setSelection(infoAboutTravel.destPortId)
-                } else {
+                if (infoAboutTravel.destPortType == RAILWAY) {
+                    railway.callOnClick()
                     spinnerRailway.setSelection(infoAboutTravel.destPortId)
+                } else {
+                    spinner.setSelection(infoAboutTravel.destPortId)
                 }
                 spinnerTime.selectedItemPosition.let { infoAboutTravel.hoursFromDest }
-
-                if (dateOfJourney.text.toString() != EMPTY_STRING && infoAboutTravel.hoursFromDest.toInt() != 0) {
-                    notify.isActivated
-                    notify.setImageResource(R.drawable.alarm_on)
-                }
             }
         }
+        changeIcon()
     }
 
     private fun TravelInfoViewState.Error.handle() {
@@ -181,6 +180,20 @@ class FromDestinationFragment : BaseFragment() {
                 seatFromDest = seat.text.toString(),
                 wayDescriptionFromDest = route.text.toString()
             )
+        }
+    }
+
+    private fun changeIcon() {
+        _binding?.apply {
+            infoViewModel.apply {
+                if (dateOfJourney.text.toString() != EMPTY_STRING && infoAboutTravel.hoursFromDest.toInt() != 0) {
+                    notify.isActivated
+                    notify.setImageResource(R.drawable.alarm_on)
+                } else {
+                    notify.isActivated = false
+                    notify.setImageResource(R.drawable.alarm_off)
+                }
+            }
         }
     }
 
