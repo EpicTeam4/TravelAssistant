@@ -45,13 +45,12 @@ class CityWithFavouritePlacesAdapter(
                         .into(img)
                 }
                 itemName.text = name
-                repeat(sights.size) {
-                    val childMembersAdapter =
-                        FavouritePlacesAdapter(sights.filter { sight ->
-                            sight.location == slug
-                        }.toMutableList(), { deleteSights(it) }) { onItemClicked(it) }
-                    favouriteSights.adapter = childMembersAdapter
-                }
+
+                val childMembersAdapter =
+                    FavouritePlacesAdapter(sights.filter { sight ->
+                        sight.location == slug
+                    }.toMutableList(), { deleteSights(it) }) { onItemClicked(it) }
+                favouriteSights.adapter = childMembersAdapter
             }
         }
     }

@@ -36,7 +36,8 @@ class ItemAdapter(
             itemName.text = items[position].item
             del.setOnClickListener {
                 deleteItem(items[position].id)
-                notifyItemRemoved(items.size)
+                items.removeAt(position)
+                notifyDataSetChanged()
             }
         }
     }
