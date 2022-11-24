@@ -5,6 +5,7 @@ import androidx.lifecycle.viewModelScope
 import com.example.travelassistant.R
 import com.example.travelassistant.features.cities.domain.CitiesUseCase
 import com.example.travelassistant.features.cities.domain.model.PlaceDomain
+import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.flow.MutableSharedFlow
 import kotlinx.coroutines.flow.MutableStateFlow
@@ -12,8 +13,10 @@ import kotlinx.coroutines.flow.asSharedFlow
 import kotlinx.coroutines.flow.asStateFlow
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.withContext
+import javax.inject.Inject
 
-class PlaceDetailViewModel(private val citiesUseCase: CitiesUseCase) : ViewModel() {
+@HiltViewModel
+class PlaceDetailViewModel @Inject constructor(private val citiesUseCase: CitiesUseCase) : ViewModel() {
 
     private val _uiState: MutableStateFlow<PlaceContract.State> =
         MutableStateFlow(PlaceContract.State.Loading)

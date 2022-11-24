@@ -10,7 +10,6 @@ import com.example.travelassistant.core.Constants.NOTIF_ID
 import com.example.travelassistant.core.Constants.NOTIF_SECOND_ID
 import com.example.travelassistant.core.Constants.RAILWAY
 import com.example.travelassistant.core.domain.data
-import com.example.travelassistant.core.domain.entity.Hotel
 import com.example.travelassistant.core.domain.entity.InfoAboutTravel
 import com.example.travelassistant.core.domain.entity.Port
 import com.example.travelassistant.core.parseError
@@ -24,7 +23,6 @@ import com.example.travelassistant.core.utils.toPosition
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.async
-import kotlinx.coroutines.awaitAll
 import kotlinx.coroutines.coroutineScope
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.withContext
@@ -67,36 +65,33 @@ class InfoViewModel @Inject constructor(
     private fun loadInfoDetails(cityId: Int, date: Long) {
         viewModelScope.launch {
             dataContent.value = InfoViewState.Loading
-            val (event, ports, hotels) = coroutineScope {
+            val (event, ports) = coroutineScope {
                 val eventResult = async { useCase.getDetails(date) }
                 val portsResult = async { useCase.getPorts() }
-                val citySlug = eventResult.await().data?.let { useCase.getCityById(it.city_id) }
-                val hotelsResult = async { citySlug?.slug?.let { useCase.getHotels(it) } }
 
-                awaitAll(eventResult, portsResult, hotelsResult)
+                eventResult.await().data to portsResult.await().data
             }
 
-            if (event != null && ports != null && hotels != null) {
-                infoAboutTravel = event.data as InfoAboutTravel
+            if (event != null && ports != null) {
+                infoAboutTravel = event
                 handleDetailsData(
-                    event = event.data as InfoAboutTravel,
+                    event = event,
                     airports = if (cityId != DEFAULT_VALUE) {
-                        (ports.data as List<Port>).filter { port -> port.location == cityId.toLong() && port.slug == "airport" }
+                        ports.filter { port -> port.location == cityId.toLong() && port.slug == "airport" }
                     } else {
-                        (ports.data as List<Port>).filter { port -> port.slug == "airport" }
+                        ports.filter { port -> port.slug == "airport" }
                     },
                     railways = if (cityId != DEFAULT_VALUE) {
-                        (ports.data as List<Port>).filter { port -> port.location == cityId.toLong() && port.slug == "railway" }
+                        ports.filter { port -> port.location == cityId.toLong() && port.slug == "railway" }
                     } else {
-                        (ports.data as List<Port>).filter { port -> port.slug == "railway" }
+                        ports.filter { port -> port.slug == "railway" }
                     },
-                    airportsDest = (ports.data as List<Port>).filter {
+                    airportsDest = ports.filter {
                         port -> port.location == infoAboutTravel.city_id && port.slug == "airport"
                     },
-                    railwaysDest = (ports.data as List<Port>).filter {
+                    railwaysDest = ports.filter {
                         port -> port.location == infoAboutTravel.city_id && port.slug == "railway"
-                    },
-                    hotels = emptyList()
+                    }
                 )
             } else {
                 handleError(false)
@@ -115,8 +110,7 @@ class InfoViewModel @Inject constructor(
         airports: List<Port>,
         railways: List<Port>,
         airportsDest: List<Port>,
-        railwaysDest: List<Port>,
-        hotels: List<Hotel>
+        railwaysDest: List<Port>
     ) {
         withContext(Dispatchers.Main) {
             dataContent.value =
@@ -125,8 +119,7 @@ class InfoViewModel @Inject constructor(
                     airports = airports,
                     railways = railways,
                     airportsDest = airportsDest,
-                    railwaysDest = railwaysDest,
-                    hotels = hotels
+                    railwaysDest = railwaysDest
                 )
         }
     }

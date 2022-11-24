@@ -35,7 +35,6 @@ class InfoEditingFragment : Fragment() {
 
     private lateinit var portsList: ArrayAdapter<String>
     private lateinit var railwayList: ArrayAdapter<String>
-    private lateinit var hotelsList: ArrayAdapter<String>
     private lateinit var portsDestList: ArrayAdapter<String>
     private lateinit var railwayDestList: ArrayAdapter<String>
     private var _binding: FragmentEditEventBinding? = null
@@ -139,11 +138,6 @@ class InfoEditingFragment : Fragment() {
             }
 
         railwayDestList =
-            (ArrayAdapter<String>(requireContext(), R.layout.spinner_item)).apply {
-                setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item)
-            }
-
-        hotelsList =
             (ArrayAdapter<String>(requireContext(), R.layout.spinner_item)).apply {
                 setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item)
             }
@@ -260,7 +254,6 @@ class InfoEditingFragment : Fragment() {
             if (railwayList.isEmpty) railways.forEach { railwayList.add(it.name) }
             if (portsDestList.isEmpty) airportsDest.forEach { portsDestList.add(it.name) }
             if (railwayDestList.isEmpty) railwaysDest.forEach { railwayDestList.add(it.name) }
-            if (hotelsList.isEmpty) hotels.forEach { hotelsList.add(it.title) }
         }
     }
 

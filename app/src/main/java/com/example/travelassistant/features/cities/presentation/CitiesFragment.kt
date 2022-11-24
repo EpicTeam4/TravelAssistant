@@ -6,6 +6,7 @@ import android.view.View
 import android.view.ViewGroup
 import androidx.core.view.isVisible
 import androidx.fragment.app.Fragment
+import androidx.fragment.app.activityViewModels
 import androidx.lifecycle.lifecycleScope
 import androidx.navigation.findNavController
 import androidx.recyclerview.widget.GridLayoutManager
@@ -14,7 +15,6 @@ import com.example.travelassistant.R
 import com.example.travelassistant.core.Constants.COUNT_OF_CITIES_SCREEN_COLUMNS
 import com.example.travelassistant.databinding.FragmentCitiesBinding
 import kotlinx.coroutines.launch
-import org.koin.androidx.viewmodel.ext.android.viewModel
 
 class CitiesFragment : Fragment() {
 
@@ -22,7 +22,7 @@ class CitiesFragment : Fragment() {
     private lateinit var recyclerView: RecyclerView
     private lateinit var citiesAdapter: CitiesRecyclerViewAdapter
 
-    private val citiesViewModel: CitiesViewModel by viewModel()
+    private val citiesViewModel: CitiesViewModel by activityViewModels()
 
     private val binding get() = _binding!!
 
