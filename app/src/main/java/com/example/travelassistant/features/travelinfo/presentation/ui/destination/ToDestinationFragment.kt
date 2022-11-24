@@ -13,9 +13,11 @@ import com.example.travelassistant.R
 import com.example.travelassistant.core.Constants.AIRPORT
 import com.example.travelassistant.core.Constants.EMPTY_STRING
 import com.example.travelassistant.core.Constants.RAILWAY
+import com.example.travelassistant.core.domain.entity.InfoAboutTravel
 import com.example.travelassistant.core.observe
 import com.example.travelassistant.core.orDefault
 import com.example.travelassistant.core.utils.toHours
+import com.example.travelassistant.core.utils.toPosition
 import com.example.travelassistant.databinding.FragmentToDestinationBinding
 import com.example.travelassistant.features.travelinfo.presentation.ui.TravelInfoViewModel
 import com.example.travelassistant.features.travelinfo.presentation.ui.TravelInfoViewState
@@ -127,13 +129,15 @@ class ToDestinationFragment : BaseFragment() {
         _binding?.apply {
             with(infoViewModel) {
                 dateOfJourney.setText(getDateTime())
+
                 if (infoAboutTravel.portType == RAILWAY) {
+                    avia.isChecked = false
                     railway.callOnClick()
                     spinnerRailway.setSelection(infoAboutTravel.portId)
                 } else {
                     spinner.setSelection(infoAboutTravel.portId)
                 }
-                spinnerTime.selectedItemPosition.let { infoAboutTravel.hours }
+                spinnerTime.setSelection(getPosition().toPosition())
             }
         }
         changeIcon()
@@ -197,7 +201,10 @@ class ToDestinationFragment : BaseFragment() {
     }
 
     override fun onOptionsItemSelected(menuItem: MenuItem): Boolean {
-        if (menuItem.itemId == android.R.id.home) requireActivity().onBackPressed()
+        if (menuItem.itemId == android.R.id.home) {
+            requireActivity().onBackPressed()
+            infoViewModel.infoAboutTravel = InfoAboutTravel()
+        }
         return super.onOptionsItemSelected(menuItem)
     }
 }

@@ -101,7 +101,9 @@ class HotelFragment : BaseFragment() {
 
     override fun onResume() {
         super.onResume()
-        _binding?.spinner?.setSelection(infoViewModel.selectedHotelPos)
+        if (infoViewModel.selectedHotelPos < hotelsList.count) {
+            _binding?.spinner?.setSelection(infoViewModel.selectedHotelPos)
+        }
     }
 
     override fun onDestroyView() {
@@ -136,14 +138,16 @@ class HotelFragment : BaseFragment() {
         _binding?.apply {
             if (hotels.isNotEmpty()) {
                 infoViewModel.apply {
-                    val id = hotels[selectedHotelPos].id
-                    infoAboutTravel = infoAboutTravel.copyInfoAboutTravel(
-                        hotelId = id,
-                        hotelName = hotels[selectedHotelPos].title,
-                        hotelAddress = hotels[selectedHotelPos].address,
-                        hotelPhone = hotels[selectedHotelPos].phone,
-                        hotelSubway = hotels[selectedHotelPos].subway
-                    )
+                    if (selectedHotelPos < hotels.size) {
+                        val id = hotels[selectedHotelPos].id
+                        infoAboutTravel = infoAboutTravel.copyInfoAboutTravel(
+                            hotelId = id,
+                            hotelName = hotels[selectedHotelPos].title,
+                            hotelAddress = hotels[selectedHotelPos].address,
+                            hotelPhone = hotels[selectedHotelPos].phone,
+                            hotelSubway = hotels[selectedHotelPos].subway
+                        )
+                    }
 
                     hotelAddress.setText(infoAboutTravel.hotelAddress)
                     hotelPhone.setText(infoAboutTravel.hotelPhone)
