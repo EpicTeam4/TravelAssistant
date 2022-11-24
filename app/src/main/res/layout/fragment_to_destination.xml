@@ -1,10 +1,13 @@
 <?xml version="1.0" encoding="utf-8"?>
-<FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<androidx.cardview.widget.CardView xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
-    android:layout_height="match_parent"
-    android:padding="@dimen/default_margin"
+    android:layout_height="wrap_content"
+    android:layout_gravity="center"
+    android:layout_margin="@dimen/layout_margin_top"
+    app:cardCornerRadius="@dimen/cardview_elevation"
+    app:cardElevation="@dimen/cardview_elevation"
     tools:context=".features.travelinfo.presentation.ui.destination.ToDestinationFragment">
 
     <androidx.core.widget.NestedScrollView
@@ -12,184 +15,176 @@
         android:layout_height="wrap_content"
         android:layout_gravity="center">
 
-        <androidx.cardview.widget.CardView
+        <androidx.constraintlayout.widget.ConstraintLayout
+            android:id="@+id/contentPanel"
             android:layout_width="match_parent"
             android:layout_height="match_parent"
-            android:layout_gravity="center"
-            app:cardCornerRadius="@dimen/cardview_elevation"
-            app:cardElevation="@dimen/cardview_elevation">
+            android:layout_margin="@dimen/layout_margin_top">
 
-            <androidx.constraintlayout.widget.ConstraintLayout
-                android:id="@+id/contentPanel"
+            <TextView
+                android:id="@+id/textView"
                 android:layout_width="match_parent"
-                android:layout_height="match_parent">
+                android:layout_height="wrap_content"
+                android:layout_marginBottom="@dimen/layout_margin_top"
+                android:text="@string/travel_info"
+                android:textAlignment="center"
+                android:textColor="@color/black"
+                android:textSize="@dimen/title_text_size"
+                app:layout_constraintBottom_toTopOf="@id/dateOfJourney" />
 
-                <TextView
-                    android:id="@+id/textView"
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:layout_marginBottom="@dimen/layout_margin_top"
-                    android:text="@string/travel_info"
-                    android:textAlignment="center"
-                    android:textColor="@color/black"
-                    android:textSize="@dimen/title_text_size"
-                    app:layout_constraintBottom_toTopOf="@id/dateOfJourney" />
+            <ImageButton
+                android:id="@+id/calendar"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_alignParentEnd="true"
+                android:layout_centerVertical="true"
+                android:background="@color/white"
+                android:src="@drawable/calendar"
+                app:layout_constraintBottom_toBottomOf="@id/dateOfJourney"
+                app:layout_constraintRight_toLeftOf="@id/dateOfJourney"
+                app:layout_constraintStart_toStartOf="@id/contentPanel"
+                app:layout_constraintTop_toTopOf="@id/dateOfJourney" />
 
-                <ImageButton
-                    android:id="@+id/calendar"
+            <EditText
+                android:id="@+id/dateOfJourney"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="@dimen/imagebutton_to_detail"
+                android:layout_marginEnd="@dimen/layout_margin_top"
+                android:ems="10"
+                android:focusable="false"
+                android:hint="@string/travel_date"
+                android:importantForAutofill="no"
+                android:textSize="@dimen/text_size"
+                app:layout_constraintLeft_toRightOf="@id/calendar"
+                app:layout_constraintRight_toLeftOf="@+id/notify"
+                app:layout_constraintTop_toTopOf="@id/textView" />
+
+            <ImageButton
+                android:id="@+id/notify"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_alignParentEnd="true"
+                android:layout_centerVertical="true"
+                android:layout_marginEnd="@dimen/imagebutton_to_detail"
+                android:background="@color/white"
+                android:src="@drawable/alarm_off"
+                app:layout_constraintBottom_toBottomOf="@id/spinnerTime"
+                app:layout_constraintLeft_toRightOf="@id/dateOfJourney"
+                app:layout_constraintRight_toLeftOf="@id/spinnerTime"
+                app:layout_constraintTop_toTopOf="@id/spinnerTime" />
+
+            <Spinner
+                android:id="@+id/spinnerTime"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="@dimen/layout_margin_top"
+                android:entries="@array/time"
+                android:theme="@style/SpinnerTextViewItem"
+                app:layout_constraintRight_toRightOf="parent"
+                app:layout_constraintTop_toTopOf="@id/dateOfJourney" />
+
+            <com.google.android.material.button.MaterialButtonToggleGroup
+                android:id="@+id/toggleButton"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="@dimen/layout_margin_top"
+                app:checkedButton="@id/avia"
+                app:layout_constraintBottom_toTopOf="@id/spinner"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@id/dateOfJourney"
+                app:selectionRequired="true"
+                app:singleSelection="true">
+
+                <com.google.android.material.button.MaterialButton
+                    android:id="@+id/avia"
+                    style="?attr/materialButtonOutlinedStyle"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:layout_alignParentEnd="true"
-                    android:layout_centerVertical="true"
-                    android:background="@color/white"
-                    android:src="@drawable/calendar"
-                    app:layout_constraintBottom_toBottomOf="@id/dateOfJourney"
-                    app:layout_constraintRight_toLeftOf="@id/dateOfJourney"
-                    app:layout_constraintStart_toStartOf="@id/contentPanel"
-                    app:layout_constraintTop_toTopOf="@id/dateOfJourney" />
+                    android:text="@string/avia" />
 
-                <EditText
-                    android:id="@+id/dateOfJourney"
-                    android:layout_width="0dp"
-                    android:layout_height="wrap_content"
-                    android:layout_marginStart="@dimen/imagebutton_to_detail"
-                    android:layout_marginEnd="@dimen/layout_margin_top"
-                    android:ems="10"
-                    android:focusable="false"
-                    android:hint="@string/travel_date"
-                    android:importantForAutofill="no"
-                    android:textSize="@dimen/text_size"
-                    app:layout_constraintLeft_toRightOf="@id/calendar"
-                    app:layout_constraintRight_toLeftOf="@+id/notify"
-                    app:layout_constraintTop_toTopOf="@id/textView" />
-
-                <ImageButton
-                    android:id="@+id/notify"
+                <com.google.android.material.button.MaterialButton
+                    android:id="@+id/railway"
+                    style="?attr/materialButtonOutlinedStyle"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:layout_alignParentEnd="true"
-                    android:layout_centerVertical="true"
-                    android:layout_marginEnd="@dimen/imagebutton_to_detail"
-                    android:background="@color/white"
-                    android:src="@drawable/alarm_off"
-                    app:layout_constraintBottom_toBottomOf="@id/spinnerTime"
-                    app:layout_constraintLeft_toRightOf="@id/dateOfJourney"
-                    app:layout_constraintRight_toLeftOf="@id/spinnerTime"
-                    app:layout_constraintTop_toTopOf="@id/spinnerTime" />
+                    android:text="@string/railway" />
+            </com.google.android.material.button.MaterialButtonToggleGroup>
 
-                <Spinner
-                    android:id="@+id/spinnerTime"
-                    android:layout_width="0dp"
-                    android:layout_height="wrap_content"
-                    android:layout_marginTop="@dimen/layout_margin_top"
-                    android:entries="@array/time"
-                    android:theme="@style/SpinnerTextViewItem"
-                    app:layout_constraintRight_toRightOf="parent"
-                    app:layout_constraintTop_toTopOf="@id/dateOfJourney" />
+            <Spinner
+                android:id="@+id/spinner"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="@dimen/layout_margin_top"
+                android:textSize="@dimen/text_size"
+                android:theme="@style/SpinnerTextViewItem"
+                app:layout_constraintEnd_toEndOf="@id/route"
+                app:layout_constraintTop_toBottomOf="@+id/toggleButton" />
 
-                <com.google.android.material.button.MaterialButtonToggleGroup
-                    android:id="@+id/toggleButton"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:layout_marginTop="@dimen/layout_margin_top"
-                    app:checkedButton="@id/avia"
-                    app:layout_constraintBottom_toTopOf="@id/spinner"
-                    app:layout_constraintEnd_toEndOf="parent"
-                    app:layout_constraintStart_toStartOf="parent"
-                    app:layout_constraintTop_toBottomOf="@id/dateOfJourney"
-                    app:selectionRequired="true"
-                    app:singleSelection="true">
+            <Spinner
+                android:id="@+id/spinnerRailway"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="@dimen/layout_margin_top"
+                android:textSize="@dimen/text_size"
+                android:theme="@style/SpinnerTextViewItem"
+                android:visibility="invisible"
+                app:layout_constraintEnd_toEndOf="@id/route"
+                app:layout_constraintTop_toBottomOf="@+id/toggleButton" />
 
-                    <com.google.android.material.button.MaterialButton
-                        android:id="@+id/avia"
-                        style="?attr/materialButtonOutlinedStyle"
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:text="@string/avia" />
+            <EditText
+                android:id="@+id/flight"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="@dimen/layout_margin_top"
+                android:ems="10"
+                android:hint="@string/flight_number"
+                android:importantForAutofill="no"
+                android:inputType="text"
+                android:textSize="@dimen/text_size"
+                app:layout_constraintEnd_toEndOf="@id/dateOfJourney"
+                app:layout_constraintRight_toLeftOf="@id/seat"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@+id/spinner" />
 
-                    <com.google.android.material.button.MaterialButton
-                        android:id="@+id/railway"
-                        style="?attr/materialButtonOutlinedStyle"
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:text="@string/railway" />
-                </com.google.android.material.button.MaterialButtonToggleGroup>
+            <EditText
+                android:id="@+id/seat"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="@dimen/layout_margin_top"
+                android:ems="10"
+                android:hint="@string/van_seat_num"
+                android:importantForAutofill="no"
+                android:inputType="text"
+                android:textSize="@dimen/text_size"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toStartOf="@id/notify"
+                app:layout_constraintTop_toBottomOf="@+id/spinner" />
 
-                <Spinner
-                    android:id="@+id/spinner"
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:layout_marginTop="@dimen/layout_margin_top"
-                    android:textSize="@dimen/text_size"
-                    android:theme="@style/SpinnerTextViewItem"
-                    app:layout_constraintEnd_toEndOf="@id/route"
-                    app:layout_constraintTop_toBottomOf="@+id/toggleButton" />
+            <EditText
+                android:id="@+id/route"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="@dimen/layout_margin_top"
+                android:ems="10"
+                android:hint="@string/route_to_station"
+                android:importantForAutofill="no"
+                android:inputType="textMultiLine"
+                android:lines="5"
+                android:textSize="@dimen/text_size"
+                app:layout_constraintTop_toBottomOf="@+id/flight" />
 
-                <Spinner
-                    android:id="@+id/spinnerRailway"
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:layout_marginTop="@dimen/layout_margin_top"
-                    android:textSize="@dimen/text_size"
-                    android:theme="@style/SpinnerTextViewItem"
-                    android:visibility="invisible"
-                    app:layout_constraintEnd_toEndOf="@id/route"
-                    app:layout_constraintTop_toBottomOf="@+id/toggleButton" />
+            <Button
+                android:id="@+id/button"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="@dimen/button_layout_margin_top"
+                android:text="@string/next"
+                app:layout_constraintBottom_toBottomOf="@+id/contentPanel"
+                app:layout_constraintTop_toBottomOf="@+id/route" />
 
-                <EditText
-                    android:id="@+id/flight"
-                    android:layout_width="0dp"
-                    android:layout_height="wrap_content"
-                    android:layout_marginTop="@dimen/layout_margin_top"
-                    android:ems="10"
-                    android:hint="@string/flight_number"
-                    android:importantForAutofill="no"
-                    android:inputType="text"
-                    android:textSize="@dimen/text_size"
-                    app:layout_constraintEnd_toEndOf="@id/dateOfJourney"
-                    app:layout_constraintRight_toLeftOf="@id/seat"
-                    app:layout_constraintStart_toStartOf="parent"
-                    app:layout_constraintTop_toBottomOf="@+id/spinner" />
-
-                <EditText
-                    android:id="@+id/seat"
-                    android:layout_width="0dp"
-                    android:layout_height="wrap_content"
-                    android:layout_marginTop="@dimen/layout_margin_top"
-                    android:ems="10"
-                    android:hint="@string/van_seat_num"
-                    android:importantForAutofill="no"
-                    android:inputType="text"
-                    android:textSize="@dimen/text_size"
-                    app:layout_constraintEnd_toEndOf="parent"
-                    app:layout_constraintStart_toStartOf="@id/notify"
-                    app:layout_constraintTop_toBottomOf="@+id/spinner" />
-
-                <EditText
-                    android:id="@+id/route"
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:layout_marginTop="@dimen/layout_margin_top"
-                    android:ems="10"
-                    android:hint="@string/route_to_station"
-                    android:importantForAutofill="no"
-                    android:inputType="textMultiLine"
-                    android:lines="5"
-                    android:textSize="@dimen/text_size"
-                    app:layout_constraintTop_toBottomOf="@+id/flight" />
-
-                <Button
-                    android:id="@+id/button"
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:layout_marginTop="@dimen/button_layout_margin_top"
-                    android:text="@string/next"
-                    app:layout_constraintBottom_toBottomOf="@+id/contentPanel"
-                    app:layout_constraintTop_toBottomOf="@+id/route" />
-
-            </androidx.constraintlayout.widget.ConstraintLayout>
-
-        </androidx.cardview.widget.CardView>
+        </androidx.constraintlayout.widget.ConstraintLayout>
 
     </androidx.core.widget.NestedScrollView>
 
@@ -205,4 +200,4 @@
         android:indeterminate="true"
         android:indeterminateTint="?attr/colorPrimary" />
 
-</FrameLayout>
+</androidx.cardview.widget.CardView>

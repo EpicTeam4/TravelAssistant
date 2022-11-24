@@ -3,7 +3,7 @@
     xmlns:app="http://schemas.android.com/apk/res-auto"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:padding="@dimen/default_margin"
+    android:layout_margin="@dimen/layout_margin_top"
     app:cardCornerRadius="@dimen/cardview_elevation"
     app:cardElevation="@dimen/cardview_elevation">
 
@@ -14,7 +14,8 @@
         <androidx.constraintlayout.widget.ConstraintLayout
             android:id="@+id/contentPanel"
             android:layout_width="match_parent"
-            android:layout_height="match_parent">
+            android:layout_height="match_parent"
+            android:padding="@dimen/layout_margin_top">
 
             <TextView
                 android:id="@+id/textView"
