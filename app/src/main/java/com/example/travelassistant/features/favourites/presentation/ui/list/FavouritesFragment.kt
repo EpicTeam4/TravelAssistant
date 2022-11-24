@@ -51,6 +51,10 @@ class FavouritesFragment : Fragment() {
             observe(commands, ::handleCommand)
             loadData()
         }
+
+        _binding?.errorPanel?.retry?.setOnClickListener {
+            sightsViewModel.loadData()
+        }
     }
 
     override fun onDestroyView() {
@@ -83,6 +87,7 @@ class FavouritesFragment : Fragment() {
         _binding?.errorPanel?.apply {
             errorIcon.setImageResource(errorModel.icon)
             errorTitle.setText(errorModel.title)
+            retry.isVisible = true
         }
     }
 

@@ -56,6 +56,10 @@ class HotelFragment : BaseFragment() {
             observe(commands, ::handleCommand)
         }
 
+        _binding?.errorPanel?.retry?.setOnClickListener {
+            infoViewModel.loadHotels(infoViewModel.infoAboutTravel.city_id)
+        }
+
         _binding?.spinner?.onItemSelectedListener = object : AdapterView.OnItemSelectedListener {
             override fun onItemSelected(
                 parent: AdapterView<*>?,
