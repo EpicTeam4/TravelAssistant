@@ -24,6 +24,7 @@ import com.example.travelassistant.core.commands.GoToFragment
 import com.example.travelassistant.core.commands.SetAlarm
 import com.example.travelassistant.core.commands.ViewCommand
 import com.example.travelassistant.core.utils.DateTimeFormatter
+import com.example.travelassistant.core.utils.toPosition
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.Dispatchers.Main
 import kotlinx.coroutines.async
@@ -207,6 +208,14 @@ class TravelInfoViewModel @Inject constructor(
         } else {
             infoAboutTravel.copyInfoAboutTravel(destPortType = RAILWAY)
         }
+    }
+
+    fun getPosition(): Int {
+        return formatter.convertMillisecondsToHours(infoAboutTravel.hours)
+    }
+
+    fun getDestPosition(): Int {
+        return formatter.convertMillisecondsToHours(infoAboutTravel.hoursFromDest)
     }
 
     /* Alarms */

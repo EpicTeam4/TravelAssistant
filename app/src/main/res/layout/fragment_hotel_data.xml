@@ -1,95 +1,178 @@
-<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<androidx.core.widget.NestedScrollView xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
     android:layout_gravity="center"
-    android:layout_margin="@dimen/list_layout_margin"
-    android:gravity="center"
     android:visibility="gone">
 
-    <ImageView
-        android:id="@+id/error_icon"
-        android:layout_width="@dimen/error_icon_size"
-        android:layout_height="@dimen/error_icon_size"
-        android:layout_gravity="center"
-        app:layout_constraintTop_toTopOf="parent"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent"/>
-
-    <TextView
-        android:id="@+id/error_title"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_marginBottom="@dimen/layout_margin_top"
-        android:layout_gravity="center"
-        app:layout_constraintTop_toBottomOf="@id/error_icon"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent" />
-
-    <EditText
-        android:id="@+id/title"
+    <androidx.constraintlayout.widget.ConstraintLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:drawableStart="@drawable/hotel_title"
-        android:layout_marginTop="@dimen/layout_margin_top"
-        android:drawablePadding="4dp"
-        android:hint="@string/hotel_title"
-        android:importantForAutofill="no"
-        android:inputType="text"
-        android:textColor="@color/black"
-        android:textSize="@dimen/text_size"
-        app:layout_constraintTop_toTopOf="@id/error_title" />
+        android:layout_margin="@dimen/default_margin">
 
-    <EditText
-        android:id="@+id/address"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:drawableStart="@drawable/hotel_location"
-        android:drawablePadding="4dp"
-        android:hint="@string/hotel_address"
-        android:importantForAutofill="no"
-        android:inputType="text"
-        android:textColor="@color/black"
-        android:textSize="@dimen/text_size"
-        app:layout_constraintTop_toBottomOf="@+id/title" />
+        <ImageView
+            android:id="@+id/error_icon"
+            android:layout_width="@dimen/error_icon_size"
+            android:layout_height="@dimen/error_icon_size"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent" />
 
-    <EditText
-        android:id="@+id/phone"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:drawableStart="@drawable/hotel_phone"
-        android:drawablePadding="4dp"
-        android:hint="@string/hotel_phone"
-        android:importantForAutofill="no"
-        android:inputType="phone"
-        android:textColor="@color/black"
-        android:textSize="@dimen/text_size"
-        app:layout_constraintTop_toBottomOf="@+id/address" />
+        <TextView
+            android:id="@+id/error_title"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center"
+            android:layout_marginBottom="@dimen/layout_margin_top"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@id/error_icon" />
 
-    <EditText
-        android:id="@+id/subway"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:drawableStart="@drawable/hotel_subway"
-        android:drawablePadding="4dp"
-        android:hint="@string/subway"
-        android:importantForAutofill="no"
-        android:inputType="text"
-        android:textColor="@color/black"
-        android:textSize="@dimen/text_size"
-        app:layout_constraintTop_toBottomOf="@+id/phone" />
+        <Button
+            android:id="@+id/retry"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center"
+            android:layout_marginTop="@dimen/layout_margin_top"
+            android:text="@string/reload"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@id/error_title" />
 
-    <EditText
-        android:id="@+id/wayToHotel"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:layout_marginTop="@dimen/layout_margin_top"
-        android:ems="10"
-        android:hint="@string/route_to_hotel"
-        android:importantForAutofill="no"
-        android:inputType="textMultiLine"
-        android:lines="5"
-        android:textSize="@dimen/text_size"
-        app:layout_constraintTop_toBottomOf="@+id/subway" />
+        <ImageButton
+            android:id="@+id/titleIcon"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_alignParentEnd="true"
+            android:layout_centerVertical="true"
+            android:background="@color/white"
+            android:src="@drawable/hotel_title"
+            app:layout_constraintBottom_toBottomOf="@id/title"
+            app:layout_constraintRight_toLeftOf="@id/title"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="@id/title" />
 
-</androidx.constraintlayout.widget.ConstraintLayout>
+        <EditText
+            android:id="@+id/title"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="@dimen/imagebutton_to_detail"
+            android:layout_marginTop="@dimen/layout_margin_top"
+            android:hint="@string/hotel_title"
+            android:importantForAutofill="no"
+            android:inputType="text"
+            android:textColor="@color/black"
+            android:textSize="@dimen/text_size"
+            app:layout_constraintLeft_toRightOf="@+id/titleIcon"
+            app:layout_constraintRight_toRightOf="parent"
+            app:layout_constraintTop_toBottomOf="@id/retry" />
+
+        <ImageButton
+            android:id="@+id/addressIcon"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_alignParentEnd="true"
+            android:layout_centerVertical="true"
+            android:background="@color/white"
+            android:src="@drawable/hotel_location"
+            app:layout_constraintBottom_toBottomOf="@id/address"
+            app:layout_constraintRight_toLeftOf="@id/address"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="@id/address" />
+
+        <EditText
+            android:id="@+id/address"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="@dimen/imagebutton_to_detail"
+            android:layout_marginTop="@dimen/layout_margin_top"
+            android:hint="@string/hotel_address"
+            android:importantForAutofill="no"
+            android:inputType="text"
+            android:textColor="@color/black"
+            android:textSize="@dimen/text_size"
+            app:layout_constraintLeft_toRightOf="@+id/addressIcon"
+            app:layout_constraintRight_toRightOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/title" />
+
+        <ImageButton
+            android:id="@+id/phoneIcon"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_alignParentEnd="true"
+            android:layout_centerVertical="true"
+            android:background="@color/white"
+            android:src="@drawable/hotel_phone"
+            app:layout_constraintBottom_toBottomOf="@id/phone"
+            app:layout_constraintRight_toLeftOf="@id/phone"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="@id/phone" />
+
+        <EditText
+            android:id="@+id/phone"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="@dimen/imagebutton_to_detail"
+            android:layout_marginTop="@dimen/layout_margin_top"
+            android:hint="@string/hotel_phone"
+            android:importantForAutofill="no"
+            android:inputType="phone"
+            android:textColor="@color/black"
+            android:textSize="@dimen/text_size"
+            app:layout_constraintLeft_toRightOf="@+id/phoneIcon"
+            app:layout_constraintRight_toRightOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/address" />
+
+        <ImageButton
+            android:id="@+id/subwayIcon"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_alignParentEnd="true"
+            android:layout_centerVertical="true"
+            android:background="@color/white"
+            android:src="@drawable/hotel_subway"
+            app:layout_constraintBottom_toBottomOf="@id/subway"
+            app:layout_constraintRight_toLeftOf="@id/subway"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="@id/subway" />
+
+        <EditText
+            android:id="@+id/subway"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="@dimen/imagebutton_to_detail"
+            android:layout_marginTop="@dimen/layout_margin_top"
+            android:hint="@string/subway"
+            android:importantForAutofill="no"
+            android:inputType="text"
+            android:textColor="@color/black"
+            android:textSize="@dimen/text_size"
+            app:layout_constraintLeft_toRightOf="@+id/subwayIcon"
+            app:layout_constraintRight_toRightOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/phone" />
+
+        <EditText
+            android:id="@+id/wayToHotel"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="@dimen/layout_margin_top"
+            android:ems="10"
+            android:hint="@string/route_to_hotel"
+            android:importantForAutofill="no"
+            android:inputType="textMultiLine"
+            android:lines="5"
+            android:textSize="@dimen/text_size"
+            app:layout_constraintTop_toBottomOf="@+id/subway" />
+
+        <Button
+            android:id="@+id/button"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="@dimen/button_layout_margin_top"
+            android:text="@string/save"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/wayToHotel" />
+
+    </androidx.constraintlayout.widget.ConstraintLayout>
+
+</androidx.core.widget.NestedScrollView>

@@ -7,7 +7,7 @@ import com.example.travelassistant.core.data.model.ErrorModel
 import com.example.travelassistant.core.commands.CommandsLiveData
 
 fun Boolean.parseError(): ErrorModel =
-    if (this) ErrorModel(R.string.network_error, R.drawable.network_error)
+    if (this) ErrorModel(R.string.network_error, R.drawable.unknown_error)
     else ErrorModel(R.string.unknown_error, R.drawable.unknown_error)
 
 inline fun <T : Any> LifecycleOwner.observe(liveData: CommandsLiveData<T>, crossinline block: (T) -> Unit) {

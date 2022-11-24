@@ -196,6 +196,7 @@ class InfoEditingFragment : Fragment() {
             with(infoViewModel) {
                 dateOfJourney.setText(convertMillisToText(infoAboutTravel.timeInMillis))
                 if (infoAboutTravel.portType == RAILWAY) {
+                    avia.isChecked = false
                     railway.callOnClick()
                     if (infoAboutTravel.portId <= railways.size) {
                         spinnerRailway.setSelection(infoAboutTravel.portId)
@@ -215,6 +216,7 @@ class InfoEditingFragment : Fragment() {
                 spinnerTime.setSelection(convertHoursToAdapterPosition(event?.hours))
                 dateOfJourneyDest.setText(convertMillisToText(infoAboutTravel.timeInMillisDest))
                 if (infoAboutTravel.destPortType == RAILWAY) {
+                    avia.isChecked = false
                     railway.callOnClick()
                     if (infoAboutTravel.destPortId <= railwaysDest.size) {
                         spinnerRailwayDest.setSelection(infoAboutTravel.destPortId)

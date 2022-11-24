@@ -17,8 +17,8 @@ import com.example.travelassistant.core.domain.entity.InfoAboutTravel
 interface TravelInfoDao {
     @Query(
         "Select * From ${InfoAboutTravel.Schema.TABLE_NAME} " +
-                "WHERE ${InfoAboutTravel.Schema.TIME_DEST} > :date " +
-                "ORDER BY ${InfoAboutTravel.Schema.TIME_DEST} DESC LIMIT 1"
+                "WHERE ${InfoAboutTravel.Schema.TIME} > :date " +
+                "ORDER BY ${InfoAboutTravel.Schema.ID} DESC LIMIT 1"
     )
     suspend fun getInfo(date: Long): InfoAboutTravel?
 

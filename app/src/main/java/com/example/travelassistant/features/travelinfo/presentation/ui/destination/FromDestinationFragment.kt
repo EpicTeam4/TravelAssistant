@@ -19,6 +19,7 @@ import com.example.travelassistant.features.travelinfo.presentation.ui.TravelInf
 import com.example.travelassistant.features.travelinfo.presentation.ui.TravelInfoViewState
 import com.example.travelassistant.core.observe
 import com.example.travelassistant.core.utils.toHours
+import com.example.travelassistant.core.utils.toPosition
 import dagger.hilt.android.AndroidEntryPoint
 
 @AndroidEntryPoint
@@ -49,10 +50,9 @@ class FromDestinationFragment : BaseFragment() {
         infoViewModel.loadData()
 
         _binding?.apply {
-
             with(infoViewModel) {
 
-                avia.setOnClickListener{
+                avia.setOnClickListener {
                     spinner.isInvisible = false
                     spinnerRailway.isInvisible = true
                     seat.setHint(R.string.van_seat_num)
@@ -129,12 +129,13 @@ class FromDestinationFragment : BaseFragment() {
             with(infoViewModel) {
                 dateOfJourney.setText(getDestDateTime())
                 if (infoAboutTravel.destPortType == RAILWAY) {
+                    avia.isChecked = false
                     railway.callOnClick()
                     spinnerRailway.setSelection(infoAboutTravel.destPortId)
                 } else {
                     spinner.setSelection(infoAboutTravel.destPortId)
                 }
-                spinnerTime.selectedItemPosition.let { infoAboutTravel.hoursFromDest }
+                spinnerTime.setSelection(getDestPosition().toPosition())
             }
         }
         changeIcon()
