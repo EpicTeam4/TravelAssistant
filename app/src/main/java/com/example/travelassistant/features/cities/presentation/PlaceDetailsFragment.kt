@@ -6,6 +6,7 @@ import android.view.View
 import android.view.ViewGroup
 import androidx.core.view.isVisible
 import androidx.fragment.app.Fragment
+import androidx.fragment.app.activityViewModels
 import androidx.lifecycle.lifecycleScope
 import androidx.navigation.fragment.navArgs
 import androidx.recyclerview.widget.LinearLayoutManager
@@ -13,7 +14,6 @@ import androidx.recyclerview.widget.RecyclerView
 import com.example.travelassistant.databinding.FragmentPlaceDetailsBinding
 import com.example.travelassistant.features.cities.domain.model.PlaceDomain
 import kotlinx.coroutines.launch
-import org.koin.androidx.viewmodel.ext.android.viewModel
 
 class PlaceDetailsFragment : Fragment() {
 
@@ -24,7 +24,7 @@ class PlaceDetailsFragment : Fragment() {
 
     val args: PlaceDetailsFragmentArgs by navArgs()
 
-    private val placeDetailViewModel: PlaceDetailViewModel by viewModel()
+    private val placeDetailViewModel: PlaceDetailViewModel by activityViewModels()
 
     override fun onCreateView(
         inflater: LayoutInflater,

@@ -6,6 +6,7 @@ import android.view.View
 import android.view.ViewGroup
 import androidx.core.view.isVisible
 import androidx.fragment.app.Fragment
+import androidx.fragment.app.activityViewModels
 import androidx.lifecycle.lifecycleScope
 import androidx.navigation.findNavController
 import androidx.navigation.fragment.navArgs
@@ -15,7 +16,6 @@ import com.example.travelassistant.R
 import com.example.travelassistant.databinding.FragmentPlacesBinding
 import com.example.travelassistant.features.cities.domain.model.PlaceDomain
 import kotlinx.coroutines.launch
-import org.koin.androidx.viewmodel.ext.android.viewModel
 
 class PlacesFragment : Fragment() {
     // todo подгрузка новых элементов при перемотке до конца
@@ -28,7 +28,7 @@ class PlacesFragment : Fragment() {
 
     val args: PlacesFragmentArgs by navArgs()
 
-    private val placesViewModel: PlacesViewModel by viewModel()
+    private val placesViewModel: PlacesViewModel by activityViewModels()
 
     private val binding get() = _binding!!
 

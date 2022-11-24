@@ -4,8 +4,9 @@ import com.example.travelassistant.features.cities.domain.model.CityDomain
 import com.example.travelassistant.features.cities.domain.model.PlaceDomain
 import com.example.travelassistant.features.cities.domain.repository.CitiesRepository
 import com.example.travelassistant.features.cities.domain.repository.PlacesRepository
+import javax.inject.Inject
 
-class CitiesUseCase( // todo поделить на разные юз-кейсы?
+class CitiesUseCase @Inject constructor( // todo поделить на разные юз-кейсы?
     private val citiesRepository: CitiesRepository,
     private val placesRepository: PlacesRepository
 ) {

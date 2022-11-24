@@ -18,6 +18,10 @@ import com.example.travelassistant.core.domain.LocalDataSource
 import com.example.travelassistant.core.network.ApiMapperHotel
 import com.example.travelassistant.core.network.KudagoClient
 import com.example.travelassistant.core.network.KudagoClientApi
+import com.example.travelassistant.features.cities.data.CitiesRepositoryLocalDbImpl
+import com.example.travelassistant.features.cities.data.PlacesRepositoryImpl
+import com.example.travelassistant.features.cities.domain.repository.CitiesRepository
+import com.example.travelassistant.features.cities.domain.repository.PlacesRepository
 import com.example.travelassistant.features.editinfo.data.InfoEditingRepositoryImpl
 import com.example.travelassistant.features.editinfo.domain.repository.InfoEditingRepository
 import com.example.travelassistant.features.favourites.data.SightsRepositoryImpl
@@ -96,13 +100,26 @@ class AppModule {
     @Provides
     fun providesEditInfoRepository(
         dataSource: LocalDataSource,
-        hotelMapper: ApiMapperHotel,
         prefs: DataStoreManager
     ): InfoEditingRepository =
-        InfoEditingRepositoryImpl(dataSource, hotelMapper, prefs)
+        InfoEditingRepositoryImpl(dataSource, prefs)
 
     @Provides
-    fun providesSightsRepository(kudagoClient: KudagoClient, dataSource: LocalDataSource): SightsRepository =
+    fun providesCitiesRepository(dataSource: LocalDataSource): CitiesRepository =
+        CitiesRepositoryLocalDbImpl(dataSource)
+
+    @Provides
+    fun providesPlacesRepository(
+        kudagoClient: KudagoClient,
+        sightsDao: SightsDao
+    ): PlacesRepository =
+        PlacesRepositoryImpl(kudagoClient, sightsDao)
+
+    @Provides
+    fun providesSightsRepository(
+        kudagoClient: KudagoClient,
+        dataSource: LocalDataSource
+    ): SightsRepository =
         SightsRepositoryImpl(kudagoClient, dataSource)
 
     @Provides

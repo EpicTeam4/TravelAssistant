@@ -1,7 +1,6 @@
 package com.example.travelassistant.features.editinfo.presentation.ui
 
 import com.example.travelassistant.core.data.model.ErrorModel
-import com.example.travelassistant.core.domain.entity.Hotel
 import com.example.travelassistant.core.domain.entity.InfoAboutTravel
 import com.example.travelassistant.core.domain.entity.Port
 
@@ -20,7 +19,6 @@ sealed class InfoViewState {
         val railways: List<Port> = listOf(),
         val airportsDest: List<Port> = listOf(),
         val railwaysDest: List<Port> = listOf(),
-        val hotels: List<Hotel> = listOf(),
         val cityId: Int = 0
     ) : InfoViewState()
 }
