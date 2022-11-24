@@ -4,7 +4,7 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:padding="@dimen/default_margin"
+    android:padding="@dimen/layout_margin_top"
     tools:context=".features.luggage.presentation.ui.PersonalItemsFragment">
 
     <androidx.cardview.widget.CardView
@@ -31,6 +31,9 @@
                 android:layout_width="0dp"
                 android:layout_height="wrap_content"
                 android:layout_marginEnd="@dimen/imagebutton_to_detail"
+                android:layout_marginTop="@dimen/layout_margin_top"
+                android:layout_marginStart="@dimen/layout_margin_top"
+                android:layout_marginBottom="@dimen/layout_margin_top"
                 android:ems="10"
                 android:hint="@string/add_item"
                 android:importantForAutofill="no"
@@ -45,6 +48,9 @@
                 android:id="@+id/addItem"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
+                android:layout_marginTop="@dimen/layout_margin_top"
+                android:layout_marginEnd="@dimen/layout_margin_top"
+                android:layout_marginBottom="@dimen/layout_margin_top"
                 android:background="@color/white"
                 android:src="@drawable/add_item"
                 app:layout_constraintBottom_toBottomOf="@id/newItem"

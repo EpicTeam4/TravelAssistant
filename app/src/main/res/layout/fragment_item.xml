@@ -3,7 +3,9 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
-    android:layout_marginBottom="@dimen/cardview_layout_margin"
+    android:layout_marginStart="@dimen/layout_margin_top"
+    android:layout_marginEnd="@dimen/layout_margin_top"
+    android:layout_marginTop="@dimen/layout_margin_top"
     app:cardCornerRadius="@dimen/cardview_elevation"
     app:cardElevation="@dimen/cardview_elevation">
 
